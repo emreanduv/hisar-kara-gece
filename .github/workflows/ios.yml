@@ -5,6 +5,10 @@ on:
       version_name:
         description: "Sürüm adı (ör. 1.0.0)"
         default: "1.0.0"
+env:
+  ASC_KEY_ID: F2R845WQ26
+  ASC_ISSUER_ID: f4943ef8-df6f-42c8-a561-58554097ea35
+  APPLE_TEAM_ID: 4UFRQ97N4C
 jobs:
   build:
     runs-on: macos-latest
@@ -23,17 +27,17 @@ jobs:
         env: { P8: "${{ secrets.ASC_KEY_P8 }}" }
         run: |
           mkdir -p ~/private_keys
-          printf '%s' "$P8" > ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8
+          printf '%s' "$P8" > ~/private_keys/AuthKey_${{ env.ASC_KEY_ID }}.p8
       - name: Arşivle
         working-directory: ios/App
         run: |
           xcodebuild -project App.xcodeproj -scheme App -configuration Release \
             -destination 'generic/platform=iOS' -archivePath $RUNNER_TEMP/Hisar.xcarchive \
             -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8 \
-            -authenticationKeyID ${{ secrets.ASC_KEY_ID }} \
-            -authenticationKeyIssuerID ${{ secrets.ASC_ISSUER_ID }} \
-            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} CODE_SIGN_STYLE=Automatic \
+            -authenticationKeyPath ~/private_keys/AuthKey_${{ env.ASC_KEY_ID }}.p8 \
+            -authenticationKeyID ${{ env.ASC_KEY_ID }} \
+            -authenticationKeyIssuerID ${{ env.ASC_ISSUER_ID }} \
+            DEVELOPMENT_TEAM=${{ env.APPLE_TEAM_ID }} CODE_SIGN_STYLE=Automatic \
             MARKETING_VERSION=${{ inputs.version_name }} CURRENT_PROJECT_VERSION=${{ github.run_number }} \
             archive
       - name: App Store Connect'e yükle
@@ -44,13 +48,13 @@ jobs:
           <plist version="1.0"><dict>
             <key>method</key><string>app-store-connect</string>
             <key>destination</key><string>upload</string>
-            <key>teamID</key><string>${{ secrets.APPLE_TEAM_ID }}</string>
+            <key>teamID</key><string>${{ env.APPLE_TEAM_ID }}</string>
             <key>signingStyle</key><string>automatic</string>
           </dict></plist>
           PL
           xcodebuild -exportArchive -archivePath $RUNNER_TEMP/Hisar.xcarchive \
             -exportOptionsPlist $RUNNER_TEMP/export.plist -exportPath $RUNNER_TEMP/export \
             -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8 \
-            -authenticationKeyID ${{ secrets.ASC_KEY_ID }} \
-            -authenticationKeyIssuerID ${{ secrets.ASC_ISSUER_ID }}
+            -authenticationKeyPath ~/private_keys/AuthKey_${{ env.ASC_KEY_ID }}.p8 \
+            -authenticationKeyID ${{ env.ASC_KEY_ID }} \
+            -authenticationKeyIssuerID ${{ env.ASC_ISSUER_ID }}
