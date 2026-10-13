@@ -6,7 +6,7 @@ on:
         description: "Sürüm adı (ör. 1.0.0)"
         default: "1.0.0"
 env:
-  ASC_KEY_ID: F2R845WQ26
+  ASC_KEY_ID: DJSHKK6T3P
   ASC_ISSUER_ID: f4943ef8-df6f-42c8-a561-58554097ea35
   APPLE_TEAM_ID: 4UFRQ97N4C
 jobs:
