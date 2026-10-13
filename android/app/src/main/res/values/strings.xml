@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Hisar: Kara Gece</string>
+    <string name="title_activity_main">Hisar: Kara Gece</string>
+    <string name="package_name">com.anduv.hisar</string>
+    <string name="custom_url_scheme">com.anduv.hisar</string>
+</resources>
