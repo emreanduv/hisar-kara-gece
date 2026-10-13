@@ -28,11 +28,10 @@ jobs:
         run: |
           OUT=hisar-${{ inputs.version_name }}-${{ github.run_number }}-unsigned.aab
           cp android/app/build/outputs/bundle/release/app-release.aab /tmp/$OUT
-          git config user.name "github-actions"; git config user.email "actions@github.com"
-          git fetch origin builds 2>/dev/null && git checkout builds || git checkout --orphan builds
-          git rm -rfq . 2>/dev/null || true
-          mkdir -p android && cp /tmp/$OUT android/
-          git add android && git commit -m "Android paketi $OUT" && git push origin builds
+          mkdir -p /tmp/b/android && cp /tmp/$OUT /tmp/b/android/ && cd /tmp/b
+          git init -q -b builds && git config user.name "github-actions" && git config user.email "actions@github.com"
+          git add . && git commit -qm "Android paketi $OUT"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" builds
       - uses: actions/upload-artifact@v4
         with:
           name: hisar-${{ inputs.version_name }}-${{ github.run_number }}-unsigned.aab
