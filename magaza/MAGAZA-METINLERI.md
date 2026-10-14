@@ -1,110 +1,51 @@
-# Mağaza metinleri ve formlar — kopyala / yapıştır
-
-Gerçek kulüp adı, arma, lig sponsoru adı ve bahis kelimeleri (iddaa, oran, kupon) **hiçbir alanda kullanılmaz**:
-Apple 5.2 (fikrî mülkiyet) ve Google Play'in marka ve kumar kuralları yüzünden ret sebebidir.
-Uygulama telefonda açılınca kulüp adları **kendiliğinden kurmaca** olur ("İstanbul Sarı-Lacivert" gibi); Mr. Anduv rozeti ve yayın modu gizlenir.
-
----
-
-## App Store Connect
+# Champion Battle Manager · Mağaza metinleri (3.0.0)
 
 | Alan | Değer |
 |---|---|
-| Ad (en çok 30) | `Champion Chess: Menajer` |
-| Alt başlık (en çok 30) | `Satranç ve tavlayla lig kazan` |
-| Paket kimliği (Bundle ID) | `com.anduv.championchess` |
-| SKU | `championchess-ios-1` |
-| Birincil kategori | Oyunlar › Strateji |
-| İkincil kategori | Oyunlar › Spor |
-| Fiyat | Ücretsiz |
-| Gizlilik politikası adresi | `https://SITE-ADRESIN/gizlilik.html` |
-| Destek adresi | `https://SITE-ADRESIN/gizlilik.html#destek` |
-| Telif (Copyright) | `2026 Emre …` (adın soyadın) |
+| Ad (en çok 30) | `Champion Battle Manager` |
+| Alt başlık (en çok 30) | `Ligini savaş meydanında kazan` |
+| Kısa açıklama (Play, en çok 80) | `6 lig, 120 kulüp: maçlarını Malazgirt ve Hisar savaşlarıyla kazan.` |
+| Kategori | Oyunlar › Strateji (ikincil: Spor) |
+| Destek / gizlilik | https://claude.ai/artifact/WutmMZEaYwe5KMC7tfN1Tj |
 
-**Tanıtım metni (en çok 170):**
-Eski menajerlik oyunlarının tadında bir lig kariyeri: maçlarını satranç tahtasında, tavla masasında ya da kulübeden canlı anlatımla kazan.
+**Tanıtım metni (170):**
+Eski menajerlik oyunlarının tadında lig kariyeri. Her maç bir savaş: akıncılarınla rakip kaleye sefere çık ya da hisarını savunup kulesini yık.
 
-**Anahtar kelimeler (en çok 100, virgülle, boşluksuz):**
-`satranç,tavla,menajer,futbol,lig,strateji,kariyer,teknik direktör,puan durumu,maç`
+**Anahtar kelimeler (100):**
+`menajer,futbol,strateji,savaş,akıncı,kale,lig,kariyer,teknik direktör,puan durumu,hisar,malazgirt`
 
 **Açıklama:**
 ```
-Champion Chess, eski menajerlik oyunlarının tadında bir futbol kariyeri. Ama maçlar sahada değil, tahtada kazanılır.
+Champion Battle Manager, eski menajerlik oyunlarının tadında bir futbol kariyeri. Ama maçlar sahada değil, savaş meydanında kazanılır.
 
-MAÇINI SEÇ
-• Satranç: iç sahada beyaz, deplasmanda siyah. Mat et, puanları al
-• Tavla: kırık taş, mars ve eşek marsı kurallarıyla tam oyun
-• Hızlı maç: 90 dakikayı canlı anlatımla kulübeden yönet, devre arasında tavrını seç
+HER MAÇ BİR SAVAŞ
+• Malazgirt modu: akıncılarını rakip kaleye sür. Artı ve çarpı kapılarından geçip ordunu büyüt, blokları okla kır, sondaki rakip birliği ya da devi dağıt
+• Hisar modu: hisarını savun, rakip kuleyi yık. Erzakla birlik çıkar, Alp Er'i yürüt, ateş yağmurunu doğru ana sakla
+• Ordun takımının renklerini giyer, rakip kale rakibin bayrağını taşır
+
+SKOR SAVAŞTAN GELİR
+• Zafer yıldızına göre 3-0, 2-1 ya da 1-0
+• Yenilsen bile kaleye ne kadar yaklaştığın sayılır: kıl payı bir yenilgi 1-1 beraberlik olur
+• Golleri kadronun oyuncuları atar; gol krallığı, averaj ve puan durumu gerçekten değişir
+
+6 LİG, 120 KULÜP
+• Anadolu, Ada, İber, Çizme, Ren ve Galya ligleri
+• Her ligde 20 kulüp, 38 hafta, fikstür ve canlı puan durumu
+• Kurmaca kulüp adları: İstanbul Sarı-Lacivert, Manchester Mavi, Madrid Beyaz…
 
 MENAJER GİBİ DÜŞÜN
-• Maç önü takım konuşması oyuncuların odağını belirler
-• Moral, yönetim güveni ve taraftar desteği her sonucu etkiler
-• Basın toplantısında söylediklerin soyunma odasında yankılanır
-• Yönetimin sezon hedefi: şampiyonluk, Avrupa ya da ligde kalmak
-
-DERİN BİR LİG
-• 18 kulüp, 34 hafta, fikstür ve canlı puan durumu
-• 24 kişilik kadrolar, gol ve asist krallığı
-• Teknik ekip notları, rakip analizi, derbi ligi
-• Sezonlar boyu süren kariyer ve geçmiş
+• Maç önü takım konuşması odağı, odak da ordunun gücünü belirler
+• Moral, yönetim güveni ve taraftar desteği, basın toplantıları
+• Teknik ekip notları, rakip analizi, derbiler ve sezonlar boyu kariyer
 
 Üyelik yok, reklam yok, uygulama içi satın alma yok, kişisel veri toplanmaz.
 
-Champion Chess bağımsız bir oyundur; hiçbir kulüp, lig ya da federasyonla bağlantısı yoktur. Kulüp, oyuncu ve hakem adları kurmacadır.
-```
-> Not: Uygulamada olmayan özelliği yazma (Apple 2.3.1).
-
-**Yaş derecelendirmesi formu:** her soruya *Yok / None*. "Kumar / Simulated Gambling": **Yok** (zar ve tavla oyun mekaniği; para, bahis, ödül yok). "Sınırsız web erişimi": **Hayır**. Sonuç: 4+.
-
-**App Privacy:** "Do you or your third-party partners collect data from this app?" → **No**. Etiket: *Data Not Collected*.
-
-**Export compliance:** kur.sh, Info.plist'e `ITSAppUsesNonExemptEncryption = NO` yazar.
-
-**İnceleme notu (App Review Information → Notes):**
-```
-Champion Chess is a single-player football manager game in which matches are played as chess, backgammon or a quick text simulation. No login is required.
-Pick a club and tap the large "Devam" (Continue) button at the top right to reach match day. Give a team talk, then choose "Satranç" (chess), "Tavla" (backgammon) or "Hızlı Maç" (quick match).
-Club names are fictional. There is no real money, betting, in-app purchase, advertising or user-generated content. Everything runs on the device.
+Champion Battle Manager bağımsız bir oyundur; hiçbir kulüp, lig ya da federasyonla bağlantısı yoktur. Kulüp, oyuncu ve hakem adları kurmacadır.
 ```
 
----
-
-## Google Play Console
-
-| Alan | Değer |
-|---|---|
-| Uygulama adı (en çok 30) | `Champion Chess: Menajer` |
-| Paket adı | `com.anduv.championchess` |
-| Uygulama / oyun | **Oyun** |
-| Kategori | Strateji |
-| Ücretli / ücretsiz | Ücretsiz |
-| Gizlilik politikası | `https://SITE-ADRESIN/gizlilik.html` |
-| E-posta | destek e-postan |
-
-**Kısa açıklama (en çok 80):**
-`Lig kariyeri: maçlarını satranç, tavla ya da canlı anlatımla kazan.`
-
-**Tam açıklama:** App Store açıklamasının aynısı.
-
-**Grafikler:** ikon 512×512 (`www/icon-512.png`), öne çıkan görsel 1024×500, en az 2 telefon ekran görüntüsü.
-
-**Uygulama içeriği formları:**
-- *Reklam:* Reklam içermiyor.
-- *Uygulama erişimi:* Tüm işlevler kısıtlama olmadan kullanılabilir.
-- *İçerik derecelendirmesi (IARC):* Kategori **Oyun**; şiddet, kumar, simüle kumar, kullanıcı etkileşimi soruları **Hayır**.
-- *Hedef kitle:* 13+ (çocuklara yönelik değil — "Families" kurallarına girmemek için).
-- *Veri güvenliği:* Veri toplanmıyor / paylaşılmıyor → **Hayır**.
-- *Finans / sağlık / devlet:* Hayır.
-
----
-
-## Ekran görüntüleri
-
-| Mağaza | Gerekli boyut |
-|---|---|
-| App Store (iPhone 6,9") | 1320×2868 (dikey) — en az 1 |
-| App Store (iPad) | Yalnız iPad açıksa gerekir (Xcode → Supported Destinations) |
-| Google Play (telefon) | 1080×1920 ya da 1080×2400 — en az 2 |
-
-Önerilen 4 kare: Genel Bakış (maskot balonu) · tavla tahtası · satranç maçı · Puan Durumu (Zirve / Alt sıralar).
-Çekmek için: Xcode → iPhone 17 Pro Max simülatörü → oyunu aç → ⌘S.
+**İnceleme notu (App Review):**
+```
+Version 3.0.0 renames the app to Champion Battle Manager and replaces the chess/backgammon matches with two built-in battle modes. It keeps all fixes from the previous review (1.5, 2.1, 2.3.3, 4.1).
+Single-player football manager: pick a league and a club, tap the large "Devam" (Continue) button at the top to reach match day, give a team talk, then choose "Malazgirt modu" (swipe to steer the army) or "Hisar modu" (landscape tower defense; tap unit cards). The result of the battle becomes the match score.
+All club, player, referee and league names are fictional; no real club names, crests or league trademarks are used. No login, no ads, no tracking, no data collection (App Privacy: Data Not Collected), no in-app purchases, no real money or betting. Everything runs on the device.
+```

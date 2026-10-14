@@ -36,7 +36,7 @@ jobs:
             -authenticationKeyID ${{ env.ASC_KEY_ID }} \
             -authenticationKeyIssuerID ${{ env.ASC_ISSUER_ID }} \
             DEVELOPMENT_TEAM=${{ env.APPLE_TEAM_ID }} CODE_SIGN_STYLE=Automatic \
-            MARKETING_VERSION=2.0.0 CURRENT_PROJECT_VERSION=$((${{ github.run_number }}+9)) \
+            MARKETING_VERSION=3.0.0 CURRENT_PROJECT_VERSION=$((${{ github.run_number }}+9)) \
             archive
       - name: App Store Connect'e yükle
         run: |

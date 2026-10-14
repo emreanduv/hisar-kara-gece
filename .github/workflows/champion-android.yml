@@ -20,11 +20,11 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          export VERSION_CODE=$(( ${{ github.run_number }} + 9 )) VERSION_NAME=2.0.0
+          export VERSION_CODE=$(( ${{ github.run_number }} + 9 )) VERSION_NAME=3.0.0
           ./gradlew bundleRelease --no-daemon
       - name: Paketi builds dalına koy
         run: |
-          OUT=champion-chess-2.0.0-$((${{ github.run_number }}+9))-unsigned.aab
+          OUT=champion-chess-3.0.0-$((${{ github.run_number }}+9))-unsigned.aab
           mkdir -p /tmp/b/android && cp android/app/build/outputs/bundle/release/app-release.aab /tmp/b/android/$OUT && cd /tmp/b
           git init -q -b champion-builds && git config user.name "github-actions" && git config user.email "actions@github.com"
           git add . && git commit -qm "Android paketi $OUT"

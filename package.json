@@ -1,8 +1,8 @@
 {
-  "name": "champion-chess-manager",
-  "version": "2.0.0",
+  "name": "champion-battle-manager",
+  "version": "3.0.0",
   "private": true,
-  "description": "Champion Chess Manager — FM2010 menajer modu (iOS + Android kabuğu, Capacitor)",
+  "description": "Champion Battle Manager — FM2010 menajer modu (iOS + Android kabuğu, Capacitor)",
   "scripts": {
     "ikonlar": "capacitor-assets generate --ios --android --assetPath magaza/assets --iconBackgroundColor '#1f3b3c' --iconBackgroundColorDark '#1f3b3c' --splashBackgroundColor '#1f3b3c' --splashBackgroundColorDark '#0d1e1e'",
     "esitle": "cap sync",
