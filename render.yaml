@@ -1,0 +1,10 @@
+# Render → New → Blueprint: oyunu ve gizlilik sayfasını statik site olarak yayınlar (sunucu gerekmez, ücretsiz plan yeter).
+services:
+  - type: web
+    name: champion-chess
+    runtime: static
+    staticPublishPath: ./www
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=300

@@ -1,0 +1,9 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "♞ Champion Chess: başlat (7/24 sunucu)", "type": "shell", "command": "./yayin-7-24.sh", "isBackground": true, "problemMatcher": [] },
+    { "label": "♞ Champion Chess: oyunu aç", "type": "shell", "command": "open http://127.0.0.1:8768", "problemMatcher": [] },
+    { "label": "📺 Yayın modunu aç (OBS önizleme)", "type": "shell", "command": "open 'http://127.0.0.1:8768/?yayin=1'", "problemMatcher": [] },
+    { "label": "📱 Mağaza: iOS + Android hazırla", "type": "shell", "command": "./magaza/kur.sh", "problemMatcher": [] }
+  ]
+}
