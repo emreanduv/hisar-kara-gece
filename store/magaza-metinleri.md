@@ -14,8 +14,11 @@
 
 ## Türkçe
 
+**Tanıtım metni (App Store, 1.1)**
+999 bölümlük sefer: Anadolu efsanelerinden yaratıklara karşı kale savunması. Reklamsız, internetsiz.
+
 **Kısa açıklama (Google Play, en fazla 80 karakter)**
-Hisar'ı savun, Kara Kule'yi yık! Anadolu efsanelerinden yaratıklara karşı sefer.
+999 bölüm! Hisar'ı savun, Anadolu efsanelerinden yaratıklara karşı sefere çık.
 
 **Alt başlık (App Store, en fazla 30 karakter)**
 Anadolu'da kale savunması
@@ -28,8 +31,11 @@ Gulyabaniler, cadılar, kurtbaşılar, demir cinler, Tepegöz, ejder Evren ve en
 • 6 birlik: Sekban, Okçu, Kalkancı, Akıncı, Humbaracı ve Deli
 • Kahramanın Alp Er'i kendin yönet
 • Ateş Yağmuru ile düşman kalabalığını dağıt
-• 4 bölge, 40 bölüm, 8 dev savaşı (Tepegöz, Yelbegen, Evren, Erlik Han), her bölümde 3 yıldız
-• Ordugâh'ta kalıcı geliştirmeler: erzak, sur, talim, kılıç ve ateş
+• 20 bölge, 999 bölüm: kolaydan zora adım adım
+• Her 10 bölümde bir dev savaşı (Tepegöz, Yelbegen, Evren, Erlik Han); bölge sonlarında iki dev birden
+• Bölüm kuralları: Sisli Gece, Kıtlık, Kara Rüzgâr, Demir Gece, Sürü, Kızıl Ay...
+• Rütbeler: ilerledikçe Alp Er ve ordun kalıcı güçler kazanır
+• Ordugâh'ta 50 seviyelik kalıcı geliştirmeler: erzak, sur, talim, kılıç ve ateş
 • Reklam yok, internet gerekmez, veri toplanmaz
 
 Kısa oturumlar için ideal: bir bölüm 1–3 dakika sürer.
@@ -55,8 +61,11 @@ Gulyabani, witches, wolf-heads, iron djinn, the one-eyed Tepegöz, the dragon Ev
 • 6 unit types: Swordsman, Archer, Shieldbearer, Raider, Grenadier and Berserker
 • Control your hero Alp Er directly
 • Call down Fire Rain to scatter enemy hordes
-• 4 regions, 40 levels, 8 giant battles, 3 stars per level
-• Permanent upgrades in the War Camp
+• 20 regions, 999 levels from easy to brutal
+• A giant battle every 10 levels, double giants at region finales
+• Level rules: Fog, Famine, Black Wind, Iron Night, Swarm, Red Moon...
+• Ranks: your hero and army earn permanent powers as you advance
+• 50-level permanent upgrades in the War Camp
 • No ads, works offline, no data collected
 
 ---

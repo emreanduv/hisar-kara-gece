@@ -42,28 +42,42 @@ canvas.full{position:absolute;left:0;top:0}
 .ibody .from{font-size:11px;color:var(--muted);margin-bottom:4px}
 .ibody .subj{font-weight:bold;font-size:15px;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:6px}
 /* levels */
-.rtabs{position:absolute;left:22px;right:22px;top:56px;display:flex;gap:6px}
-.rtab{flex:1;background:linear-gradient(#8a8570,#5f5a48);color:#fff;border:1px solid #3d3a2e;border-bottom:none;border-radius:3px 3px 0 0;padding:7px 8px;font-size:13px;font-weight:bold;cursor:pointer;text-align:center}
-.rtab small{display:block;font-weight:normal;font-size:11px;opacity:.85}
-.rtab.on{background:linear-gradient(#5f9152,#3a6232);border-color:#23401f}
-.rtab.lock{opacity:.45;cursor:default}
-.lvgrid{position:absolute;left:22px;right:22px;top:104px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.lv{height:172px;cursor:pointer;display:flex;flex-direction:column;position:relative}
-.lv .num{font-size:36px;font-weight:bold;color:#2c3e2f;text-align:center;margin-top:8px}
-.lv .nm{text-align:center;font-size:13px;font-weight:bold;padding:0 6px}
-.lv .st{text-align:center;color:#c8a23a;font-size:22px;letter-spacing:3px;margin-top:6px;text-shadow:0 1px 0 #7a6420}
-.lv .st .off{color:#cfc6a6;text-shadow:none}
-.lv .tag{position:absolute;right:6px;top:40px;background:var(--red);color:#fff;font-size:10px;font-weight:bold;padding:2px 5px;border-radius:2px}
+.rnav{position:absolute;left:22px;right:22px;top:56px;height:44px;display:flex;gap:8px;align-items:stretch}
+.rarr{width:56px;padding:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+.rhead{flex:1;display:flex;align-items:center;gap:10px;padding:0 12px;font-weight:bold;font-size:16px;white-space:nowrap}
+.rhead small{font-weight:normal;color:var(--muted);font-size:12px}
+.rbar{flex:1;height:8px;background:#d4c9a4;border:1px solid #b9ad84;position:relative;min-width:60px}
+.rbar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#5f9152,#3a6232)}
+#bCur{padding:0 14px;display:flex;align-items:center;font-size:14px}
+.lvgrid{position:absolute;left:22px;right:22px;top:108px;display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.lv{height:58px;cursor:pointer;position:relative}
+.lv .n{font-size:20px;font-weight:bold;color:#2c3e2f;text-align:center;margin-top:8px}
+.lv .s{text-align:center;color:#c8a23a;font-size:12px;letter-spacing:1px;text-shadow:0 1px 0 #7a6420}
+.lv .s .off{color:#cfc6a6;text-shadow:none}
+.lv .tg{position:absolute;right:3px;top:1px;font-size:11px;color:var(--red);font-weight:bold}
+.lv .mi{position:absolute;left:3px;top:1px;font-size:11px}
+.lv.boss{background:#ecd9c6}
+.lv.cur{outline:3px solid var(--accent);outline-offset:-1px}
 .lv.lock{opacity:.45;cursor:default}
-.lv.lock .num{font-size:30px;margin-top:20px}
+.lv.lock .n{font-size:14px;margin-top:12px;color:#6b6650}
+.modl{margin-top:8px;padding:6px 8px;background:#ebe3c8;border:1px solid #d4c9a4;font-size:13px}
+.lvst{font-size:24px;color:#c8a23a;letter-spacing:4px;text-shadow:0 1px 0 #7a6420}
+.lvst .off{color:#cfc6a6;text-shadow:none}
 /* upgrades */
 .ut{width:100%;border-collapse:collapse;font-size:13px}
 .ut td{padding:9px 10px;border-bottom:1px solid #d4c9a4;vertical-align:middle}
 .ut tr:nth-child(even){background:#ebe3c8}
 .ut .unm{font-weight:bold;font-size:14px}
 .ut .ud{color:var(--muted);font-size:12px}
-.pips span{display:inline-block;width:14px;height:14px;border:1px solid #6b6650;margin-right:3px;background:#fffbea}
-.pips span.on{background:linear-gradient(#5f9152,#3a6232)}
+.ulv{width:150px;font-size:12px;color:var(--muted)}
+.ulv b{font-size:16px;color:var(--ink)}
+.ubar{height:8px;background:#fffbea;border:1px solid #6b6650;margin-top:4px;position:relative}
+.ubar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#5f9152,#3a6232)}
+.rk{padding:4px 8px;overflow:auto;height:calc(100% - 35px)}
+.rki{padding:5px 2px;border-bottom:1px solid #d4c9a4;font-size:11px;color:var(--muted);line-height:1.35}
+.rki b{display:block;font-size:13px;color:#8a8570}
+.rki.on b{color:var(--green)}
+.rki.on{color:var(--ink)}
 .ut .btn{padding:7px 12px;font-size:13px;min-width:120px}
 .help{padding:12px 16px;font-size:13.5px;line-height:1.55}
 .help b{color:#2c3e2f}
@@ -137,16 +151,20 @@ canvas.full{position:absolute;left:0;top:0}
   <!-- BÖLÜMLER -->
   <div id="scrLevels" class="screen">
     <canvas class="full bgc" width="960" height="540"></canvas>
-    <div class="topbar"><span class="title">Sefer Haritası</span><span class="sp"></span><span class="gold lvGold"></span><span class="badge">Komutan</span></div>
-    <div class="rtabs" id="rtabs"></div><div class="lvgrid" id="lvgrid"></div>
+    <div class="topbar"><span class="title">Sefer Haritası</span><span class="sub" id="lvSub"></span><span class="sp"></span><span class="gold lvGold"></span><span class="badge">Komutan</span></div>
+    <div class="rnav"><div class="btn gray rarr" id="rPrev">◀</div><div class="panel rhead" id="rHead"></div><div class="btn gray rarr" id="rNext">▶</div><div class="btn" id="bCur">Kaldığın Yer</div></div>
+    <div class="lvgrid" id="lvgrid"></div>
     <div class="footbar"><span class="hint">Bir bölüm seç. Yıldızlar Hisar'ın ne kadar sağlam kaldığına göre verilir.</span><div class="btn gray" data-go="menu">Geri</div><div class="btn" id="bCamp2">Ordugâh</div></div>
+    <div class="overlay" id="ovLv"><div class="panel res"><h3 id="lvT"></h3><div class="body" id="lvB"></div>
+      <div class="acts"><div class="btn gray" id="lvBack">Geri</div><div class="btn" id="lvGo">Sefere Çık ▸</div></div></div></div>
   </div>
 
   <!-- ORDUGÂH -->
   <div id="scrCamp" class="screen">
     <canvas class="full bgc" width="960" height="540"></canvas>
     <div class="topbar"><span class="title">Ordugâh</span><span class="sub">Geliştirmeler kalıcıdır</span><span class="sp"></span><span class="gold lvGold"></span><span class="badge">Komutan</span></div>
-    <div class="panel" style="position:absolute;left:24px;right:24px;top:62px"><h3>Hazine ile Geliştir</h3><table class="ut" id="ut"></table></div>
+    <div class="panel" style="position:absolute;left:24px;top:62px;width:598px"><h3>Hazine ile Geliştir</h3><table class="ut" id="ut"></table></div>
+    <div class="panel" style="position:absolute;right:24px;top:62px;width:302px;bottom:74px"><h3>Rütbeler</h3><div class="rk" id="ranks"></div></div>
     <div class="footbar"><span class="hint">Akçe; düşman leşlerinden ve zaferlerden gelir.</span><div class="btn gray" data-go="menu">Ana Menü</div><div class="btn" data-go="levels">Sefere Çık</div></div>
   </div>
 
@@ -161,8 +179,10 @@ canvas.full{position:absolute;left:0;top:0}
         <b>Alp Er:</b> Senin kahramanın. ◀ ▶ tuşlarıyla yürüt, yanındaki düşmanlara kendiliğinden kılıç sallar. Düşerse 10 saniye sonra Hisar'dan yeniden çıkar.<br>
         <b>Ateş Yağmuru:</b> Ocak dolunca (50) en öndeki düşman kalabalığına ateş yağdırır.<br>
         <b>Zırh:</b> Demir Cin ve Erlik Muhafızları zırhlıdır; kılıç ve ok hasarının bir kısmını yutar. Humbaracı güllesi ve Ateş Yağmuru zırhı deler.<br>
-        <b>Sefer:</b> 4 bölge, 40 bölüm. Her bölgenin 5. ve 10. bölümünde bir dev çıkar.<br>
-        <b>Ordugâh:</b> Kazandığın akçeyle erzak, sur, birlik, Alp ve ateş güçlerini kalıcı olarak geliştir.<br>
+        <b>Sefer:</b> 20 bölge, 999 bölüm. Her 10 bölümde bir dev çıkar; bölgenin son savaşında iki dev birden gelir.<br>
+        <b>Bölüm kuralları:</b> Bazı bölümlerde Sis, Kıtlık, Kara Rüzgâr, Demir Gece gibi kurallar vardır; zor kural daha çok ganimet getirir. Her yeni bölgenin ilk bölümü Bereket'tir.<br>
+        <b>Rütbeler:</b> Belirli bölümleri geçince Alp Er ve ordun kalıcı güçler kazanır.<br>
+        <b>Ordugâh:</b> Kazandığın akçeyle erzak, sur, birlik, Alp ve ateş güçlerini 50 seviyeye kadar kalıcı olarak geliştir.<br>
         <b>Klavye:</b> 1–6 birlik · ← → Alp · Boşluk ateş · P mola
       </div>
     </div>
@@ -209,6 +229,8 @@ const DEF_UP={erzak:0,sur:0,guc:0,alp:0,ates:0};
 let S={gold:0,unlocked:1,stars:[],up:Object.assign({},DEF_UP),sound:true,read:[]};
 try{const r=localStorage.getItem(SKEY);if(r){const o=JSON.parse(r);S=Object.assign(S,o);S.up=Object.assign({},DEF_UP,o.up||{});}}catch(e){}
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}}
+// 1.0 → 1.1 (40 → 999 bölüm): ilerleme korunur; 40'ı bitiren 41'den devam eder
+if(!S.v){if(S.finished&&S.unlocked<41)S.unlocked=41;S.finished=false;S.v=2;save();}
 
 /* ================= VERİ ================= */
 const GY=372;
@@ -239,9 +261,9 @@ const UNITS=[
  {id:'sekban',ad:'Sekban',cost:15,cd:1.2,hp:60,atk:10,rate:0.9,range:22,spd:44,unlock:1},
  {id:'okcu',ad:'Okçu',cost:25,cd:2,hp:40,atk:9,rate:1.3,range:170,spd:38,unlock:1,ranged:true},
  {id:'kalkan',ad:'Kalkancı',cost:40,cd:4,hp:220,atk:7,rate:1.2,range:22,spd:30,unlock:3},
- {id:'akinci',ad:'Akıncı',cost:60,cd:5,hp:140,atk:22,rate:1.0,range:28,spd:88,unlock:6,mounted:true},
- {id:'humbara',ad:'Humbaracı',cost:90,cd:8,hp:70,atk:42,rate:3.0,range:240,spd:26,unlock:12,ranged:true,splash:60},
- {id:'deli',ad:'Deli',cost:45,cd:3,hp:75,atk:30,rate:0.75,range:22,spd:72,unlock:17},
+ {id:'akinci',ad:'Akıncı',cost:60,cd:5,hp:140,atk:22,rate:1.0,range:28,spd:88,unlock:8,mounted:true},
+ {id:'humbara',ad:'Humbaracı',cost:90,cd:8,hp:70,atk:42,rate:3.0,range:240,spd:26,unlock:15,ranged:true,splash:60},
+ {id:'deli',ad:'Deli',cost:45,cd:3,hp:75,atk:30,rate:0.75,range:22,spd:72,unlock:25},
 ];
 const FOES={
  gulyabani:{id:'gulyabani',ad:'Gulyabani',hp:55,atk:9,rate:1.0,range:22,spd:36,gold:4},
@@ -259,27 +281,88 @@ const FOES={
  evren:{id:'evren',ad:'Evren',hp:800,atk:26,rate:2.6,range:210,spd:16,gold:160,sc:1.6,boss:true,r:30,ranged:true,splash:80},
  erlik:{id:'erlik',ad:'Erlik Han',hp:1300,atk:44,rate:2.0,range:46,spd:15,gold:300,sc:2.8,boss:true,r:20,summon:true},
 };
+/* ---- SEFER: 20 bölge × 50 bölüm = 999 bölüm ---- */
+const NLV=999,RSZ=50;
+// st: görsel stil (0 köy,1 orman,2 dağ,3 kule) · tint: renk tonu · wx: hava · fav: sık görülen düşmanlar
 const REGIONS=[
- {ad:'Köyler',bosses:['tepegoz','tepegoz'],names:['Köy Yolu','Değirmen','Kervansaray','Pınar Başı','Tepegöz İni','Sisli Geçit','Eski Mezarlık','Kuzgun Tepesi','Kanlı Dere','Kara Karakol'],
-  lines:['Köylüler Hisar\'a sığındı. Yolu temizle, Karakol\'a ilerle.','Gece uzun, erzağı boşa harcama. Öne kalkancı, arkaya okçu.','Düşman sürü halinde geliyor. Ateş Yağmuru\'nu kalabalığa sakla.']},
- {ad:'Kara Orman',bosses:['tepegoz','yelbegen'],names:['Orman Kapısı','Cadı Kulübesi','Yosunlu Taşlar','Kurt Sırtı','Dev Koruluğu','Çürük Köprü','Baykuş Yuvası','Kuru Göl','Kökler Arası','Yelbegen Yatağı'],
+ {ad:'Köyler',st:0,fav:['gulyabani','albasti'],bosses:['tepegoz'],
+  first:['Köy Yolu','Değirmen','Kervansaray','Pınar Başı','Tepegöz İni','Sisli Geçit','Eski Mezarlık','Kuzgun Tepesi','Kanlı Dere','Kara Karakol'],
+  nouns:['Ambar','Harman','Çeşme','Ağıl','Köprü','Bağ','Mezra','Kuyu','Han','Ocak'],
+  lines:['Köylüler Hisar\'a sığındı. Yolu temizle, karakollara ilerle.','Gece uzun, erzağı boşa harcama. Öne kalkancı, arkaya okçu.','Düşman sürü halinde geliyor. Ateş Yağmuru\'nu kalabalığa sakla.']},
+ {ad:'Kara Orman',st:1,fav:['kurtbasi','cadi'],bosses:['tepegoz','yelbegen'],
+  first:['Orman Kapısı','Cadı Kulübesi','Yosunlu Taşlar','Kurt Sırtı','Dev Koruluğu','Çürük Köprü','Baykuş Yuvası','Kuru Göl','Kökler Arası','Yelbegen Yatağı'],
+  nouns:['Koru','Patika','Kütük','Yuva','Sazlık','Çalılık','Meşe','Kovuk','Açıklık','Kök'],
   lines:['Ağaçların arasında gözler parlıyor. Safları sık tut.','Orman yolu dar, birliklerini sırayla sür.','Cadılar uzaktan vuruyor; akıncılarla hızlıca üstlerine git.']},
- {ad:'Dağ Geçitleri',bosses:['yelbegen','evren'],names:['Taş Merdiven','Demirci Ocağı','Kartal Kayası','Kızıl Yamaç','Yelbegen Mağarası','Karlı Geçit','Kükürt Vadisi','Buzul Köprü','Kül Tepesi','Evren\'in Yuvası'],
-  lines:['Geçitler dar ve dik. Demir Cinlere kılıç işlemez; gülle ve ateş kullan.','Dağın ardında Kara Kule görünüyor. Durmak yok.','Ateş Cinleri kalabalığa ateş atar; birliklerini yığma.']},
- {ad:'Kara Kule',bosses:['evren','erlik'],names:['Kule Eteği','Kemik Bahçesi','Kara Sur','Gölge Yolu','Evren\'in Kanadı','Zindan Kapısı','Kanlı Avlu','Erlik Kapısı','Kule Merdiveni','Kara Kule'],
+ {ad:'Dağ Geçitleri',st:2,fav:['demircin','karakoncolos'],bosses:['yelbegen','evren'],
+  first:['Taş Merdiven','Demirci Ocağı','Kartal Kayası','Kızıl Yamaç','Yelbegen Mağarası','Karlı Geçit','Kükürt Vadisi','Buzul Köprü','Kül Tepesi','Evren\'in Yuvası'],
+  nouns:['Geçit','Yamaç','Kaya','Zirve','Mağara','Uçurum','Sırt','Boğaz','Taş Yolu','Patika'],
+  lines:['Geçitler dar ve dik. Demir Cinlere kılıç işlemez; gülle ve ateş kullan.','Dağın ardında yeni ovalar görünüyor. Durmak yok.','Ateş Cinleri kalabalığa ateş atar; birliklerini yığma.']},
+ {ad:'Kızıl Bozkır',st:0,tint:'#b4461e',wx:'sand',fav:['kurtbasi','albasti'],bosses:['yelbegen','tepegoz'],
+  nouns:['Bozkır','Kurgan','Tepe','Ova','Pınar','Obruk','Höyük','Düzlük','Kervan İzi','Yurt'],
+  lines:['Bozkırda rüzgâr kan kokuyor. Kurtbaşı sürüleri ufukta.','Açık arazide saklanacak yer yok; kalkancıların önde olsun.','Bozkırın sonunda sis çöküyor.']},
+ {ad:'Sisli Bataklık',st:1,tint:'#5a8a6a',wx:'rain',fav:['hortlak','cadi'],bosses:['yelbegen','evren'],
+  nouns:['Bataklık','Sazlık','Göl','Kamışlık','Su Yolu','Çamur','Ada','Gölet','Köprü','Bent'],
+  lines:['Bataklıkta hortlaklar kaynıyor. Okçularını bol tut.','Çamur adımları ağırlaştırıyor; akıncılarla hızlı vur.','Cadıların kazanı kaynıyor; büyücüleri önce düşür.']},
+ {ad:'Tuz Gölü',st:0,tint:'#c8cce0',fav:['albasti','atescini'],bosses:['evren','tepegoz'],
+  nouns:['Kıyı','Tuzla','Gölet','Kumsal','Yalı','Burun','Düz','Taşlık','Tuz Yolu','Ada'],
+  lines:['Tuz göz alıyor; düşman beyaz ufuktan çıkıp geliyor.','Göl kıyısı dar, birliklerini aralıklı sür.','Ateş Cinleri tuzun üstünde parlıyor.']},
+ {ad:'Kül Ovası',st:2,tint:'#6a6a6a',wx:'ash',fav:['atescini','demircin'],bosses:['evren','yelbegen'],
+  nouns:['Ova','Çukur','Köz Yolu','Duman','Ocak','Höyük','Tepe','Yanık Köy','Kor Vadisi','Sırt'],
+  lines:['Ova küle döndü. Gülleler ve ateş burada en iyi silahın.','Demir Cinler külün içinden çıkıyor.','Duman gözleri yakıyor; Alp Er önde olsun.']},
+ {ad:'Buzul Yaylası',st:2,tint:'#6aa0e0',wx:'snow',fav:['karakoncolos','kurtbasi'],bosses:['yelbegen','tepegoz'],
+  nouns:['Yayla','Buzul','Kar Yolu','Donuk Göl','Sırt','Zirve','Çadır','Geçit','Tepe','Buz Mağarası'],
+  lines:['Karakoncoloslar karın içinden çıkıyor. Ateşi onlara sakla.','Soğuk birlikleri yavaşlatmaz; ama erzak az gelir.','Buzulların ardında kurt ulumaları.']},
+ {ad:'Kurt Vadisi',st:1,tint:'#7a6a3a',fav:['kurtbasi','golge'],bosses:['tepegoz','evren'],
+  nouns:['Vadi','İn','Sürü Yolu','Kaya','Dere','Yamaç','Mağara','Pınar','Uçurum','Koru'],
+  lines:['Vadide kurtbaşı sürüleri dolaşıyor. Hızlı ve kalabalıklar.','Gölgeler kurtların arasına karışmış.','Vadi daralıyor; kalkancılarını öne al.']},
+ {ad:'Yıkık Şehir',st:3,tint:'#8a7a5a',fav:['muhafiz','hortlak'],bosses:['erlik','yelbegen'],
+  nouns:['Sur','Kapı','Çarşı','Saray','Kule','Meydan','Zindan','Hamam','Medrese','Sokak'],
+  lines:['Eski şehrin harabelerinde Erlik\'in muhafızları nöbette.','Sokaklar dar; humbaracılar burada altın değerinde.','Saray avlusunda Erlik\'in gölgesi dolaşıyor.']},
+ {ad:'Kervan Yolu',st:0,tint:'#d4a050',wx:'sand',fav:['albasti','atescini'],bosses:['yelbegen','evren'],
+  nouns:['Han','Kuyu','Vaha','Kum Tepesi','Geçit','Pazar','Çeşme','Durak','Yol Ağzı','Bedesten'],
+  lines:['Kervanlar yağmalanmış. Yolu yeniden açmalıyız.','Kum fırtınası yaklaşıyor; safları dağıtma.','Hanların ardında ateş cinleri pusuda.']},
+ {ad:'Yeraltı Mağaraları',st:2,tint:'#3a3a5a',fav:['golge','demircin'],bosses:['tepegoz','yelbegen'],
+  nouns:['Mağara','Dehliz','Tünel','Kuyu','Yeraltı Gölü','Maden','Oyuk','Sarnıç','Galeri','Derinlik'],
+  lines:['Mağaralarda gölgeler ışıktan kaçıyor; ama sana değil.','Dehlizler dar ve karanlık. Alp Er\'i yalnız bırakma.','Derinlerde demir sesleri: Demir Cinler.']},
+ {ad:'Ejder Sırtı',st:2,tint:'#b4462e',wx:'ember',fav:['atescini','muhafiz'],bosses:['evren','yelbegen'],
+  nouns:['Sırt','Yuva','Kaya','Zirve','Kül Tepesi','Uçurum','Pul Vadisi','Kanat Taşı','Ejder Yolu','Ocak'],
+  lines:['Ejderlerin yurdu. Evren\'in soyu burada kanat açıyor.','Gökten alev yağıyor; birliklerini yığma.','Sırtın tepesinde kızıl bir ışık.']},
+ {ad:'Ay Ormanı',st:1,tint:'#4a5ab4',fav:['hortlak','golge'],bosses:['yelbegen','evren'],
+  nouns:['Koru','Ay Gölü','Açıklık','Kovuk','Patika','Sırt','Pınar','Çember Taşı','Gümüş Dere','Meşe'],
+  lines:['Ay ışığında ağaçlar fısıldıyor. Hortlaklar uyanık.','Gümüş derenin ötesinde gölgeler toplanıyor.','Orman büyülü; Ateş Yağmuru\'nu doğru ana sakla.']},
+ {ad:'Kanlı Irmak',st:0,tint:'#a01e1e',wx:'rain',fav:['kurtbasi','muhafiz'],bosses:['evren','tepegoz'],
+  nouns:['Irmak','Köprü','Kıyı','Değirmen','Geçit','Ada','Sal Yolu','Delta','Bent','İskele'],
+  lines:['Irmak kızıl akıyor. Köprüleri tutmalıyız.','Muhafızlar ırmağın karşı kıyısında saf tutmuş.','Bendi yıkarlarsa ova sular altında kalır.']},
+ {ad:'Gölge Diyarı',st:3,tint:'#6a2aa0',fav:['golge','cadi'],bosses:['erlik','evren'],
+  nouns:['Diyar','Kapı','Sis Yolu','Meydan','Kule','Mezarlık','Avlu','Tapınak','Bahçe','Taht'],
+  lines:['Gölgeler diyarında ışık az. Gölgeler çok hızlı vurur.','Cadılar gölgeleri çağırıyor; önce cadıları düşür.','Erlik\'in tahtına bir adım daha yakınız.']},
+ {ad:'Demir Dağlar',st:2,tint:'#7a8aa0',wx:'snow',fav:['demircin','muhafiz'],bosses:['yelbegen','tepegoz'],
+  nouns:['Maden','Ocak','Örs','Dağ','Geçit','Döküm','Kale','Sırt','Mağara','Zirve'],
+  lines:['Demir Dağlar zırhlı yaratıklarla dolu. Humbaracı şart.','Örslerin sesi dağları inletiyor.','Zırh deler gülle; zırhı yutar kılıç. Unutma.']},
+ {ad:'Ateş Çölü',st:0,tint:'#e0801e',wx:'ember',fav:['atescini','albasti'],bosses:['evren','yelbegen'],
+  nouns:['Çöl','Kum Tepesi','Vaha','Kuyu','Serap','Kaya','Harabe','Kervan İzi','Kızgın Taş','Ufuk'],
+  lines:['Kum yanıyor, gökyüzü yanıyor. Ateş Cinleri her yerde.','Serapların arasından düşman çıkıyor; gözünü dört aç.','Çölün ötesinde Erlik\'in Eşiği.']},
+ {ad:'Erlik\'in Eşiği',st:3,tint:'#a01e46',wx:'ember',fav:['muhafiz','golge'],bosses:['erlik','evren'],
+  nouns:['Eşik','Kapı','Köprü','Uçurum','Sur','Zindan','Avlu','Kemik Yolu','Ateş Hendeği','Nöbet Yeri'],
+  lines:['Yeraltının kapısındayız. Erlik\'in muhafızları sayısız.','Kemik yolundan geri dönüş yok.','Kara Kule artık görünüyor.']},
+ {ad:'Kara Kule',st:3,fav:['muhafiz','golge','demircin'],bosses:['erlik','evren'],
+  first:['Kule Eteği','Kemik Bahçesi','Kara Sur','Gölge Yolu','Evren\'in Kanadı','Zindan Kapısı','Kanlı Avlu','Erlik Kapısı','Kule Merdiveni','Kule Burcu'],
+  nouns:['Kule','Sur','Avlu','Merdiven','Zindan','Kapı','Taht','Mahzen','Burç','Salon'],
   lines:['Kule\'nin gölgesindeyiz. Her adım kanla ödenir.','Erlik\'in muhafızları zırhlı ve sabırlı. Humbaracılarını hazır tut.','Son surlar. Bu gece burada biter.']},
 ];
-const INTRO={gulyabani:0,albasti:1,hortlak:2,karakoncolos:5,cadi:10,kurtbasi:13,demircin:20,atescini:23,muhafiz:30,golge:33};
+const ADJ=['Eski','Kara','Yanık','Sessiz','Kanlı','Kuzey','Güney','Derin','Yüksek','Issız','Taşlı','Dar','Gizli','Yıkık','Soğuk','Uzak','Dumanlı','Kayıp','Lanetli','Çorak'];
+const INTRO={gulyabani:0,albasti:1,hortlak:2,karakoncolos:6,cadi:12,kurtbasi:18,demircin:28,atescini:36,muhafiz:48,golge:60};
+const BOSS_FROM={tepegoz:0,yelbegen:59,evren:119,erlik:299};
 const WGT={gulyabani:3,albasti:2,hortlak:2,karakoncolos:1.5,cadi:2,kurtbasi:2,demircin:1.5,atescini:1.5,muhafiz:1.5,golge:2};
 const INTRO_TXT={
  albasti:'Albastılar görüldü. Çok hızlıdırlar ama çabuk düşerler; okçuların arkasını boş bırakma.',
- hortlak:'Hortlaklar uzaktan büyü atar. Kalkancılar artık emrinde: öne kalkancı, arkaya okçu diz.',
+ hortlak:'Hortlaklar uzaktan büyü atar. Okçuların menzili onlara yeter.',
  karakoncolos:'Karakoncolos iri ve dayanıklıdır. Ateş Yağmuru\'nu ona sakla.',
- cadi:'Kara Orman\'a girdik. Cadılar uzaktan zehirli büyü atar ve canı yakar; onlara hızlı birlik sür.',
+ cadi:'Cadılar uzaktan zehirli büyü atar ve canı yakar; onlara hızlı birlik sür.',
  kurtbasi:'Kurtbaşılar sürü halinde ve çok hızlı. Kalkancıların önde dursun.',
- demircin:'Dağlarda Demir Cinler var. Zırhları kılıç ve okun yarısını yutar; gülle ve Ateş Yağmuru tam işler.',
+ demircin:'Demir Cinler geldi. Zırhları kılıç ve okun yarısını yutar; gülle ve Ateş Yağmuru tam işler.',
  atescini:'Ateş Cinleri uzaktan alev topu atar ve topluca yakar. Birliklerini aralıklı sür.',
- muhafiz:'Kara Kule\'nin eteğindeyiz. Erlik Muhafızları zırhlı ve uzun mızraklı.',
+ muhafiz:'Erlik Muhafızları göründü: zırhlı ve uzun mızraklı.',
  golge:'Gölgeler sessiz ve ölümcül. Çok hızlı vurur; Alp Er\'i yalnız bırakma.',
 };
 const BOSS_TXT={tepegoz:'Tepegöz geliyor. Dev çıktığında safları sıklaştır, Alp Er\'i geri çek, ateşle karşıla.',
@@ -287,34 +370,94 @@ const BOSS_TXT={tepegoz:'Tepegöz geliyor. Dev çıktığında safları sıklaş
  evren:'Evren, dağların ejderi! Uzaktan alev püskürtür; humbaracıların onu yere indirmeli.',
  erlik:'Erlik Han\'ın kendisi! Yanına sürekli Gölge çağırır. Bütün gücünle saldır, Komutan.'};
 const UNIT_TXT={kalkan:'Kalkancılar ordumuza katıldı.',akinci:'Akıncılar artık seninle: hızlı ve güçlü.',humbara:'Humbaracılar katıldı: kalabalığın ortasına gülle at.',deli:'Deliler katıldı: zırhsız ama korkusuz, çok sert vururlar.'};
+// Bölüm kuralları
+const MODS={
+ sis:{ad:'Sisli Gece',ic:'🌫',d:'Sis çöktü; düşmanı ancak yaklaşınca görürsün. Ganimet +%15.',gold:1.15,sc:0.98},
+ kitlik:{ad:'Kıtlık',ic:'🌾',d:'Ambarlar boş: erzak %15 yavaş gelir. Ganimet +%30.',gold:1.3,food:0.85,sc:0.84},
+ bereket:{ad:'Bereket',ic:'🍞',d:'Köylüler erzak getirdi: erzak %30 hızlı gelir. Nefes al, Komutan.',gold:0.9,food:1.3},
+ ruzgar:{ad:'Kara Rüzgâr',ic:'💨',d:'Rüzgâr düşmanın arkasında: yaratıklar %30 hızlı yürür. Ganimet +%15.',gold:1.15,spd:1.3,sc:0.93},
+ demir:{ad:'Demir Gece',ic:'🛡',d:'Bütün yaratıklar zırh kuşandı. Gülle ve ateş her zamankinden değerli. Ganimet +%20.',gold:1.2,armor:0.2,sc:0.92},
+ suru:{ad:'Sürü',ic:'🐺',d:'Düşman sürü halinde: daha kalabalık ama daha cılız. Ganimet +%10.',gold:1.1,iv:0.7,hp:0.8,wave:2,sc:0.86},
+ kizilay:{ad:'Kızıl Ay',ic:'🌑',d:'Kızıl ay yaratıkları azdırdı: vuruşları %20 sert. Ganimet +%30.',gold:1.3,atk:1.2,sc:0.88},
+ yaya:{ad:'Atlar Yorgun',ic:'🐎',d:'Atlar dinleniyor: bu bölümde Akıncı çıkaramazsın. Ganimet +%20.',gold:1.2,noUnit:'akinci',sc:0.93},
+ dev:{ad:'Dev Gecesi',ic:'☠',d:'Bölgenin son savaşı: iki dev birden geliyor!',gold:1.25},
+};
+const RND_MODS=['sis','kitlik','ruzgar','demir','suru','kizilay','yaya'];
+// Zorluk eğrisi (bot simülasyonuyla ayarlandı)
+const DIFF={a:0.085,sl:0.0067,late:1.2,k:1,gold:400,cm:2.5,cq:0.14,corr:[0.624,0.678,0.695,0.764,0.787,0.739,0.791,0.891,0.949,0.965,0.884,0.91,0.88,0.978,1.148,1.219,1.185,0.955,0.984,0.974],rageT:100,rageS:150,bk:1,bonus:5};
+// Düşman gücü, oyuncunun beklenen gelişimini (geliştirmeler + rütbeler) izler; üstüne hafif bir artış biner.
+function diffRaw(i){if(i<40)return 1+DIFF.a*i;
+  const rank=(i>=150?1.1:1)*(i>=550?1.15:1)*(i>=850?1.2:1);
+  return (1+DIFF.a*39)*(1+DIFF.sl*(i-39))*rank*(1+(DIFF.late-1)*(i-39)/(NLV-40));}
+function corrAt(i){const c=DIFF.corr;if(!c)return 1;return c[Math.min(c.length-1,Math.floor(i/RSZ))];}
 const LEVELS=[];
-(function(){
-  for(let i=0;i<40;i++){
-    const r=Math.floor(i/10),k=i%10,R=REGIONS[r];
+function buildLevels(){
+  LEVELS.length=0;
+  for(let i=0;i<NLV;i++){
+    const r=Math.floor(i/RSZ),k=i%RSZ,R=REGIONS[r],rng=srand(1013+i*7919);
     const pool={};
     for(const id in INTRO){if(INTRO[id]>i)continue;const age=i-INTRO[id];let w=WGT[id];
-      if(id==='gulyabani'||id==='albasti'||id==='hortlak')w*=Math.max(0.25,1-age/25);
-      if(age<3&&INTRO[id]>0)w*=0.7;pool[id]=w;}
-    const L={ad:R.names[k],region:r,base:400+55*i,iv:Math.max(2.0,3.4-0.035*i),pool};
+      if(id==='gulyabani'||id==='albasti'||id==='hortlak')w*=Math.max(0.3,1-age/60);
+      if(age<3&&INTRO[id]>0)w*=0.7;if(R.fav.indexOf(id)>=0)w*=1.8;pool[id]=w;}
+    let ad;
+    if(R.first&&k<10)ad=R.first[k];
+    else{const p=((k-(R.first?10:0))*13+r*7)%200;ad=ADJ[p%20]+' '+R.nouns[Math.floor(p/20)];}
+    if(i===NLV-1)ad='Kara Kule\'nin Kalbi';
+    // zorluk: bölge içinde testere dişi, yeni bölgenin ilk iki bölümü nefes
+    let saw=0.95+0.1*(k/(RSZ-1));if(r>0&&k<2)saw=0.86;if(k===RSZ-1)saw*=0.9;
+    let sc=diffRaw(i)*saw*(1+(DIFF.k-1)*Math.min(1,i/30))*corrAt(i);
+    const L={ad,region:r,k,iv:Math.max(1.9,3.4-0.035*Math.min(i,45)),pool,gm:1+i/DIFF.gold,
+      waves:2+Math.min(6,Math.floor(i/8))+Math.min(4,Math.floor(i/200))};
     let brief='';
-    if(k===4||k===9){L.boss=R.bosses[k===4?0:1];L.bossEvery=k===9?100:130;brief=BOSS_TXT[L.boss];}
+    if(k%10===9){const bl=R.bosses.filter(b=>BOSS_FROM[b]<=i);const list=bl.length?bl:['tepegoz'];
+      L.boss=list[Math.floor(k/10)%list.length];L.bossEvery=k===RSZ-1?95:120;brief=BOSS_TXT[L.boss];
+      if(k===RSZ-1&&i>=RSZ-1){L.boss2=list[(Math.floor(k/10)+1)%list.length];if(L.boss2===L.boss&&list.length===1)L.boss2=L.boss;L.mod='dev';}}
+    if(i===NLV-1){L.boss='erlik';L.boss2='evren';L.mod='dev';brief='Kara Kule\'nin kalbindeyiz ve Erlik Han içeride. Bu gece biterse sabah gelir. '+BOSS_TXT.erlik;}
+    if(!L.mod){
+      if(r>0&&k===0)L.mod='bereket';
+      else if(i>=30&&k%10!==9&&rng()<0.32){let m=RND_MODS[Math.floor(rng()*RND_MODS.length)];if(m==='yaya'&&i<20)m='sis';L.mod=m;}
+    }
+    if(L.mod&&MODS[L.mod].sc)sc*=MODS[L.mod].sc;
+    L.sc=sc;
+    L.base=Math.round((400+55*Math.min(i,39))*Math.max(1,sc/(diffRaw(39)*DIFF.k))*(i<40?1:1.1)*DIFF.bk);
     for(const id in INTRO)if(INTRO[id]===i&&INTRO_TXT[id])brief=INTRO_TXT[id]+(brief?' '+brief:'');
     UNITS.forEach(U=>{if(U.unlock===i+1&&UNIT_TXT[U.id])brief+=' '+UNIT_TXT[U.id];});
     if(!brief)brief=R.lines[k%3];
     if(i===0)brief='Gulyabaniler köy yoluna indi. Sekban ve okçularla karşıla, Alp Er\'i öne sür. Kara Kule\'nin ilk karakolunu yık.';
-    if(i===39)brief='Kara Kule karşımızda ve Erlik Han içeride. Bu gece biterse sabah gelir. '+BOSS_TXT.erlik;
+    if(k===0&&r>0)brief='Yeni bölge: '+R.ad+'. '+R.lines[0]+' '+brief.replace(R.lines[0],'').trim();
     L.brief=brief.trim();LEVELS.push(L);
   }
-})();
+}
+buildLevels();
 const UPS=[
- {id:'erzak',ad:'Erzak Ambarı',desc:'Erzak üretimi +%15',base:110},
+ {id:'erzak',ad:'Erzak Ambarı',desc:'Erzak üretimi artar',base:110},
  {id:'sur',ad:'Hisar Surları',desc:'Hisar canı +%20',base:90},
  {id:'guc',ad:'Talim Meydanı',desc:'Birliklerin gücü ve canı +%12',base:140},
  {id:'alp',ad:'Alp Er\'in Kılıcı',desc:'Alp Er\'in gücü ve canı +%20',base:120},
- {id:'ates',ad:'Ateş Ocağı',desc:'Ateş Yağmuru hasarı +%25, dolum +%10',base:130},
+ {id:'ates',ad:'Ateş Ocağı',desc:'Ateş Yağmuru hasarı +%25, dolumu hızlanır',base:130},
 ];
-const UPMAX=10;
-const upCost=(u,l)=>Math.round(u.base*Math.pow(1.45,l));
+const UPMAX=50;
+const upCost=(u,l)=>Math.round(u.base*(1+DIFF.cm*l+DIFF.cq*l*l));
+function upEff(id){const l=S.up[id]||0;
+  if(id==='erzak')return 1+0.15*Math.min(l,10)+0.05*Math.max(0,l-10);
+  if(id==='sur')return 1+0.2*l;
+  if(id==='guc')return 1+0.12*l;
+  if(id==='alp')return 1+0.2*l;
+  if(id==='atesD')return 1+0.25*(S.up.ates||0);
+  if(id==='atesM'){const a=S.up.ates||0;return 1+0.1*Math.min(a,10)+0.02*Math.max(0,a-10);}
+  return 1;}
+// Rütbeler: belirli bölümleri geçince kalıcı yetenekler
+const RANKS=[
+ {at:51,ad:'Kılıç Fırtınası',who:'Alp Er',d:'Alp Er bir vuruşta 5 düşmana kadar biçer (önce 3).'},
+ {at:151,ad:'Usta Askerler',who:'Ordu',d:'Bütün birliklerin gücü ve canı +%10.'},
+ {at:251,ad:'Şifacı Nara',who:'Alp Er',d:'Alp Er 8 saniyede bir yakınındaki askerleri %20 iyileştirir.'},
+ {at:401,ad:'Çifte Ocak',who:'Ateş Ocağı',d:'Ateş Yağmuru 50 yerine 40 ocakla atılır.'},
+ {at:551,ad:'Gazi Askerler',who:'Ordu',d:'Bütün birliklerin gücü ve canı +%15 daha.'},
+ {at:701,ad:'Ölümsüz Alp',who:'Alp Er',d:'Alp Er düşünce 10 yerine 5 saniyede döner.'},
+ {at:851,ad:'Efsane Ordu',who:'Ordu',d:'Bütün birliklerin gücü ve canı +%20 daha.'},
+];
+function hasRank(at){return S.unlocked>=at;}
+function armyMul(){return (hasRank(151)?1.1:1)*(hasRank(551)?1.15:1)*(hasRank(851)?1.2:1);}
 
 /* ================= SES ================= */
 // Tüm sesler WebAudio ile anlık sentezlenir: dosya yok, internet yok.
@@ -407,7 +550,7 @@ function ambience(on){
 }
 function ambienceTick(dt){
   if(!AMB||!B||B.paused||B.over||AC.state!=='running')return;
-  AMB.drumT-=dt;if(AMB.drumT<=0){AMB.drumT=2.4;const v=0.06+(B.L.region*0.02);tone('sine',62,42,0.3,v);tone('sine',62,42,0.25,v*0.7,0.3);}
+  AMB.drumT-=dt;if(AMB.drumT<=0){AMB.drumT=2.4;const v=0.06+(REGIONS[B.L.region].st*0.02);tone('sine',62,42,0.3,v);tone('sine',62,42,0.25,v*0.7,0.3);}
 }
 document.addEventListener('visibilitychange',()=>{if(!AC)return;if(document.hidden)AC.suspend();else if(S.sound)AC.resume();});
 
@@ -569,7 +712,7 @@ const RPAL=[
 const bgCache={};
 function makeBg(i){
   if(bgCache[i])return bgCache[i];
-  const reg=Math.min(3,Math.floor(i/10)),P=RPAL[reg][i%3];
+  const RG=REGIONS[Math.min(REGIONS.length-1,Math.floor(i/RSZ))],reg=RG.st,P=RPAL[reg][i%3];
   const b=document.createElement('canvas');b.width=960;b.height=430;const c=b.getContext('2d');const R=srand(77+i*13);
   let g=c.createLinearGradient(0,0,0,GY);g.addColorStop(0,P[0]);g.addColorStop(1,P[1]);c.fillStyle=g;c.fillRect(0,0,960,430);
   for(let k=0;k<90;k++){c.fillStyle='rgba(255,255,240,'+(0.3+R()*0.6)+')';c.fillRect(R()*960,R()*230,R()<0.15?2:1,R()<0.15?2:1);}
@@ -595,6 +738,8 @@ function makeBg(i){
   for(let k=0;k<160;k++){c.fillStyle='rgba(0,0,0,'+(0.08+R()*0.15)+')';c.fillRect(R()*960,GY-20+R()*70,2+R()*4,1+R()*2);}
   for(let k=0;k<60;k++){c.strokeStyle=reg===3?'rgba(120,50,60,.4)':'rgba(90,120,60,.45)';c.lineWidth=1;const x=R()*960,y=GY+16+R()*40;ln(c,x,y,x+(R()-0.5)*4,y-4-R()*5);}
   if(reg===3){for(let k=0;k<30;k++){c.fillStyle='rgba(255,120,60,'+(0.2+R()*0.4)+')';c.fillRect(R()*960,R()*GY,2,2);}}
+  if(RG.tint){c.globalCompositeOperation='overlay';c.fillStyle=RG.tint;c.globalAlpha=0.55;c.fillRect(0,0,960,430);c.globalAlpha=1;c.globalCompositeOperation='source-over';}
+  const ks=Object.keys(bgCache);if(ks.length>8)delete bgCache[ks[0]];
   bgCache[i]=b;return b;
 }
 function shade(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;const f=amt<0?0:255,p=Math.abs(amt);
@@ -648,8 +793,10 @@ function baseBar(c,cx,y,b,col){
 /* ================= SAVAŞ ================= */
 let B=null;
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-function mult(){const g=S.up.guc;return{hp:1+0.12*g,atk:1+0.12*g};}
+function mult(){const m=upEff('guc')*armyMul();return{hp:m,atk:m};}
 function unitUnlocked(u){return Math.max(S.unlocked,B?B.i+1:1)>=u.unlock;}
+function unitBanned(u){return !!(B&&B.M&&B.M.noUnit===u.id);}
+function fireCost(){return hasRank(401)?40:50;}
 
 function mkUnit(side,def,look,m,x){
   const sc=def.sc||1;
@@ -658,16 +805,19 @@ function mkUnit(side,def,look,m,x){
     look,sc,mounted:!!def.mounted,gold:def.gold||0,boss:!!def.boss,id:def.id,r:def.r||0};
 }
 function startLevel(i){
-  const L=LEVELS[i],sc=1+0.075*i;
-  const pMax=Math.round(700*(1+0.2*S.up.sur));
-  B={i,L,sc,t:0,food:40,foodRate:5*(1+0.15*S.up.erzak),mana:20,manaRate:4*(1+0.1*S.up.ates),
+  const L=LEVELS[i],sc=L.sc,M=MODS[L.mod]||{};
+  const pMax=Math.round(700*upEff('sur'));
+  B={i,L,M,sc,gm:L.gm*(M.gold||1),t:0,food:40,foodRate:5*upEff('erzak')*(M.food||1),mana:20,manaRate:4*upEff('atesM'),
     pBase:{isBase:true,side:0,x:112,hp:pMax,max:pMax,hitT:0},eBase:{isBase:true,side:1,x:848,hp:Math.round(L.base*1.25),max:Math.round(L.base*1.25),hitT:0},
     units:[],proj:[],fires:[],parts:[],texts:[],cds:UNITS.map(()=>0),spawnT:2.5,waveT:35,queue:[],bossT:L.boss?22:1e9,
-    speed:B?B.speed:1,paused:false,over:false,goldEarned:0,kills:0,shake:0,banner:null,heroIn:0,shown:false};
-  const ha=1+0.2*S.up.alp;
+    speed:B?B.speed:1,paused:false,over:false,goldEarned:0,kills:0,shake:0,banner:null,heroIn:0,shown:false,modBan:!!L.mod,wx:[]};
+  const R=REGIONS[L.region];
+  if(R.wx)for(let k=0;k<70;k++)B.wx.push({x:Math.random()*960,y:Math.random()*430,s:0.5+Math.random()});
+  const ha=upEff('alp');
   const hero={side:0,dir:1,isHero:true,x:140,lane:5,hp:320*ha,max:320*ha,atk:24*ha,rate:0.7,range:40,spd:115,cdT:0,walk:0,atkA:0,hitT:0,state:'idle',look:LOOK.alp,sc:1.25,dead:0,r:0};
   B.hero=hero;B.units.push(hero);
-  document.getElementById('lvChip').textContent='Bölüm '+(i+1)+' · '+L.ad;
+  document.getElementById('lvChip').textContent='Bölüm '+(i+1)+' · '+L.ad+(L.mod?' · '+M.ic+' '+M.ad:'');
+  document.getElementById('bSpeed').textContent='×'+B.speed;
   buildUnitButtons();
   banner('Bölüm '+(i+1)+': '+L.ad,2.2);
   document.getElementById('ovRes').classList.remove('on');document.getElementById('ovPause').classList.remove('on');
@@ -676,23 +826,26 @@ function startLevel(i){
 function banner(txt,life,col){B.banner={txt,life:life||2,max:life||2,col:col||'#f2ecd6'};}
 function pick(pool){let tot=0;for(const k in pool)tot+=pool[k];let r=Math.random()*tot;for(const k in pool){r-=pool[k];if(r<=0)return k;}return Object.keys(pool)[0];}
 function spawnFoe(id,x){
-  const d=FOES[id];const u=mkUnit(1,d,LOOK[id],{hp:B.sc,atk:B.sc},x);B.units.push(u);
+  const d=FOES[id],M=B.M;const rage=1+Math.max(0,B.t-DIFF.rageT)/DIFF.rageS;
+  const u=mkUnit(1,d,LOOK[id],{hp:B.sc*(M.hp||1)*rage,atk:B.sc*(M.atk||1)*rage},x);
+  u.gold=Math.max(1,Math.round(d.gold*B.gm));if(M.spd)u.spd*=M.spd;if(M.armor)u.armor=Math.min(0.6,u.armor+M.armor);
+  B.units.push(u);
   if(d.boss){banner(d.ad.toLocaleUpperCase('tr')+' GELİYOR!',2.5,'#ff8a6a');B.shake=8;SFX.bossRoar();}
 }
 function trySpawn(k){
   if(!B||B.over||B.paused)return;
   const U=UNITS[k];
-  if(!unitUnlocked(U)||B.cds[k]>0||B.food<U.cost){SFX.fail();return;}
+  if(!unitUnlocked(U)||unitBanned(U)||B.cds[k]>0||B.food<U.cost){SFX.fail();return;}
   B.food-=U.cost;B.cds[k]=U.cd;
   const u=mkUnit(0,U,LOOK[U.id],mult());B.units.push(u);
   SFX.spawn(U.id);
 }
 function fire(){
   if(!B||B.over||B.paused)return;
-  if(B.mana<50){SFX.fail();return;}
+  if(B.mana<fireCost()){SFX.fail();return;}
   let front=null;for(const e of B.units)if(e.side===1&&e.hp>0&&(!front||e.x<front.x))front=e;
   if(!front){banner('Ortada düşman yok',1.2);return;}
-  B.mana-=50;B.fires.push({cx:Math.min(800,front.x+50),t:0,done:false,balls:[]});
+  B.mana-=fireCost();B.fires.push({cx:Math.min(800,front.x+50),t:0,done:false,balls:[]});
   SFX.fireRain();
 }
 function findTarget(u){
@@ -712,7 +865,7 @@ function hurt(t,a,pierce){
 function die(t){
   const y=GY+t.lane-20*t.sc;
   for(let k=0;k<10;k++)B.parts.push({x:t.x,y,vx:(Math.random()-0.5)*120,vy:-Math.random()*140,life:0.6+Math.random()*0.4,col:t.side?'#4a2a3a':'#7a1f1a',sz:2+Math.random()*2.5*t.sc,g:300});
-  if(t.isHero){t.dead=10;banner('Alp Er yaralandı! 10 sn sonra döner',2,'#ffcc66');SFX.heroDown();return;}
+  if(t.isHero){t.dead=hasRank(701)?5:10;banner('Alp Er yaralandı! '+t.dead+' sn sonra döner',2,'#ffcc66');SFX.heroDown();return;}
   if(t.side===1){
     B.goldEarned+=t.gold;B.kills++;B.texts.push({x:t.x,y:y-18,txt:'+'+t.gold,life:1,col:'#f5d36b'});
     if(t.boss){B.shake=10;banner(FOES[t.id].ad+' devrildi!',2,'#f5d36b');SFX.bossDown();}
@@ -756,7 +909,7 @@ function updHero(h,dt){
   for(const e of B.units){if(e.side!==1||e.hp<=0)continue;const dx=e.x-h.x;
     if(Math.abs(dx)<=h.range+(e.r||0)){near.push(e);}}
   if(!inp&&near.length){h.dir=Math.sign(near[0].x-h.x)||1;}
-  const front=near.filter(e=>(e.x-h.x)*h.dir>-10).sort((a,b)=>Math.abs(a.x-h.x)-Math.abs(b.x-h.x)).slice(0,3);
+  const front=near.filter(e=>(e.x-h.x)*h.dir>-10).sort((a,b)=>Math.abs(a.x-h.x)-Math.abs(b.x-h.x)).slice(0,hasRank(51)?5:3);
   const baseIn=h.dir===1&&B.eBase.x-h.x<=h.range;
   if((front.length||baseIn)&&h.cdT<=0){
     h.cdT=h.rate;h.atkA=1;for(const e of front)hurt(e,h.atk);if(baseIn&&!front.length)hurt(B.eBase,h.atk*0.6);
@@ -774,24 +927,28 @@ function step(dt){
   for(const t of B.texts){t.life-=dt;t.y-=30*dt;}B.texts=B.texts.filter(t=>t.life>0);
   if(B.over){B.endT-=dt;for(const u of B.units){if(u.atkA>0)u.atkA=Math.max(0,u.atkA-dt*3);u.state='idle';}
     if(B.endT<=0&&!B.shown){B.shown=true;showResult();}return;}
+  if(!B.rageBan&&B.t>DIFF.rageT){B.rageBan=true;banner('Kara Kule azdı: düşman güçleniyor!',2.2,'#ff8a6a');}
+  if(B.modBan&&B.t>2.4){B.modBan=false;banner(B.M.ic+' '+B.M.ad,2.4,'#ffd27a');}
   B.moral=Math.min(2.2,1+B.t/160);B.food=Math.min(999,B.food+B.foodRate*B.moral*dt);B.mana=Math.min(100,B.mana+B.manaRate*dt);
   for(let k=0;k<B.cds.length;k++)if(B.cds[k]>0)B.cds[k]=Math.max(0,B.cds[k]-dt);
   // düşman üretimi
   B.spawnT-=dt;
-  if(B.spawnT<=0){spawnFoe(pick(B.L.pool));B.spawnT=B.L.iv*0.85*(0.7+Math.random()*0.6)*Math.max(0.62,1-B.t/260);}
+  if(B.spawnT<=0){spawnFoe(pick(B.L.pool));B.spawnT=B.L.iv*(B.M.iv||1)*0.85*(0.7+Math.random()*0.6)*Math.max(0.62,1-B.t/260);}
   B.waveT-=dt;
-  if(B.waveT<=0){B.waveT=35;const n=2+Math.floor(B.i/8);banner('Düşman dalgası!',1.6,'#ff8a6a');SFX.wave();
+  if(B.waveT<=0){B.waveT=35;const n=B.L.waves+(B.M.wave||0);banner('Düşman dalgası!',1.6,'#ff8a6a');SFX.wave();
     for(let k=0;k<n;k++)B.queue.push(B.t+k*0.38);}
   while(B.queue.length&&B.queue[0]<=B.t){B.queue.shift();spawnFoe(pick(B.L.pool));}
   B.bossT-=dt;
-  if(B.bossT<=0&&B.L.boss){B.bossT=B.L.bossEvery||90;spawnFoe(B.L.boss);}
+  if(B.bossT<=0&&B.L.boss){B.bossT=B.L.bossEvery||90;spawnFoe(B.L.boss);if(B.L.boss2)B.queue2=B.t+4;}
+  if(B.queue2&&B.t>=B.queue2){B.queue2=0;spawnFoe(B.L.boss2);}
+  if(hasRank(251)&&B.hero.hp>0){B.healT=(B.healT||8)-dt;if(B.healT<=0){B.healT=8;let n=0;for(const u of B.units)if(u.side===0&&!u.isHero&&u.hp>0&&Math.abs(u.x-B.hero.x)<150&&u.hp<u.max){u.hp=Math.min(u.max,u.hp+u.max*0.2);n++;}if(n)B.texts.push({x:B.hero.x,y:GY-70,txt:'Şifa +'+n,life:1.2,col:'#8aff8a'});}}
   for(const u of B.units)if(u.summon&&u.hp>0){u.sumT-=dt;if(u.sumT<=0){u.sumT=14;spawnFoe('golge',u.x+10);spawnFoe('golge',u.x+30);banner('Erlik Gölge çağırdı!',1.4,'#d06aff');SFX.summon();}}
   for(const u of B.units){if(u.isHero)updHero(u,dt);else if(u.hp>0)updUnit(u,dt);}
   // mermiler
   for(const p of B.proj){p.e+=dt;if(p.e>=p.dur){p.done=true;impact(p);}}
   B.proj=B.proj.filter(p=>!p.done);
   // ateş yağmuru
-  const fdmg=65*(1+0.25*S.up.ates)*(1+0.04*B.i);
+  const fdmg=65*upEff('atesD')*(0.6+0.5*B.sc);
   for(const f of B.fires){f.t+=dt;
     if(f.t<0.6&&Math.random()<0.7)f.balls.push({x:f.cx+(Math.random()-0.5)*260,y:-20,vy:700+Math.random()*200});
     for(const b of f.balls){b.y+=b.vy*dt;if(!b.hit&&b.y>=GY){b.hit=true;for(let k=0;k<6;k++)B.parts.push({x:b.x,y:GY,vx:(Math.random()-0.5)*140,vy:-Math.random()*160,life:0.5,col:Math.random()<0.5?'#ffb347':'#ff5a1f',sz:3,g:300});}}
@@ -821,9 +978,9 @@ function endGame(win){
   B.over=true;B.win=win;B.endT=1.6;B.heroIn=0;
   let bonus=0;B.stars=0;
   if(win){const pct=B.pBase.hp/B.pBase.max;B.stars=pct>0.7?3:pct>0.35?2:1;
-    const first=!(S.stars[B.i]>0);bonus=Math.round((80+30*B.i)*(first?1:0.35));
-    S.stars[B.i]=Math.max(S.stars[B.i]||0,B.stars);if(S.unlocked<B.i+2)S.unlocked=Math.min(LEVELS.length,B.i+2);
-    if(B.i===LEVELS.length-1)S.finished=true;
+    const first=!(S.stars[B.i]>0);bonus=Math.round((80+DIFF.bonus*B.i)*(first?1:0.35)*(B.M.gold||1));
+    S.stars[B.i]=Math.max(S.stars[B.i]||0,B.stars);if(S.unlocked<B.i+2)S.unlocked=Math.min(NLV,B.i+2);
+    if(B.i===NLV-1)S.finished=true;
     banner('ZAFER!',3,'#f5d36b');B.shake=12;
     for(let k=0;k<40;k++)B.parts.push({x:880+Math.random()*60,y:GY-100-Math.random()*90,vx:(Math.random()-0.5)*260,vy:-Math.random()*220,life:1+Math.random(),col:k%3?'#2a2433':'#c060ff',sz:3+Math.random()*5,g:400});
     SFX.towerFall();setTimeout(()=>SFX.victory(),700);
@@ -863,6 +1020,14 @@ function draw(){
   for(const f of B.fires){for(const b of f.balls){if(b.hit)continue;c.strokeStyle='rgba(255,160,60,.5)';c.lineWidth=4;ln(c,b.x,b.y-26,b.x,b.y);c.fillStyle='#ffcc55';c.shadowColor='#ff7a1f';c.shadowBlur=14;circ(c,b.x,b.y,5);c.shadowBlur=0;}
     if(f.t>0.5&&f.t<0.9){c.fillStyle='rgba(255,140,40,'+(0.35*(1-(f.t-0.5)/0.4))+')';c.fillRect(f.cx-140,GY-90,280,110);}}
   for(const p of B.parts){c.globalAlpha=Math.min(1,p.life*2);c.fillStyle=p.col;c.fillRect(p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz);}c.globalAlpha=1;
+  if(B.L.mod==='sis'){const g=c.createLinearGradient(430,0,820,0);g.addColorStop(0,'rgba(170,180,175,0)');g.addColorStop(1,'rgba(150,160,158,.88)');c.fillStyle=g;c.fillRect(430,0,530,GY+60);}
+  const wx=REGIONS[B.L.region].wx;
+  if(wx){const sp=wx==='snow'?40:wx==='ash'?28:wx==='rain'?520:wx==='sand'?60:-35;
+    c.fillStyle=wx==='snow'?'rgba(240,245,255,.8)':wx==='ash'?'rgba(150,150,150,.6)':wx==='rain'?'rgba(170,190,220,.45)':wx==='sand'?'rgba(220,180,120,.5)':'rgba(255,140,50,.85)';
+    c.strokeStyle=c.fillStyle;c.lineWidth=1;
+    for(const w of B.wx){if(!B.paused){w.y+=sp*w.s*(1/60);w.x+=(wx==='sand'?120:wx==='rain'?-60:10)*w.s*(1/60);}
+      if(w.y>430)w.y=-5;if(w.y<-6)w.y=430;if(w.x>965)w.x=-5;if(w.x<-6)w.x=960;
+      if(wx==='rain')ln(c,w.x,w.y,w.x-3,w.y+10);else c.fillRect(w.x,w.y,wx==='sand'?3:2*w.s,wx==='sand'?1:2*w.s);}}
   c.textAlign='center';c.font='bold 13px Tahoma,Verdana,sans-serif';
   for(const t of B.texts){c.globalAlpha=Math.min(1,t.life*2);c.fillStyle='#000';c.fillText(t.txt,t.x+1,t.y+1);c.fillStyle=t.col;c.fillText(t.txt,t.x,t.y);}c.globalAlpha=1;
   if(B.hero.hp<=0&&!B.over){c.fillStyle='rgba(30,46,33,.85)';c.fillRect(120,GY+30,150,22);c.fillStyle='#ffcc66';c.font='bold 12px Tahoma,Verdana,sans-serif';c.fillText('Alp Er dönüyor: '+Math.ceil(B.hero.dead)+' sn',195,GY+45);}
@@ -892,26 +1057,26 @@ function hud(){
   document.getElementById('foodV').textContent=Math.floor(B.food);
   document.getElementById('foodR').textContent='+'+(B.foodRate*(B.moral||1)).toFixed(1)+'/sn';
   document.getElementById('killChip').textContent='Leş '+B.kills+' · '+B.goldEarned+' akçe';
-  UNITS.forEach((U,k)=>{const e=ubEls[k];if(!e)return;const un=unitUnlocked(U);
-    e.d.classList.toggle('locked',!un);e.d.classList.toggle('poor',un&&B.food<U.cost);
-    e.cost.textContent=un?U.cost+' erzak':'Bölüm '+U.unlock+"'te";
+  UNITS.forEach((U,k)=>{const e=ubEls[k];if(!e)return;const un=unitUnlocked(U),ban=unitBanned(U);
+    e.d.classList.toggle('locked',!un||ban);e.d.classList.toggle('poor',un&&!ban&&B.food<U.cost);
+    e.cost.textContent=ban?'Bu bölümde yok':un?U.cost+' erzak':'Bölüm '+U.unlock+"'te";
     e.cdv.style.height=(B.cds[k]>0?B.cds[k]/U.cd*100:0)+'%';});
   document.getElementById('fireFill').style.height=B.mana+'%';
-  document.getElementById('fireBtn').classList.toggle('ready',B.mana>=50);
+  document.getElementById('fireBtn').classList.toggle('ready',B.mana>=fireCost());
 }
 
 /* ================= SONUÇ ================= */
 function starHtml(n){let s='';for(let k=0;k<3;k++)s+=k<n?'★':'<span class="off">★</span>';return s;}
 function showResult(){
   const rb=document.getElementById('resBody'),ra=document.getElementById('resActs');
-  const last=B.i===LEVELS.length-1;
+  const last=B.i===NLV-1,rk=RANKS.find(x=>x.at===B.i+2&&B.win);
   if(B.win){
     rb.innerHTML='<div class="big">'+(last?'Kara Kule yıkıldı!':'Zafer: '+B.L.ad)+'</div><div class="stars">'+starHtml(B.stars)+'</div>'+
-      (last?'Kara Gece sona erdi, Komutan. Anadolu sabaha uyanıyor.':(B.i%10===9?REGIONS[B.L.region].ad+' temizlendi! Sırada '+REGIONS[B.L.region+1].ad+' var.':'Divan seni kutluyor, Komutan. Ordu bir sonraki sefere hazır.'))+
+      (last?'Kara Gece sona erdi, Komutan. Anadolu sabaha uyanıyor.':(B.L.k===RSZ-1?REGIONS[B.L.region].ad+' temizlendi! Sırada '+REGIONS[B.L.region+1].ad+' var.':'Divan seni kutluyor, Komutan. Ordu bir sonraki sefere hazır.'))+(rk?'<br><b>Yeni rütbe: '+rk.ad+'</b> · '+rk.d:'')+
       '<table><tr><td>Leş</td><td>'+B.kills+'</td></tr><tr><td>Ganimet</td><td>'+B.goldEarned+' akçe</td></tr><tr><td>Zafer ödülü</td><td>'+B.bonus+' akçe</td></tr><tr><td>Hazine</td><td>'+S.gold+' akçe</td></tr></table>';
     ra.innerHTML='';
     addAct(ra,'Ordugâh','gray',()=>show('camp'));addAct(ra,'Tekrar','gray',()=>startLevel(B.i));
-    if(!last)addAct(ra,'Devam ▸','',()=>{curReg=Math.floor((B.i+1)/10);startLevel(B.i+1);});else addAct(ra,'Ana Menü','',()=>show('menu'));
+    if(!last)addAct(ra,'Devam ▸','',()=>{curReg=Math.floor((B.i+1)/RSZ);startLevel(B.i+1);});else addAct(ra,'Ana Menü','',()=>show('menu'));
   }else{
     rb.innerHTML='<div class="big">Hisar düştü</div>Bu sefer olmadı, Komutan. Ganimet yine de hazineye eklendi. Ordugâh\'ta ordunu güçlendir ve tekrar dene.'+
       '<table><tr><td>Leş</td><td>'+B.kills+'</td></tr><tr><td>Ganimet</td><td>'+B.goldEarned+' akçe</td></tr><tr><td>Hazine</td><td>'+S.gold+' akçe</td></tr></table>';
@@ -928,17 +1093,20 @@ function show(n){
   cur=n;const map={menu:'scrMenu',levels:'scrLevels',camp:'scrCamp',help:'scrHelp',battle:'scrBattle'};
   for(const k in map)document.getElementById(map[k]).classList.toggle('on',k===n);
   document.querySelectorAll('.lvGold').forEach(e=>e.textContent=S.gold+' akçe');
+  document.getElementById('ovLv').classList.remove('on');
   if(n==='menu')renderMenu();if(n==='levels')renderLevels();if(n==='camp')renderCamp();
   if(n!=='battle'){ambience(false);if(B)B.heroIn=0;}
 }
 function messages(){
   const m=[];
   m.push({id:'m0',from:'Hisar Divanı',subj:'Kara Gece çöktü',body:'Komutan,<br><br>Doğudaki Kara Kule\'den inen yaratıklar köylerimize saldırıyor: gulyabaniler, albastılar, hortlaklar... Hisar\'ın kapıları sana emanet.<br><br>Alp Er yanında. Erzağı iyi kullan, birliklerini sırayla çıkar ve Kule\'yi yık. Bu gece biterse sabah gelir.'});
-  for(let i=Math.max(0,Math.min(S.unlocked,40)-5);i<S.unlocked&&i<LEVELS.length;i++)m.push({id:'l'+i,from:'Keşif Kolu',subj:'Bölüm '+(i+1)+': '+LEVELS[i].ad,body:LEVELS[i].brief+(S.stars[i]?'<br><br><b>Durum:</b> Fethedildi '+'★'.repeat(S.stars[i]):'<br><br><b>Durum:</b> Seni bekliyor.')});
+  for(let i=Math.max(0,Math.min(S.unlocked,NLV)-5);i<S.unlocked&&i<NLV;i++)m.push({id:'l'+i,from:'Keşif Kolu',subj:'Bölüm '+(i+1)+': '+LEVELS[i].ad,body:LEVELS[i].brief+(S.stars[i]?'<br><br><b>Durum:</b> Fethedildi '+'★'.repeat(S.stars[i]):'<br><br><b>Durum:</b> Seni bekliyor.')});
   UNITS.forEach(U=>{if(U.unlock>1&&S.unlocked>=U.unlock)m.push({id:'u'+U.id,from:'Talim Meydanı',subj:'Yeni birlik: '+U.ad,body:U.ad+' ordumuza katıldı. Bedeli '+U.cost+' erzak.'});});
-  REGIONS.forEach((R,r)=>{if(r>0&&S.unlocked>r*10)m.push({id:'r'+r,from:'Hisar Divanı',subj:'Yeni bölge: '+R.ad,body:R.ad+' bölgesine ulaştık, Komutan. '+R.lines[0]});});
+  const ur=Math.floor((Math.min(S.unlocked,NLV)-1)/RSZ);
+  REGIONS.forEach((R,r)=>{if(r>0&&r<=ur&&r>ur-3)m.push({id:'r'+r,from:'Hisar Divanı',subj:'Yeni bölge: '+R.ad,body:R.ad+' bölgesine ulaştık, Komutan. '+R.lines[0]});});
+  RANKS.forEach(x=>{if(hasRank(x.at))m.push({id:'k'+x.at,from:'Hisar Divanı',subj:'Rütbe: '+x.ad,body:'Bölüm '+(x.at-1)+' fethedildi. '+x.who+' yeni bir güç kazandı: '+x.d});});
   if(S.gold>=150)m.push({id:'g',from:'Defterdar',subj:'Hazine dolu',body:'Hazinede '+S.gold+' akçe var. Ordugâh\'ta geliştirmelere harcamayı unutma.'});
-  if(S.finished)m.push({id:'fin',from:'Hisar Divanı',subj:'Sabah geldi',body:'Kara Kule yıkıldı, Komutan. Bütün Anadolu adını anıyor. Yıldızları tamamlamak için seferlere dönebilirsin.'});
+  if(S.finished)m.push({id:'fin',from:'Hisar Divanı',subj:'Sabah geldi',body:'999 bölümün hepsi fethedildi ve Kara Kule yıkıldı, Komutan. Bütün Anadolu adını anıyor. Yıldızları tamamlamak için seferlere dönebilirsin.'});
   return m.reverse();
 }
 let selMsg=null;
@@ -952,27 +1120,42 @@ function renderMenu(){
   const s=ms.find(x=>x.id===selMsg);if(S.read.indexOf(s.id)<0){S.read.push(s.id);save();}
   document.getElementById('ibody').innerHTML='<div class="from">Kimden: '+s.from+'</div><div class="subj">'+s.subj+'</div>'+s.body;
 }
-let curReg=null;
+let curReg=null,selLv=null;
 function renderLevels(){
-  if(curReg===null)curReg=Math.min(3,Math.floor((Math.min(S.unlocked,40)-1)/10));
-  const tb=document.getElementById('rtabs');tb.innerHTML='';
-  REGIONS.forEach((R,r)=>{const lock=r*10+1>S.unlocked;let st=0;for(let k=0;k<10;k++)st+=S.stars[r*10+k]||0;
-    const d=document.createElement('div');d.className='rtab'+(r===curReg?' on':'')+(lock?' lock':'');
-    d.innerHTML=(lock?'🔒 ':'')+R.ad+'<small>Bölüm '+(r*10+1)+'–'+(r*10+10)+' · ★ '+st+'/30</small>';
-    if(!lock)d.onclick=()=>{curReg=r;renderLevels();};tb.appendChild(d);});
+  const top=Math.min(S.unlocked,NLV);
+  if(curReg===null)curReg=Math.floor((top-1)/RSZ);
+  curReg=Math.max(0,Math.min(REGIONS.length-1,curReg));
+  const R=REGIONS[curReg],a=curReg*RSZ,b=Math.min(NLV,a+RSZ);let st=0,won=0;
+  for(let i=a;i<b;i++){st+=S.stars[i]||0;if(S.stars[i])won++;}
+  const lockR=a+1>S.unlocked;
+  document.getElementById('lvSub').textContent='Fethedilen: '+(S.unlocked-1+(S.finished?1:0))+' / '+NLV;
+  document.getElementById('rHead').innerHTML=(lockR?'🔒 ':'')+'<span>'+(curReg+1)+'. '+R.ad+'</span><small>Bölüm '+(a+1)+'–'+b+'</small><span class="rbar"><i style="width:'+Math.round(won/(b-a)*100)+'%"></i></span><small>★ '+st+' / '+(b-a)*3+'</small>';
+  document.getElementById('rPrev').classList.toggle('dis',curReg===0);
+  document.getElementById('rNext').classList.toggle('dis',curReg>=REGIONS.length-1);
   const g=document.getElementById('lvgrid');g.innerHTML='';
-  LEVELS.forEach((L,i)=>{if(Math.floor(i/10)!==curReg)return;const lock=i+1>S.unlocked;const d=document.createElement('div');d.className='panel lv'+(lock?' lock':'');
-    d.innerHTML='<h3>Bölüm '+(i+1)+'</h3>'+(L.boss?'<span class="tag">'+FOES[L.boss].ad.toLocaleUpperCase('tr')+'</span>':'')+'<div class="num">'+(lock?'🔒':(i+1))+'</div><div class="nm">'+L.ad+'</div><div class="st">'+(lock?'':starHtml(S.stars[i]||0))+'</div>';
-    if(!lock)d.onclick=()=>startLevel(i);g.appendChild(d);});
+  for(let i=a;i<b;i++){const L=LEVELS[i],lock=i+1>S.unlocked,d=document.createElement('div');
+    d.className='panel lv'+(lock?' lock':'')+(L.boss?' boss':'')+(i===top-1&&!S.finished?' cur':'');
+    d.innerHTML=(L.mod&&!lock?'<span class="mi">'+MODS[L.mod].ic+'</span>':'')+(L.boss?'<span class="tg">☠</span>':'')+
+      '<div class="n">'+(lock?'🔒 '+(i+1):(i+1))+'</div><div class="s">'+(lock?'':starHtml(S.stars[i]||0))+'</div>';
+    if(!lock)d.onclick=()=>openLv(i);g.appendChild(d);}
+}
+function openLv(i){
+  selLv=i;const L=LEVELS[i],M=MODS[L.mod];
+  document.getElementById('lvT').textContent='Bölüm '+(i+1)+' · '+L.ad;
+  document.getElementById('lvB').innerHTML='<div class="from">'+(L.region+1)+'. bölge · '+REGIONS[L.region].ad+'</div><div class="lvst">'+starHtml(S.stars[i]||0)+'</div>'+L.brief+
+    (L.boss?'<div class="modl">☠ <b>Dev:</b> '+FOES[L.boss].ad+(L.boss2?' ve '+FOES[L.boss2].ad:'')+'</div>':'')+
+    (M?'<div class="modl">'+M.ic+' <b>'+M.ad+':</b> '+M.d+'</div>':'');
+  document.getElementById('ovLv').classList.add('on');
 }
 function renderCamp(){
   const t=document.getElementById('ut');t.innerHTML='';
   UPS.forEach(u=>{const l=S.up[u.id],max=l>=UPMAX,cost=upCost(u,l);const tr=document.createElement('tr');
-    let pips='';for(let k=0;k<UPMAX;k++)pips+='<span class="'+(k<l?'on':'')+'"></span>';
-    tr.innerHTML='<td><div class="unm">'+u.ad+'</div><div class="ud">'+u.desc+'</div></td><td class="pips">'+pips+'</td><td style="text-align:right"></td>';
+    tr.innerHTML='<td><div class="unm">'+u.ad+'</div><div class="ud">'+u.desc+'</div></td><td class="ulv"><b>'+l+'</b> / '+UPMAX+'<div class="ubar"><i style="width:'+(l/UPMAX*100)+'%"></i></div></td><td style="text-align:right"></td>';
     const b=document.createElement('div');b.className='btn'+(max||S.gold<cost?' dis':'');b.textContent=max?'Tamam':'Geliştir · '+cost;
     b.onclick=()=>{if(S.up[u.id]>=UPMAX||S.gold<cost)return;S.gold-=cost;S.up[u.id]++;save();SFX.upgrade();show('camp');};
     tr.lastChild.appendChild(b);t.appendChild(tr);});
+  document.getElementById('ranks').innerHTML=RANKS.map(x=>{const on=hasRank(x.at);
+    return '<div class="rki'+(on?' on':'')+'"><b>'+(on?'✓ ':'🔒 ')+x.ad+'</b>'+x.who+' · Bölüm '+(x.at-1)+' geçilince<br>'+x.d+'</div>';}).join('');
 }
 function paintBgs(){
   const m=document.getElementById('menuBg').getContext('2d');m.drawImage(makeBg(4),0,0,960,540);m.fillStyle='rgba(5,10,6,.35)';m.fillRect(0,0,960,540);
@@ -981,13 +1164,15 @@ function paintBgs(){
 
 /* ================= GİRDİLER ================= */
 function on(id,fn){document.getElementById(id).addEventListener('click',fn);}
-on('bPlay',()=>show('levels'));on('bPlay2',()=>show('levels'));on('bCamp',()=>show('camp'));on('bCamp2',()=>show('camp'));on('bHelp',()=>show('help'));
+on('bPlay',()=>show('levels'));on('rPrev',()=>{if(curReg>0){curReg--;renderLevels();}});on('rNext',()=>{if(curReg<REGIONS.length-1){curReg++;renderLevels();}});
+on('bCur',()=>{curReg=null;renderLevels();openLv(Math.min(S.unlocked,NLV)-1);});on('lvBack',()=>document.getElementById('ovLv').classList.remove('on'));
+on('lvGo',()=>{document.getElementById('ovLv').classList.remove('on');if(selLv!=null)startLevel(selLv);});on('bPlay2',()=>show('levels'));on('bCamp',()=>show('camp'));on('bCamp2',()=>show('camp'));on('bHelp',()=>show('help'));
 on('bSound',()=>{S.sound=!S.sound;save();if(S.sound){unlockAudio();setTimeout(()=>SFX.click(),30);}else ambience(false);renderMenu();});
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
 function setPause(p){if(!B||B.over)return;B.paused=p;ambience(!p);B.heroIn=0;document.getElementById('ovPause').classList.toggle('on',p);}
 on('bPause',()=>setPause(true));on('bResume',()=>setPause(false));
 on('bQuit',()=>{setPause(false);B=null;show('levels');});
-on('bSpeed',()=>{if(!B)return;B.speed=B.speed===1?2:1;document.getElementById('bSpeed').textContent='×'+B.speed;});
+on('bSpeed',()=>{if(!B)return;B.speed=B.speed>=3?1:B.speed+1;document.getElementById('bSpeed').textContent='×'+B.speed;});
 on('fireBtn',fire);
 function holdBtn(id,dir){const el=document.getElementById(id);
   const down=e=>{e.preventDefault();if(B&&!B.paused)B.heroIn=dir;el.classList.add('down');};
@@ -1011,7 +1196,7 @@ function loop(now){
   if(cur==='battle'&&B){if(!B.paused){for(let k=0;k<B.speed;k++)step(dt);ambienceTick(dt);}draw();hud();}
 }
 paintBgs();show('menu');requestAnimationFrame(loop);
-window.HISAR={startLevel,step,trySpawn,fire,get B(){return B;},S,show,UNITS,LEVELS};
+window.HISAR={startLevel,step,trySpawn,fire,get B(){return B;},S,show,UNITS,LEVELS,REGIONS,MODS,UPS,upCost,UPMAX,NLV,RSZ,DIFF,buildLevels,fireCost,openLv,save};
 </script>
 </body>
 </html>
