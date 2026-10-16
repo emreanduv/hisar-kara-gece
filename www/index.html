@@ -736,19 +736,21 @@ function stripHtml(score){
 
 /* ===================== MAÇ MOTORLARI: MALAZGİRT · HİSAR ===================== */
 const MOTOR={
-  mlz:{ad:'Malazgirt',dosya:'malazgirt.html',nl:50,ic:'🏹'},
+  mlz:{ad:'Malazgirt',dosya:'malazgirt.html',nl:50,sf:4,ic:'🏹'},
   hsr:{ad:'Hisar',dosya:'hisar.html',nl:40,ic:'🏰'}
 };
 const typeName=t=>({mlz:'Malazgirt',hsr:'Hisar',quick:'Hızlı Maç',chess:'Satranç',bg:'Tavla'}[t]||'');
-function engineLevel(mode){const e=effOpp(),n=MOTOR[mode].nl;return clamp(Math.round((e-1)*(mode==='mlz'?4.3:3.6)),0,n-5)}
-function engineUp(lv){const t=me(),d=(t.str-6)*.55+(M.focus-55)/22+(t.morale-60)/40;return clamp(Math.round(Math.min(10,lv*.2)+d),0,10)}
+function engineLevel(mode){const e=effOpp(),n=MOTOR[mode].nl,b=clamp(Math.round((e-1)*(mode==='mlz'?4.3:3.6)),0,n-5);
+  return mode==='mlz'?((Math.max(1,G.week)-1)%MOTOR.mlz.sf)*50+b:b} // Malazgirt: her hafta başka sefer (Malazgirt, Anadolu, Haçlı, Miryokefalon)
+function engineDelta(){const t=me();return (t.str-6)*.55+(M.focus-55)/22+(t.morale-60)/40}
+function engineUp(lv){return clamp(Math.round(Math.min(10,(lv%50)*.2)+engineDelta()),0,10)}
 function engineScore(r){ // r:{win,stars,prog}
   if(r.win)return r.stars>=3?[3,0]:r.stars===2?[2,1]:[1,0];
   return r.prog>=.8?[1,1]:r.prog>=.5?[1,2]:[0,3];
 }
 function startEngine(mode){
   const{m,isH,opp}=matchCtx(),t=me(),lv=engineLevel(mode),u=engineUp(lv);
-  const p=new URLSearchParams({mac:'1',lv:String(lv),up:String(u),ben:t.name,bk:t.short,b1:t.c1,b2:t.c2,rakip:opp.name,rk:opp.short,r1:opp.c1,r2:opp.c2,
+  const p=new URLSearchParams({mac:'1',lv:String(lv),up:String(u),ud:engineDelta().toFixed(2),ben:t.name,bk:t.short,b1:t.c1,b2:t.c2,rakip:opp.name,rk:opp.short,r1:opp.c1,r2:opp.c2,
     lig:LIG(),hafta:String(G.week),saha:isH?'ic':'dep',ses:SES.vol()?'1':'0'});
   Object.assign(M,{mode,lv,running:true});
   const a=$('#arena');a.innerHTML=`<iframe title="${esc(MOTOR[mode].ad)} maçı" src="${MOTOR[mode].dosya}?${p.toString()}" allow="autoplay; fullscreen"></iframe>`;a.hidden=false;
