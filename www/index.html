@@ -590,7 +590,7 @@ function seasonMails(){
   mail('Spor Basını',`Medya tahmini: ${esc(t.short)} ${myPred}. sırada`,
    `<p>Yazarlarımızın sezon öncesi tahmininde ${esc(t.name)} <b>${myPred}.</b> sırada.</p><p>Şampiyonluk favorisi: <b>${esc(pred[0].name)}</b>. Düşme hattı adayları: ${pred.slice(-3).map(x=>esc(x.name)).join(', ')}.</p>`);
   mail('Yardımcı Antrenör','Maç günü nasıl işliyor?',
-   `<p>Hocam, her hafta maç önü <b>takım konuşması</b> yapacaksınız. Konuşmanın tonu oyuncuların <b>odağını</b> belirler; odak arttıkça rakip zayıflar ve ben size maç içinde daha çok <b>taktik ipucu</b> verebilirim.</p><p>Maçı iki yoldan oynayabilirsiniz: <b>Malazgirt modu</b> (akıncılarla rakip kaleye sefer) ya da <b>Hisar modu</b> (hisarını savun, rakip kuleyi yık). Zafer yıldızına göre 3-0, 2-1 ya da 1-0; yenilgide sona ne kadar yaklaştığına göre 1-1, 1-2 ya da 0-3 yazılır.</p><p>Maç sonrası basın toplantısında söyledikleriniz moral, taraftar ve yönetim güvenini etkiler.</p>`);
+   `<p>Hocam, her hafta maç önü <b>takım konuşması</b> yapacaksınız. Konuşmanın tonu oyuncuların <b>odağını</b> belirler; odak arttıkça rakip zayıflar ve ben size maç içinde daha çok <b>taktik ipucu</b> verebilirim.</p><p>Maçı dört yoldan oynayabilirsiniz: <b>Malazgirt modu</b> (akıncılarla rakip kaleye sefer), <b>Hisar modu</b> (hisarını savun, rakip kuleyi yık), <b>Topçular modu</b> (topçularla kale kuşatması) ya da <b>Kafa Topu modu</b> (Keloğlan efsanelere karşı; skor sahadaki gibi yazılır). Zafer yıldızına göre 3-0, 2-1 ya da 1-0; yenilgide sona ne kadar yaklaştığına göre 1-1, 1-2 ya da 0-3 yazılır.</p><p>Maç sonrası basın toplantısında söyledikleriniz moral, taraftar ve yönetim güvenini etkiler.</p>`);
 }
 const weekMatches=w=>G.fixtures[w-1];
 const userMatch=w=>weekMatches(w).find(m=>m.h===G.teamId||m.a===G.teamId);
@@ -720,11 +720,13 @@ function scrModes(){
   <div class="modes">
    <button class="mode" data-act="play" data-v="mlz"><span class="ic">🏹</span><b>Malazgirt modu</b><span>${esc(me().name)} akıncıları ${esc(opp.name)} ${isH?'ordusunu sahanda karşılıyor':'kalesine sefere çıkıyor'}. Kapılardan doğru tarafı seç, ordunu büyüt, kaleyi düşür.</span></button>
    <button class="mode" data-act="play" data-v="hsr"><span class="ic">🏰</span><b>Hisar modu</b><span>${esc(me().name)} hisarını savun, ${esc(opp.name)} kulesini yık. Erzakla birlik çıkar, Alp Er'i yürüt, ateş yağmurunu doğru ana sakla.</span></button>
+   <button class="mode" data-act="play" data-v="top"><span class="ic">💣</span><b>Topçular modu</b><span>${esc(me().name)} topçuları ${esc(opp.name)} kalesini kuşatıyor. Açıyı ve gücü ayarla, rüzgârı hesaba kat, bütün savunucuları sustur.</span></button>
+   <button class="mode" data-act="play" data-v="kfa"><span class="ic">⚽</span><b>Kafa Topu modu</b><span>Keloğlan ${esc(me().name)} formasıyla ${esc(opp.name)} adına sahaya çıkan efsaneye karşı. 60 saniye, atılan goller skor olarak yazılır.</span></button>
   </div>
   <div class="pnl" style="margin-top:14px"><div class="cap">⚽ Skor nasıl yazılır?</div><div class="bd"><div class="kv">
    <div><span>Zafer ★★★</span><b>3-0</b></div><div><span>Zafer ★★</span><b>2-1</b></div><div><span>Zafer ★</span><b>1-0</b></div>
    <div><span>Yenilgi, sona %80+ yaklaştın</span><b>1-1 beraberlik</b></div><div><span>Yenilgi, %50–80</span><b>1-2</b></div><div><span>Yenilgi, %50 altı</span><b>0-3</b></div>
-  </div><p class="dim" style="margin:0">Rakip ne kadar güçlüyse bölüm o kadar zorlaşır; odak, moral ve kadro gücün ordunu güçlendirir. Golleri kadrodaki oyuncular atar.</p></div></div>  </div>`;
+  </div><p class="dim" style="margin:0">Kafa Topu modunda skor sahadaki gibidir: kaç gol attıysan o yazılır. Rakip ne kadar güçlüyse bölüm o kadar zorlaşır; odak, moral ve kadro gücün ordunu güçlendirir. Golleri kadrodaki oyuncular atar.</p></div></div>  </div>`;
 }
 function stripHtml(score){
   const{m}=matchCtx();const H=team(m.h),A=team(m.a);
@@ -737,21 +739,27 @@ function stripHtml(score){
 /* ===================== MAÇ MOTORLARI: MALAZGİRT · HİSAR ===================== */
 const MOTOR={
   mlz:{ad:'Malazgirt',dosya:'malazgirt.html',nl:50,sf:4,ic:'🏹'},
-  hsr:{ad:'Hisar',dosya:'hisar.html',nl:40,ic:'🏰'}
+  hsr:{ad:'Hisar',dosya:'hisar.html',nl:40,ic:'🏰'},
+  top:{ad:'Topçular',dosya:'topcular.html',nl:20,ic:'💣'},
+  kfa:{ad:'Kafa Topu',dosya:'legendheads.html',nl:8,ic:'⚽'}
 };
-const typeName=t=>({mlz:'Malazgirt',hsr:'Hisar',quick:'Hızlı Maç',chess:'Satranç',bg:'Tavla'}[t]||'');
-function engineLevel(mode){const e=effOpp(),n=MOTOR[mode].nl,b=clamp(Math.round((e-1)*(mode==='mlz'?4.3:3.6)),0,n-5);
+const typeName=t=>({mlz:'Malazgirt',hsr:'Hisar',top:'Topçular',kfa:'Kafa Topu',quick:'Hızlı Maç',chess:'Satranç',bg:'Tavla'}[t]||'');
+function engineLevel(mode){const e=effOpp(),n=MOTOR[mode].nl;
+  if(mode==='top')return clamp(Math.round((e-1)*1.9),0,17); // 20 kale: güçlü rakip, daha zorlu kuşatma
+  if(mode==='kfa')return (Math.max(1,G.week)-1)%8; // her hafta başka efsane: Zeus, Herkül, Poseidon...
+  const b=clamp(Math.round((e-1)*(mode==='mlz'?4.3:3.6)),0,n-5);
   return mode==='mlz'?((Math.max(1,G.week)-1)%MOTOR.mlz.sf)*50+b:b} // Malazgirt: her hafta başka sefer (Malazgirt, Anadolu, Haçlı, Miryokefalon)
 function engineDelta(){const t=me();return (t.str-6)*.55+(M.focus-55)/22+(t.morale-60)/40}
 function engineUp(lv){return clamp(Math.round(Math.min(10,(lv%50)*.2)+engineDelta()),0,10)}
-function engineScore(r){ // r:{win,stars,prog}
+function engineScore(r){ // r:{win,stars,prog} · kafa topunda gerçek skor: gf/ga
+  if(r.gf!=null&&r.ga!=null)return[clamp(r.gf,0,9),clamp(r.ga,0,9)];
   if(r.win)return r.stars>=3?[3,0]:r.stars===2?[2,1]:[1,0];
   return r.prog>=.8?[1,1]:r.prog>=.5?[1,2]:[0,3];
 }
 function startEngine(mode){
   const{m,isH,opp}=matchCtx(),t=me(),lv=engineLevel(mode),u=engineUp(lv);
   const p=new URLSearchParams({mac:'1',lv:String(lv),up:String(u),ud:engineDelta().toFixed(2),ben:t.name,bk:t.short,b1:t.c1,b2:t.c2,rakip:opp.name,rk:opp.short,r1:opp.c1,r2:opp.c2,
-    lig:LIG(),hafta:String(G.week),saha:isH?'ic':'dep',ses:SES.vol()?'1':'0'});
+    zor:(clamp((effOpp()-1.5)/8,0,1)).toFixed(2),lig:LIG(),hafta:String(G.week),saha:isH?'ic':'dep',ses:SES.vol()?'1':'0'});
   Object.assign(M,{mode,lv,running:true});
   const a=$('#arena');a.innerHTML=`<iframe title="${esc(MOTOR[mode].ad)} maçı" src="${MOTOR[mode].dosya}?${p.toString()}" allow="autoplay; fullscreen"></iframe>`;a.hidden=false;
   document.documentElement.classList.add('arena-on');SES.duduk(1);
@@ -760,10 +768,10 @@ function engineDone(r){
   if(!M||!M.running||!MOTOR[M.mode])return;M.running=false;
   const a=$('#arena');a.hidden=true;a.innerHTML='';document.documentElement.classList.remove('arena-on');
   const{isH}=matchCtx(),[f,ag]=engineScore(r),mode=M.mode;
-  const how=r.quit?'Maçtan çekilindi.':r.win?`${MOTOR[mode].ad}: zafer, ${r.stars} yıldız.`:`${MOTOR[mode].ad}: yenilgi, sona %${Math.round(r.prog*100)} yaklaşıldı.`;
+  const how=r.quit?'Maçtan çekilindi.':r.gf!=null?`${MOTOR[mode].ad}: Keloğlan sahada, maç ${r.gf}-${r.ga} bitti.`:r.win?`${MOTOR[mode].ad}: zafer, ${r.stars} yıldız.`:`${MOTOR[mode].ad}: yenilgi, sona %${Math.round(r.prog*100)} yaklaşıldı.`;
   finishUserMatch(isH?f:ag,isH?ag:f,mode,how);
 }
-window.addEventListener('message',e=>{const d=e.data;if(d&&d.ccm==='sonuc')engineDone({win:!!d.win,stars:+d.stars||0,prog:clamp(+d.prog||0,0,1),quit:!!d.quit})});
+window.addEventListener('message',e=>{const d=e.data;if(d&&d.ccm==='sonuc')engineDone({win:!!d.win,stars:+d.stars||0,prog:clamp(+d.prog||0,0,1),quit:!!d.quit,gf:d.gf!=null?+d.gf:null,ga:d.ga!=null?+d.ga:null})});
 
 function startQuick(){
   Object.assign(M,{mode:'quick',min:0,hs:0,as:0,feed:[],shout:null,ht:false,running:false,speed:110,done:false});
@@ -1305,7 +1313,7 @@ function scrFixtures(){
   const nx=nextMatchOf(G.teamId),selW=UI.fx||(nx?nx.w:NW());
   const rows=G.fixtures.map((wk,i)=>{const x=wk.find(m=>m.h===G.teamId||m.a===G.teamId),home=x.h===G.teamId,o=team(home?x.a:x.h),k=kickoff(i+1,x);
     let res='<span class="faint">—</span>';if(x.hs!==null){const f=home?x.hs:x.as,a=home?x.as:x.hs,r=f>a?'G':f<a?'M':'B';res=`<i class="fm ${r}">${r}</i> <span class="scr" style="font-size:17px;min-width:44px">${f}-${a}</span>`}
-    const ic={mlz:'🏹 Malazgirt',hsr:'🏰 Hisar',chess:'♞&#xFE0E; Satranç',bg:'⚂&#xFE0E; Tavla',quick:'⚽ Hızlı',sim:''}[x.t]||'';
+    const ic={mlz:'🏹 Malazgirt',hsr:'🏰 Hisar',top:'💣 Topçular',kfa:'⚽ Kafa Topu',chess:'♞&#xFE0E; Satranç',bg:'⚂&#xFE0E; Tavla',quick:'⚽ Hızlı',sim:''}[x.t]||'';
     return `<tr class="click ${i+1===selW?'me':''}" data-act="fx" data-v="${i+1}"><td class="r"><b>${i+1}</b></td><td>${dShort(k.d)}</td><td class="dim">${k.h}</td><td>${tchip(o)}</td><td class="c"><b>${home?'İ':'D'}</b></td><td>${res}</td><td class="dim">${ic}</td></tr>`}).join('');
   const done=G.fixtures.filter(w=>w[0].hs!==null).length;
   const sm=G.fixtures[selW-1].find(m=>m.h===G.teamId||m.a===G.teamId),k=kickoff(selW,sm),opp=team(sm.h===G.teamId?sm.a:sm.h),tb=table(),or=tb.find(r=>r.id===opp.id);
@@ -1403,7 +1411,7 @@ function tickClock(){document.querySelectorAll('.clk,.bigclk').forEach(e=>e.text
 setInterval(tickClock,15000);
 function stripeHtml(inMatch){
   if(!G){const d=new Date();return `<div class="stripe"><div class="cell now"><span class="d">📅 ${dShort(d)}</span><span class="stat go">Yeni kariyer</span><b class="clk">${hhmm()}</b></div>
-    <div class="cell info"><small>Lig</small><div class="ln"><b>${LIG()} · ${NT()} kulüp</b></div></div><div class="cell info"><small>Sezon</small><div class="ln"><b>${NW()} hafta</b></div></div><div class="cell info"><small>Oyun</small><div class="ln"><b>🏹 Malazgirt · 🏰 Hisar</b></div></div>
+    <div class="cell info"><small>Lig</small><div class="ln"><b>${LIG()} · ${NT()} kulüp</b></div></div><div class="cell info"><small>Sezon</small><div class="ln"><b>${NW()} hafta</b></div></div><div class="cell info"><small>Oyun</small><div class="ln"><b>🏹 🏰 💣 ⚽ 4 savaş modu</b></div></div>
     <button class="devam" data-act="start" ${UI.newTeam?'':'disabled'}><span class="ar">➜</span>Başla<i class="pr" style="width:0"></i></button></div>`}
   const st=G.sacked?['bad','Görevden alındı']:G.phase==='pre'?['go','Maç günü']:G.phase==='post'?['ok','Maç sonu']:['ok','Sezon sonu'];
   const t=table().slice(0,4);
@@ -1439,7 +1447,7 @@ function subHtml(inMatch){
   let pills='';
   const meta=G?`${G.teamId?esc(me().name)+' · ':''}${seasonLabel()} · <b>${Math.min(G.week,NW())}. hafta</b> / ${NW()}`:'Kayıt bu tarayıcıda tutulur';
   if(!G)pills=`<span class="sp on">Kulüp seçimi</span>`;
-  else if(inMatch){const md=M&&M.mode?({mlz:'🏹 Malazgirt',hsr:'🏰 Hisar',quick:'⚽ Hızlı Maç'}[M.mode]||'Mod seçimi'):'Mod seçimi';pills=`<span class="sp on">${md}</span><span class="sp">Odak ${M?M.focus:'—'}</span>`}
+  else if(inMatch){const md=M&&M.mode?({mlz:'🏹 Malazgirt',hsr:'🏰 Hisar',top:'💣 Topçular',kfa:'⚽ Kafa Topu',quick:'⚽ Hızlı Maç'}[M.mode]||'Mod seçimi'):'Mod seçimi';pills=`<span class="sp on">${md}</span><span class="sp">Odak ${M?M.focus:'—'}</span>`}
   else if(UI.screen==='inbox')pills=[['all','Gelen Kutusu'],['yon','Yönetim'],['asi','Asistan'],['bas','Basın'],['mac','Maç Merkezi']].map(x=>`<button class="sp ${(UI.inTab||'all')===x[0]?'on':''}" data-act="navI" data-v="${x[0]}">${x[1]}</button>`).join('');
   else if(UI.screen==='table')pills=[['lig','🏆 Lig tablosu'],['tek','📊 Tek tablo'],['derbi','⚔️ Derbiler'],['res','📋 Haftanın sonuçları']].map(x=>`<button class="sp ${UI.tableTab===x[0]?'on':''}" data-act="navT" data-v="${x[0]}">${x[1]}</button>`).join('');
   else if(UI.screen==='squad'){const nx=nextMatchOf(G.teamId),op=nx&&team(nx.m.h===G.teamId?nx.m.a:nx.m.h),cur=UI.sqTeam||G.teamId;pills=`<button class="sp ${cur===G.teamId?'on':''}" data-act="sqTeam" data-v="${G.teamId}">👕 Kadrom</button>`+(op?`<button class="sp ${cur===op.id?'on':''}" data-act="sqTeam" data-v="${op.id}">🔍 Rakip: ${esc(op.name)}</button>`:'')+(cur!==G.teamId&&(!op||cur!==op.id)?`<span class="sp on">${esc(team(cur).name)}</span>`:'')+`<button class="sp" data-act="nav" data-v="clubs">🛡️ Başka kulüp</button>`}
@@ -1485,10 +1493,12 @@ function openModal(html){if(KATMAN)return;const o=$('#ov');o.innerHTML=`<div cla
 function closeModal(){const o=$('#ov');o.hidden=true;o.innerHTML=''}
 function helpModal(){
   openModal(`<div class="cap">❓ Nasıl oynanır</div><div class="bd">
-   <div class="kv"><div><span>1. Devam</span><b>Sağ üstteki Devam ile haftayı ilerletin</b></div><div><span>2. Konuşma</span><b>Maç önü tonunuz odağı belirler</b></div><div><span>3. Mod</span><b>Malazgirt ya da Hisar</b></div><div><span>4. Basın</span><b>Cevaplarınız moral ve güveni oynatır</b></div></div>
+   <div class="kv"><div><span>1. Devam</span><b>Sağ üstteki Devam ile haftayı ilerletin</b></div><div><span>2. Konuşma</span><b>Maç önü tonunuz odağı belirler</b></div><div><span>3. Mod</span><b>Malazgirt, Hisar, Topçular ya da Kafa Topu</b></div><div><span>4. Basın</span><b>Cevaplarınız moral ve güveni oynatır</b></div></div>
    <p style="margin:0"><b>Lig:</b> Yeni kariyerde Türkiye ya da beş büyük Avrupa liginden birini seçin; Avrupa kulüpleri kurmaca adlarla (ör. Manchester Mavi, Madrid Beyaz) yer alır.</p>
    <p style="margin:0"><b>Malazgirt modu:</b> Parmağınızı kaydırın. Artı ve çarpı kapılarından geçip ordunuzu büyütün, blokları okla kırın, sondaki rakip birliği ya da devi dağıtın.</p>
    <p style="margin:0"><b>Hisar modu:</b> Telefonu yan çevirin. Erzakla alttaki birlik kartlarına dokunun, ◀ ▶ ile Alp Er'i yürütün, ocak dolunca Ateş Yağmuru'nu kullanın. Rakip kuleyi yıkın.</p>
+   <p style="margin:0"><b>Topçular modu:</b> Telefonu yan çevirin. Topunuzun önüne dokunup hedefe sürükleyin, ATEŞ! ile atın. Rüzgârı hesaba katın, kaledeki bütün savunucuları susturun.</p>
+   <p style="margin:0"><b>Kafa Topu modu:</b> Telefonu yan çevirin. ◀ ▶ ile koşun, ZIPLA ve VUR ile topa vurun, bar dolunca SÜPER şutu kullanın. 60 saniyede kaç gol attıysanız skor odur.</p>
    <p style="margin:0"><b>Skor:</b> Zafer ★★★ 3-0, ★★ 2-1, ★ 1-0. Yenilgide sona %80'den fazla yaklaştıysanız 1-1, %50–80 arası 1-2, daha azı 0-3.</p>
    <div class="row" style="justify-content:flex-end"><button class="btn pri" data-act="close">Tamam</button></div></div>`);
 }
