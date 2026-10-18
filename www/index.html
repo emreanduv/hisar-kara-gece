@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="tr">
-<head>
+<head><script src="ses-kurtarici.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#1e2e21">
@@ -328,6 +328,7 @@ function audio(){
   return AC;
 }
 function unlockAudio(){if(!S.sound)return;const a=audio();if(a&&a.state==='suspended')a.resume();}
+window.SesKurtarici&&SesKurtarici.yenidenKur(()=>{AC=null;AMB=null});
 ['pointerdown','keydown','touchend'].forEach(ev=>addEventListener(ev,unlockAudio,{passive:true}));
 function ok(key,gap){
   if(!S.sound||!audio()||AC.state!=='running')return false;
