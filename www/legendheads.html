@@ -149,24 +149,36 @@ button:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
 .hudbtn{position:absolute;z-index:4;top:1.6cqw;left:26.4cqw;width:max(34px,4.4cqw);height:max(34px,4.4cqw);border-radius:50%;
   border:2px solid color-mix(in srgb,var(--cream) 55%,transparent);background:color-mix(in srgb,var(--ink) 55%,transparent);color:var(--cream);
   font:800 max(12px,1.6cqw) var(--f-body);padding:0}
-#spiker{position:absolute;z-index:4;left:50%;bottom:1.2cqw;transform:translateX(-50%);max-width:44cqw;display:flex;align-items:center;gap:.8cqw;
+#spiker{position:absolute;z-index:4;left:50%;top:10.6cqw;transform:translateX(-50%);max-width:44cqw;display:flex;align-items:center;gap:.8cqw;
   padding:.45cqw 1.2cqw .35cqw .5cqw;border-radius:999px;background:color-mix(in srgb,var(--ink) 70%,transparent);pointer-events:none}
 #spiker .tag{font-family:var(--f-display);font-size:max(8px,1cqw);background:var(--teal);color:var(--ink);padding:.3cqw .7cqw .1cqw;border-radius:.6cqw;flex:none}
 #spikerLine{font-weight:700;font-size:max(10px,1.45cqw);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 #spikerLine.pop{animation:pop .35s ease-out}
 @keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
-.pad{position:absolute;inset:auto 0 0 0;display:none;justify-content:space-between;align-items:flex-end;padding:0 1.8cqw 1.8cqw;pointer-events:none;z-index:3}
+.pad{position:fixed;left:calc(max(6px,env(safe-area-inset-left,0px)) + 4px);right:calc(max(6px,env(safe-area-inset-right,0px)) + 4px);bottom:max(8px,env(safe-area-inset-bottom,0px));display:none;justify-content:space-between;align-items:flex-end;pointer-events:none;z-index:6}
 @media (pointer:coarse){.pad{display:flex}}
 body.touch .pad{display:flex}
-.pad .grp{display:flex;gap:1.4cqw;pointer-events:auto}
-.pad button{width:max(48px,8.6cqw);height:max(48px,8.6cqw);border-radius:50%;border:2px solid color-mix(in srgb,var(--cream) 55%,transparent);
-  background:color-mix(in srgb,var(--ink) 42%,transparent);color:var(--cream);font:800 max(11px,1.45cqw) var(--f-body);touch-action:none;padding:0}
+.pad[hidden]{display:none!important}
+.pad .grp{display:flex;gap:2.8vh;pointer-events:auto;align-items:flex-end}
+.pad button{width:max(80px,21vh);height:max(80px,21vh);border-radius:50%;border:2px solid color-mix(in srgb,var(--cream) 45%,transparent);
+  background:color-mix(in srgb,var(--ink) 30%,transparent);color:var(--cream);font:800 max(14px,4.4vh) var(--f-body);touch-action:none;padding:0;-webkit-user-select:none;user-select:none}
 .pad button.on{background:var(--magenta)}
+.pad .dpad{gap:0;touch-action:none;border-radius:999px}
+.pad .dpad button{width:max(92px,25vh);height:max(84px,23vh);font-size:max(26px,7.4vh)}
+.pad .dpad button:first-child{border-radius:999px 30% 30% 999px;border-right-width:1px}
+.pad .dpad button:last-child{border-radius:30% 999px 999px 30%;border-left-width:1px}
+.pad .act button[data-act=jump]{width:max(96px,27vh);height:max(96px,27vh)}
+.pad .act button[data-act=kick]{width:max(88px,24vh);height:max(88px,24vh);margin-bottom:8vh}
 .pad .sup{border-color:var(--sun);color:var(--sun)}
 @media (pointer:coarse){.keyhint{display:none}}
 kbd{font:700 .95em var(--f-body);background:color-mix(in srgb,var(--cream) 12%,transparent);border:1px solid color-mix(in srgb,var(--cream) 30%,transparent);border-bottom-width:3px;border-radius:6px;padding:0 .4em}
 @media (prefers-reduced-motion:reduce){#spikerLine.pop{animation:none}}
-html.rot #app{inset:auto;top:0;left:0;width:100vh;height:100vw;transform:rotate(90deg) translateY(-100%);transform-origin:top left}
+html.rot body{position:fixed;top:0;left:0;width:100vh;height:100vw;transform:rotate(90deg) translateY(-100%);transform-origin:top left}
+html.rot .pad button{width:max(80px,21vw);height:max(80px,21vw);font-size:max(14px,4.4vw)}
+html.rot .pad .grp{display:flex;gap:2.8vw;pointer-events:auto;align-items:flex-end}
+html.rot .pad .dpad button{width:max(92px,25vw);height:max(84px,23vw);font-size:max(26px,7.4vw)}
+html.rot .pad .act button[data-act=jump]{width:max(96px,27vw);height:max(96px,27vw)}
+html.rot .pad .act button[data-act=kick]{width:max(88px,24vw);height:max(88px,24vw);margin-bottom:8vw}
 html.rot .rot,html.mac .rot{display:none!important}
 </style>
 </head>
@@ -178,17 +190,6 @@ html.rot .rot,html.mac .rot{display:none!important}
     <button class="hudbtn" id="pauseBtn" type="button" aria-label="Mola" hidden>II</button>
     <div id="spiker" hidden><span class="tag">SPİKER</span><span id="spikerLine"></span></div>
 
-    <div class="pad" id="pad" hidden>
-      <div class="grp">
-        <button type="button" data-act="left" aria-label="Sola">◀</button>
-        <button type="button" data-act="right" aria-label="Sağa">▶</button>
-      </div>
-      <div class="grp">
-        <button type="button" class="sup" data-act="super">SÜPER</button>
-        <button type="button" data-act="kick">VUR</button>
-        <button type="button" data-act="jump">ZIPLA</button>
-      </div>
-    </div>
 
     <div class="ov" id="titleOv">
       <div class="card">
@@ -243,6 +244,17 @@ html.rot .rot,html.mac .rot{display:none!important}
       </div>
     </div>
   </div>
+  <div class="pad" id="pad" hidden>
+      <div class="grp dpad" id="dpad">
+        <button type="button" data-act="left" aria-label="Sola">◀</button>
+        <button type="button" data-act="right" aria-label="Sağa">▶</button>
+      </div>
+      <div class="grp act">
+        <button type="button" class="sup" data-act="super">SÜPER</button>
+        <button type="button" data-act="kick">VUR</button>
+        <button type="button" data-act="jump">ZIPLA</button>
+      </div>
+    </div>
 </div>
 
 <script>
@@ -383,7 +395,16 @@ addEventListener('keydown',e=>{
 addEventListener('keyup',e=>{const a=KEYMAP[e.code];if(a)keys[a]=false;});
 function clearInput(){for(const k in keys)keys[k]=false;for(const k in touch)touch[k]=false;document.querySelectorAll('.pad button.on').forEach(b=>b.classList.remove('on'));}
 addEventListener('blur',()=>{clearInput();if(live())pause();});
-document.querySelectorAll('.pad button').forEach(b=>{
+// Yön tuşları tek parça: parmak kaydırınca sol/sağ arasında geçer, aradaki boşluk ölü bölge değil
+{const dp=document.getElementById('dpad'),bl=dp.querySelector('[data-act=left]'),br=dp.querySelector('[data-act=right]');const ids=new Map();
+ const upd=()=>{let l=false,r=false;for(const d of ids.values()){if(d<0)l=true;else r=true;}touch.left=l;touch.right=r;bl.classList.toggle('on',l);br.classList.toggle('on',r);};
+ const side=e=>{const q=dp.getBoundingClientRect();return document.documentElement.classList.contains('rot')?(e.clientY<q.top+q.height/2?-1:1):(e.clientX<q.left+q.width/2?-1:1);};
+ dp.addEventListener('pointerdown',e=>{e.preventDefault();ids.set(e.pointerId,side(e));try{dp.setPointerCapture(e.pointerId)}catch(_){}upd();});
+ dp.addEventListener('pointermove',e=>{if(ids.has(e.pointerId)){ids.set(e.pointerId,side(e));upd();}});
+ ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>dp.addEventListener(ev,e=>{if(ids.delete(e.pointerId))upd();}));
+ dp.addEventListener('contextmenu',e=>e.preventDefault());
+ addEventListener('blur',()=>{ids.clear();upd();});}
+document.querySelectorAll('.pad .act button').forEach(b=>{
   const a=b.dataset.act;
   const on=e=>{e.preventDefault();touch[a]=true;b.classList.add('on');try{b.setPointerCapture(e.pointerId)}catch(_){}};
   const off=()=>{touch[a]=false;b.classList.remove('on');};
