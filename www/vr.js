@@ -23,8 +23,9 @@ const FONT = 'Tahoma,Verdana,"Segoe UI",sans-serif';
 
 /* ---------------- sahne ---------------- */
 let renderer, scene, camera, board, session = null, mode = 'vr', placed = false;
-let env, hudPanel, resPanel, pausePanel, banner, bars = {}, decoGroup, unitLayer, projLayer;
+let env, hudPanel, resPanel, pausePanel, mapPanel, banner, bars = {}, decoGroup, unitLayer, projLayer;
 let preview = false; // masaüstü önizleme (ekran görüntüleri ve test için)
+let mapOpen = false, mapSel = 0, mapTab = 'map', mapDressT = -1; // VR içi sefer haritası ve ordugâh
 
 function initRenderer() {
   if (renderer) return;
@@ -304,6 +305,7 @@ function buildPanels() {
   hudPanel.m.position.set(0, 0.012, 0.22); hudPanel.m.rotation.x = -0.95; board.add(hudPanel.m);
   resPanel = makePanel(900, 520, 0.5, 0.289); resPanel.m.position.set(0, 0.22, 0.02); resPanel.m.visible = false; board.add(resPanel.m);
   pausePanel = makePanel(900, 360, 0.44, 0.176); pausePanel.m.position.set(0, 0.2, 0.03); pausePanel.m.visible = false; board.add(pausePanel.m);
+  mapPanel = makePanel(900, 640, 0.5, 0.356); mapPanel.m.position.set(0, 0.215, 0.04); mapPanel.m.visible = false; board.add(mapPanel.m);
   banner = makeBanner(); buildParticles();
 }
 const ICONS = {};
@@ -376,7 +378,7 @@ function drawResult(r) {
   if (r.rk) { c.fillStyle = '#3f7a3a'; c.font = 'bold 22px ' + FONT; c.textAlign = 'left'; c.fillText('Yeni rütbe: ' + r.rk.ad, 300, 186); }
   const btns = [];
   const B2 = (label, x, w, primary, fn) => { rr(c, x, 432, w, 64, 10); const gg = c.createLinearGradient(0, 432, 0, 496); gg.addColorStop(0, primary ? '#5f9152' : '#8a8570'); gg.addColorStop(1, primary ? '#3a6232' : '#5f5a48'); c.fillStyle = gg; c.fill(); c.fillStyle = '#fff'; c.font = 'bold 28px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + w / 2, 474); btns.push({ id: label, x, y: 432, w, h: 64, fn }); };
-  B2('Haritaya Dön', 30, 260, false, () => endXR());
+  B2('Haritaya Dön', 30, 260, false, () => openMap(r.win ? r.i + 1 : r.i));
   B2('Tekrar', 310, 220, false, () => startVrLevel(r.i));
   if (r.win && !r.last) B2('Devam ▸', 550, 320, true, () => { H.setCurReg(Math.floor((r.i + 1) / H.RSZ)); startVrLevel(r.i + 1); });
   else if (!r.win) B2('Tekrar ▸', 550, 320, true, () => startVrLevel(r.i));
@@ -389,13 +391,74 @@ function drawPause() {
   c.font = '26px ' + FONT; c.fillText('Ordu bekliyor. Masayı yeniden konumlamak için ⌖ düğmesini kullan.', P.w / 2, 150);
   const btns = [];
   const B2 = (label, x, w, primary, fn) => { rr(c, x, 230, w, 80, 12); const gg = c.createLinearGradient(0, 230, 0, 310); gg.addColorStop(0, primary ? '#5f9152' : '#b84a3c'); gg.addColorStop(1, primary ? '#3a6232' : '#7c2a21'); c.fillStyle = gg; c.fill(); c.fillStyle = '#fff'; c.font = 'bold 32px ' + FONT; c.fillText(label, x + w / 2, 282); btns.push({ id: label, x, y: 230, w, h: 80, fn }); };
-  B2('Bölümden Çık', 60, 360, false, () => endXR());
+  B2('Haritaya Dön', 60, 360, false, () => openMap(H.B ? H.B.i : null));
   B2('Devam', 480, 360, true, () => setVrPause(false));
   panelButtons(P, btns); P.tex.needsUpdate = true;
 }
 function setVrPause(p) {
   const B = H.B; if (!B || B.over) return; B.paused = p; B.heroIn = 0; heroTarget = null; H.ambience(!p);
   pausePanel.m.visible = p; if (p) drawPause();
+}
+
+
+/* ---------------- VR içi sefer haritası + ordugâh (gözlüğü çıkarmadan bölüm seçimi ve geliştirme) ---------------- */
+function wrap(c, txt, x, y, maxW, lh, maxLines) {
+  const words = String(txt).split(' '); let line = '', n = 0;
+  for (const w of words) { const t = line ? line + ' ' + w : w; if (c.measureText(t).width > maxW && line) { c.fillText(line, x, y + n * lh); n++; line = w; if (n >= maxLines) return; } else line = t; }
+  if (line && n < maxLines) c.fillText(line, x, y + n * lh);
+}
+function topLv() { return Math.max(0, Math.min(S.unlocked, H.NLV) - 1); }
+function drawMap() {
+  const P = mapPanel, c = P.c.getContext('2d'), btns = []; c.clearRect(0, 0, P.w, P.h);
+  rr(c, 4, 4, P.w - 8, P.h - 8, 18); c.fillStyle = '#f2ecd6'; c.fill(); c.strokeStyle = '#b9ad84'; c.lineWidth = 4; c.stroke();
+  c.save(); rr(c, 4, 4, P.w - 8, 70, 18); c.clip(); const g = c.createLinearGradient(0, 0, 0, 70); g.addColorStop(0, '#4a6450'); g.addColorStop(1, '#2c3e2f'); c.fillStyle = g; c.fillRect(0, 0, P.w, 76); c.restore();
+  c.fillStyle = '#c8a23a'; c.fillRect(4, 72, P.w - 8, 4);
+  const tab = (id, label, x, w) => { const on = mapTab === id; rr(c, x, 14, w, 48, 10); c.fillStyle = on ? '#f2ecd6' : 'rgba(242,236,214,.18)'; c.fill(); c.fillStyle = on ? '#2c3e2f' : '#f2ecd6'; c.font = 'bold 24px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + w / 2, 46); btns.push({ id: 'tab' + id, x, y: 14, w, h: 48, fn: () => { mapTab = id; } }); };
+  tab('map', 'Sefer Haritası', 20, 230); tab('camp', 'Ordugâh', 262, 170);
+  c.fillStyle = '#f5d36b'; c.font = 'bold 26px ' + FONT; c.textAlign = 'right'; c.fillText(S.gold + ' akçe', P.w - 26, 47);
+  const B2 = (label, x, y, w, h, kind, fn, dis) => { rr(c, x, y, w, h, 12); const gg = c.createLinearGradient(0, y, 0, y + h); const col = dis ? ['#cfc6a6', '#b9ad84'] : kind === 1 ? ['#5f9152', '#3a6232'] : kind === 2 ? ['#b84a3c', '#7c2a21'] : ['#8a8570', '#5f5a48']; gg.addColorStop(0, col[0]); gg.addColorStop(1, col[1]); c.fillStyle = gg; c.fill(); c.fillStyle = dis ? '#8a8570' : '#fff'; c.font = 'bold ' + Math.round(h * 0.42) + 'px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + w / 2, y + h * 0.66); if (!dis) btns.push({ id: label, x, y, w, h, fn }); };
+  if (mapTab === 'map') {
+    const i = mapSel, L = H.LEVELS[i], R = H.REGIONS[L.region], M = H.MODS[L.mod], top = topLv();
+    c.textAlign = 'left'; c.fillStyle = '#5a5444'; c.font = '24px ' + FONT; c.fillText((L.region + 1) + '. bölge · ' + R.ad, 30, 116);
+    c.fillStyle = '#1d2a1f'; c.font = 'bold 50px ' + FONT; c.fillText('Bölüm ' + (i + 1), 30, 172);
+    c.font = 'bold 30px ' + FONT; c.fillText(L.ad, 30, 214);
+    c.font = '46px ' + FONT; const st = S.stars[i] || 0; for (let k = 0; k < 3; k++) { c.fillStyle = k < st ? '#c8a23a' : '#d4c9a4'; c.fillText('★', 640 + k * 74, 172); }
+    let y = 258; c.font = '22px ' + FONT; c.fillStyle = '#3a3a2a';
+    if (L.boss) { c.fillStyle = '#7c2a21'; c.font = 'bold 23px ' + FONT; c.fillText('☠ Dev: ' + H.FOES[L.boss].ad + (L.boss2 ? ' ve ' + H.FOES[L.boss2].ad : ''), 30, y); y += 34; }
+    if (M) { c.fillStyle = '#2c3e2f'; c.font = 'bold 23px ' + FONT; c.fillText(M.ic + ' ' + M.ad + ':', 30, y); c.font = '22px ' + FONT; const w0 = c.measureText(M.ic + ' ' + M.ad + ': ').width; wrap(c, M.d, 30 + w0, y, P.w - 60 - w0, 28, 1); y += 34; }
+    c.fillStyle = '#3a3a2a'; c.font = '22px ' + FONT; wrap(c, L.brief, 30, y, P.w - 60, 28, Math.max(1, Math.floor((404 - y) / 28)));
+    const nav = [['« 10', -10], ['‹', -1], ['›', 1], ['10 »', 10]];
+    nav.forEach(([lb, d], k) => { const j = Math.max(0, Math.min(top, i + d)); B2(lb, 30 + k * 132, 440, 120, 66, 0, () => { mapSel = j; mapDressT = 0.35; }, j === i); });
+    B2('Son bölüm', 568, 440, 302, 66, 0, () => { mapSel = top; mapDressT = 0.35; }, i === top);
+    B2('Oyundan Çık', 30, 534, 300, 76, 2, () => endXR());
+    B2('Sefere Çık ▸', 350, 534, 520, 76, 1, () => playFromMap());
+  } else {
+    H.UPS.forEach((u, k) => {
+      const y = 96 + k * 86, l = S.up[u.id], max = l >= H.UPMAX, cost = H.upCost(u, l);
+      c.textAlign = 'left'; c.fillStyle = '#1d2a1f'; c.font = 'bold 26px ' + FONT; c.fillText(u.ad, 30, y + 32);
+      c.fillStyle = '#5a5444'; c.font = '19px ' + FONT; wrap(c, u.desc, 30, y + 60, 420, 22, 1);
+      c.fillStyle = '#1d2a1f'; c.font = 'bold 24px ' + FONT; c.textAlign = 'center'; c.fillText(l + ' / ' + H.UPMAX, 530, y + 38);
+      c.fillStyle = '#d4c9a4'; c.fillRect(470, y + 50, 120, 10); c.fillStyle = '#c8a23a'; c.fillRect(470, y + 50, 120 * l / H.UPMAX, 10);
+      B2(max ? 'Tamam' : 'Geliştir · ' + cost, 620, y + 12, 250, 60, 1, () => { if (S.up[u.id] >= H.UPMAX || S.gold < cost) return; S.gold -= cost; S.up[u.id]++; H.save(); H.SFX.upgrade(); }, max || S.gold < cost);
+      c.strokeStyle = '#d4c9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(30, y + 82); c.lineTo(P.w - 30, y + 82); c.stroke();
+    });
+    B2('Sefer Haritası ▸', 350, 534, 520, 76, 1, () => { mapTab = 'map'; });
+  }
+  panelButtons(P, btns); P.tex.needsUpdate = true;
+}
+function openMap(i) {
+  const B = H.B; if (B && !B.over) { B.paused = true; H.ambience(false); }
+  mapOpen = true; mapTab = 'map';
+  mapSel = Math.max(0, Math.min(topLv(), i == null ? topLv() : i));
+  resPanel.m.visible = false; pausePanel.m.visible = false; hudPanel.m.visible = false; banner.m.visible = false;
+  for (const [u, v] of unitViews) dropView(u, v);
+  unitLayer.visible = projLayer.visible = false; heroTarget = null; holdHero.clear();
+  dressBoard(mapSel); mapDressT = -1;
+  drawMap(); mapPanel.m.visible = true;
+}
+function playFromMap() {
+  mapOpen = false; mapPanel.m.visible = false; hudPanel.m.visible = true; banner.m.visible = true; unitLayer.visible = projLayer.visible = true;
+  H.setCurReg(Math.floor(mapSel / H.RSZ)); startVrLevel(mapSel);
 }
 
 /* ---------------- girdi: el / kumanda ışını ---------------- */
@@ -415,6 +478,7 @@ function buildControllers() {
   }
 }
 function hitTargets() {
+  if (mapOpen) return [mapPanel.m];
   const list = [hudPanel.m];
   if (resPanel.m.visible) list.unshift(resPanel.m);
   if (pausePanel.m.visible) list.unshift(pausePanel.m);
@@ -428,7 +492,7 @@ function castFrom(obj) {
   const hits = ray.intersectObjects(hitTargets(), false);
   return hits[0] || null;
 }
-function panelOf(mesh) { return mesh === hudPanel.m ? hudPanel : mesh === resPanel.m ? resPanel : mesh === pausePanel.m ? pausePanel : null; }
+function panelOf(mesh) { return mesh === mapPanel.m ? mapPanel : mesh === hudPanel.m ? hudPanel : mesh === resPanel.m ? resPanel : mesh === pausePanel.m ? pausePanel : null; }
 function onSelect(c, down) {
   const h = castFrom(c);
   if (!down) { const d = holdHero.get(c); if (d) { holdHero.delete(c); if (H.B && H.B.heroIn === d) H.B.heroIn = 0; drawHud(true); } return; }
@@ -440,7 +504,7 @@ function onSelect(c, down) {
     if (!b) return;
     H.SFX.click();
     if (b.id === 'hero-1' || b.id === 'hero1') { const d = b.id === 'hero1' ? 1 : -1; if (H.B && !H.B.paused) { H.B.heroIn = d; heroTarget = null; holdHero.set(c, d); } drawHud(true); return; }
-    if (b.fn) b.fn(); drawHud(true); return;
+    if (b.fn) b.fn(); if (mapOpen) drawMap(); else drawHud(true); return;
   }
   if (h.object === baseTop && H.B && !H.B.over && !H.B.paused) {
     // maketin üstüne dokunmak: Alp Er oraya yürür
@@ -541,7 +605,8 @@ function frame() {
   if (!(dt > 0)) dt = 0.001; if (dt > 0.05) dt = 0.05;
   if (renderer.xr.isPresenting && !placed) placeBoard(renderer.xr.getCamera());
   const B = H.B;
-  if (B) {
+  if (mapOpen) { H.tick(dt); if (mapDressT > 0 && (mapDressT -= dt) <= 0) dressBoard(mapSel); }
+  else if (B) {
     H.tick(dt);
     if (!B.paused) { for (let k = 0; k < B.speed; k++) H.step(dt); H.ambienceTick(dt); }
     sync(dt);
@@ -558,7 +623,7 @@ function startVrLevel(i) {
   H.B.shake = 0;
   dressBoard(i); hudKey = ''; drawHud(true);
 }
-async function enterXR(i) {
+async function enterXR(i, opts) {
   initRenderer();
   const modes = H.xrModes || {};
   mode = modes.ar ? 'immersive-ar' : 'immersive-vr';
@@ -570,14 +635,16 @@ async function enterXR(i) {
   scene.background = null; renderer.setClearColor(0x000000, mode === 'immersive-ar' ? 0 : 1);
   await renderer.xr.setSession(session);
   session.addEventListener('end', onEnd);
-  startVrLevel(i);
+  if (opts && opts.map) openMap(i); else startVrLevel(i);
   renderer.setAnimationLoop(frame);
 }
 function onEnd() {
+  mapOpen = false; if (mapPanel) mapPanel.m.visible = false; if (hudPanel) hudPanel.m.visible = true; if (unitLayer) unitLayer.visible = projLayer.visible = true; if (banner) banner.m.visible = true;
   session = null; window.__XR_ON = false; renderer.setAnimationLoop(null);
   const B = H.B; if (B && !B.over) { H.setPause(true); }
   for (const [u, v] of unitViews) dropView(u, v);
   if (!preview) H.show('levels');
+  window.dispatchEvent(new Event('hisar-xr-end'));
 }
 function endXR() { if (session) session.end(); else if (preview) onEnd(); }
 
@@ -589,7 +656,7 @@ function startPreview(i, opts) {
   renderer.setClearColor(opts && opts.ar ? 0x8a8478 : 0x000000, 1);
   camera.position.set(0, 1.2, 0); camera.lookAt(0, 0.78, -0.62);
   placeBoard(camera);
-  startVrLevel(i);
+  if (opts && opts.map) openMap(i); else startVrLevel(i);
   renderer.setAnimationLoop(frame);
 }
 
@@ -602,5 +669,19 @@ function bindUi() {
   if (mb) mb.addEventListener('click', () => { H.show('levels'); document.getElementById('bCur').click(); });
 }
 bindUi();
-window.HISAR_VR = { enterXR, startPreview, startVrLevel, placeBoard: () => placeBoard(renderer.xr.isPresenting ? renderer.xr.getCamera() : camera), get scene() { return scene; }, get renderer() { return renderer; }, get board() { return board; }, ctrls, drawHud, onSelect, castFrom, sync, setVrPause, get resPanel() { return resPanel; } };
+/* Meta Horizon Store uygulaması (?quest=1): açılır açılmaz masaya oturur (simgeye dokunuş kullanıcı etkileşimi sayılır).
+   Olmazsa ekranı kaplayan tek bir "Masaya Otur" düğmesi çıkar. */
+if (/[?&]quest=1/.test(location.search) && H.xrModes) {
+  const gate = () => {
+    if (document.getElementById('questGate')) return;
+    const d = document.createElement('div'); d.id = 'questGate';
+    d.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(#2c3e2f,#0d1410);color:#f2ecd6;font:bold 28px ' + FONT + ';cursor:pointer;text-align:center';
+    d.innerHTML = '<div style="font-size:54px;color:#f5d36b">Hisar: Kara Gece</div><div style="padding:22px 44px;border-radius:16px;background:linear-gradient(#5f9152,#3a6232);border:3px solid #c8a23a">🥽 Masaya Otur</div><div style="font-size:18px;opacity:.7">Bir Mr. Anduv! yapımıdır.</div>';
+    d.onclick = () => enterXR(null, { map: true }).then(() => d.remove()).catch(e => console.warn(e));
+    document.body.appendChild(d);
+  };
+  enterXR(null, { map: true }).catch(gate);
+  window.addEventListener('hisar-xr-end', gate);
+}
+window.HISAR_VR = { enterXR, startPreview, startVrLevel, placeBoard: () => placeBoard(renderer.xr.isPresenting ? renderer.xr.getCamera() : camera), get scene() { return scene; }, get renderer() { return renderer; }, get board() { return board; }, ctrls, drawHud, onSelect, castFrom, sync, setVrPause, openMap, get resPanel() { return resPanel; }, get mapPanel() { return mapPanel; }, get mapOpen() { return mapOpen; }, get mapSel() { return mapSel; } };
 H.onResult = r => { if (window.__XR_ON) { H.B.shown = true; drawResult(r); } };
