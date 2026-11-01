@@ -28,6 +28,7 @@ jobs:
         run: |
           mkdir -p ~/private_keys
           printf '%s' "$P8" > ~/private_keys/AuthKey_${{ env.ASC_KEY_ID }}.p8
+      # Arşiv imzasız alınır; imzayı dışa aktarma adımı Apple'ın bulut imzasıyla atar (sertifika sınırına takılmaz).
       - name: Arşivle
         working-directory: ios/App
         run: |
@@ -38,6 +39,7 @@ jobs:
             -authenticationKeyID ${{ env.ASC_KEY_ID }} \
             -authenticationKeyIssuerID ${{ env.ASC_ISSUER_ID }} \
             DEVELOPMENT_TEAM=${{ env.APPLE_TEAM_ID }} CODE_SIGN_STYLE=Automatic \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
             MARKETING_VERSION=${{ inputs.version_name }} CURRENT_PROJECT_VERSION=${{ github.run_number }} \
             archive
       - name: App Store Connect'e yükle
