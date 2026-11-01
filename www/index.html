@@ -60,6 +60,7 @@ canvas.full{position:absolute;left:0;top:0}
 .lv.cur{outline:3px solid var(--accent);outline-offset:-1px}
 .lv.lock{opacity:.45;cursor:default}
 .lv.lock .n{font-size:14px;margin-top:12px;color:#6b6650}
+.xr-only{display:none!important}.xr-ok .xr-only{display:inline-block!important}
 .modl{margin-top:8px;padding:6px 8px;background:#ebe3c8;border:1px solid #d4c9a4;font-size:13px}
 .lvst{font-size:24px;color:#c8a23a;letter-spacing:4px;text-shadow:0 1px 0 #7a6420}
 .lvst .off{color:#cfc6a6;text-shadow:none}
@@ -140,6 +141,7 @@ canvas.full{position:absolute;left:0;top:0}
       <h3>Komuta Masası</h3>
       <div class="menuBtns">
         <div class="btn" id="bPlay">Devam ▸</div>
+        <div class="btn xr-only" id="bVR" style="background:linear-gradient(#a8822a,#6e521a);border-color:#4a3510">🥽 Masadaki Savaş</div>
         <div class="btn gray" id="bCamp">Ordugâh</div>
         <div class="btn gray" id="bHelp">Nasıl Oynanır</div>
         <div class="btn gray" id="bSound">Ses: Açık</div>
@@ -156,7 +158,7 @@ canvas.full{position:absolute;left:0;top:0}
     <div class="lvgrid" id="lvgrid"></div>
     <div class="footbar"><span class="hint">Bir bölüm seç. Yıldızlar Hisar'ın ne kadar sağlam kaldığına göre verilir.</span><div class="btn gray" data-go="menu">Geri</div><div class="btn" id="bCamp2">Ordugâh</div></div>
     <div class="overlay" id="ovLv"><div class="panel res"><h3 id="lvT"></h3><div class="body" id="lvB"></div>
-      <div class="acts"><div class="btn gray" id="lvBack">Geri</div><div class="btn" id="lvGo">Sefere Çık ▸</div></div></div></div>
+      <div class="acts"><div class="btn gray" id="lvBack">Geri</div><div class="btn xr-only" id="lvVR">Masada Oyna 🥽</div><div class="btn" id="lvGo">Sefere Çık ▸</div></div></div></div>
   </div>
 
   <!-- ORDUGÂH -->
@@ -1084,6 +1086,7 @@ function showResult(){
     ra.innerHTML='';addAct(ra,'Harita','gray',()=>show('levels'));addAct(ra,'Ordugâh','gray',()=>show('camp'));addAct(ra,'Tekrar ▸','',()=>startLevel(B.i));
   }
   document.getElementById('ovRes').classList.add('on');
+  if(window.HISAR&&window.HISAR.onResult)window.HISAR.onResult({win:B.win,stars:B.stars,last,rk,kills:B.kills,gold:B.goldEarned,bonus:B.bonus,hazine:S.gold,i:B.i,ad:B.L.ad});
   if(B.win){for(let k=0;k<B.stars;k++)setTimeout(()=>SFX.star(k),250+k*260);setTimeout(()=>SFX.coin(),300+B.stars*260);}
 }
 function addAct(p,txt,cls,fn){const b=document.createElement('div');b.className='btn '+cls;b.textContent=txt;b.onclick=()=>{SFX.click();fn();};p.appendChild(b);}
@@ -1194,10 +1197,18 @@ let last=performance.now();
 function loop(now){
   requestAnimationFrame(loop);
   const dt=Math.min(0.05,(now-last)/1000);last=now;T+=dt;
+  if(window.__XR_ON)return; // VR (Masadaki Savaş) kendi döngüsünü çalıştırır
   if(cur==='battle'&&B){if(!B.paused){for(let k=0;k<B.speed;k++)step(dt);ambienceTick(dt);}draw();hud();}
 }
 paintBgs();show('menu');requestAnimationFrame(loop);
-window.HISAR={startLevel,step,trySpawn,fire,get B(){return B;},S,show,UNITS,LEVELS,REGIONS,MODS,UPS,upCost,UPMAX,NLV,RSZ,DIFF,buildLevels,fireCost,openLv,save};
+window.HISAR={startLevel,step,trySpawn,fire,get B(){return B;},S,show,UNITS,LEVELS,REGIONS,MODS,UPS,upCost,UPMAX,NLV,RSZ,DIFF,buildLevels,fireCost,openLv,save,
+  LOOK,FOES,RANKS,RPAL,GY,drawFig,drawHorse,makeBg,shade,srand,SFX,ambience,ambienceTick,setPause,unitUnlocked,unitBanned,hasRank,
+  tick(dt){T+=dt;},get T(){return T;},onResult:null,get selLv(){return selLv;},setCurReg(r){curReg=r;}};
+// Masadaki Savaş (VR/MR): yalnızca WebXR destekleyen cihazlarda yüklenir
+(function(){const m=/[?&]masa=([a-z]+)/.exec(location.search);if(m){import('./vr.js').then(()=>{const q=/[?&]b=(\d+)/.exec(location.search);window.HISAR_VR.startPreview(q?+q[1]-1:0,{ar:m[1]==='mr'});});return;}
+  const x=navigator.xr;if(!x||!x.isSessionSupported)return;
+  Promise.all([x.isSessionSupported('immersive-ar').catch(()=>false),x.isSessionSupported('immersive-vr').catch(()=>false)]).then(([ar,vr])=>{
+    if(!ar&&!vr)return;window.HISAR.xrModes={ar,vr};document.body.classList.add('xr-ok');import('./vr.js').catch(e=>console.warn('VR yüklenemedi',e));});})();
 </script>
 </body>
 </html>
