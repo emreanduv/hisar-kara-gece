@@ -59,6 +59,16 @@ function buildEnv() {
   env.add(sky);
   const fl = new THREE.Mesh(new THREE.CircleGeometry(6, 48), new THREE.MeshStandardMaterial({ color: 0x2a2a22, roughness: 1 }));
   fl.rotation.x = -Math.PI / 2; env.add(fl); env.userData.floor = fl;
+  // ufukta tepeler (karanlık siluet halkaları)
+  const hills = new THREE.Group(); env.add(hills); env.userData.hills = hills;
+  for (const [r, h0, h1, col, sd] of [[17, 0.6, 2.6, 0x141a1c, 7], [13, 0.2, 1.3, 0x1c221e, 31]]) {
+    const N = 96, pos = [], idx = []; let sd2 = sd; const rnd = () => (sd2 = (sd2 * 16807) % 2147483647) / 2147483647;
+    const hs = []; for (let i = 0; i < N; i++) hs.push(h0 + rnd() * (h1 - h0));
+    for (let i = 0; i <= N; i++) { const a = i / N * Math.PI * 2, hh = (hs[i % N] + hs[(i + 1) % N] + hs[(i + N - 1) % N]) / 3; pos.push(Math.cos(a) * r, -0.5, Math.sin(a) * r, Math.cos(a) * r, hh, Math.sin(a) * r); }
+    for (let i = 0; i < N; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx);
+    hills.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide })));
+  }
   // çadır direkleri ve meşaleler: hareketsiz, uzakta
   for (const a of [-0.9, 0.9]) {
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.04, 2.2, 8), new THREE.MeshStandardMaterial({ color: 0x4a3420 }));
@@ -115,7 +125,7 @@ function makeHisar() {
   c.fillStyle = '#f2ecd6'; star(c, 86, 40, 11);
   const flagGeo = new THREE.PlaneGeometry(0.04, 0.024, 8, 1);
   const flag = new THREE.Mesh(flagGeo, new THREE.MeshBasicMaterial({ map: texOf(fc), side: THREE.DoubleSide }));
-  flag.position.set(0.021, 0.2, 0); g.add(flag); g.userData.flag = flag; g.userData.flagBase = Float32Array.from(flagGeo.attributes.position.array);
+  flag.position.set(0.021, 0.2, 0); g.add(flag); g.userData.pole = pole; g.userData.flag = flag; g.userData.flagBase = Float32Array.from(flagGeo.attributes.position.array);
   return g;
 }
 function star(c, x, y, r) { c.beginPath(); for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, rr2 = k % 2 ? r * 0.42 : r; c.lineTo(x + Math.cos(a) * rr2, y + Math.sin(a) * rr2); } c.closePath(); c.fill(); }
@@ -526,24 +536,29 @@ function updatePointers() {
 }
 
 /* ---------------- maketi yerleştir ---------------- */
-const camPos = new THREE.Vector3(), camDir = new THREE.Vector3();
+const camPos = new THREE.Vector3(), camDir = new THREE.Vector3(), _up = new THREE.Vector3(0, 1, 0), _zAx = new THREE.Vector3(0, 0, 1), _q = new THREE.Quaternion();
 /* Görünümler: Masa (maket masada), Oda (savaş odanın zemininde), Sur Başı (Hisar'ın burcunda durursun, ordular ayağının dibinden ufka uzanır).
    Kamera hiçbir görünümde oyun tarafından hareket ettirilmez; sadece maketin ölçeği ve yeri değişir. */
 const VIEWS = {
+  // Harp Masası: alan önünden uzağa uzanır, sana doğru eğik büyük bir masada (Hisar yakında, Kara Kule karşı uçta)
+  harp: { ad: 'Harp Masası', s: 1.35, lane: 4, ar: false, turn: 0, tilt: 18 * Math.PI / 180, ahead: 0.95, below: 0.22, uiAhead: 0.42 },
   sur: { ad: 'Sur Başı', s: 14, lane: 4, ar: false, turn: 0.3 },
   oda: { ad: 'Oda', s: 5, lane: 2, ar: true, turn: 0.2 },
-  masa: { ad: 'Masa', s: 1, lane: 1, ar: true },
 };
-const VIEW_ORDER = ['sur', 'oda', 'masa'];
-let view = 'sur';
-try { const v = localStorage.getItem('hisar_vr_gorunum'); if (VIEWS[v]) view = v; } catch (e) {}
+const VIEW_ORDER = ['harp', 'sur', 'oda'];
+let view = 'harp';
+try { const v = localStorage.getItem('hisar_vr_gorunum2'); if (VIEWS[v]) view = v; } catch (e) {}
 function applyView() {
-  const V = VIEWS[view], big = V.s > 1;
+  const V = VIEWS[view], big = V.s > 2, table = !!V.tilt;
   laneMul = V.lane;
-  plinth.visible = plinth.userData.trim.visible = !big; backdrop.visible = !big;
+  plinth.visible = plinth.userData.trim.visible = !big; backdrop.visible = false;
+  // burçta bayrak gözünün dibinde dalgalanmasın
+  hisarModel.userData.flag.visible = hisarModel.userData.pole.visible = view !== 'sur';
   for (const o of env.userData.poles) o.visible = !big;
   partPts.material.size = 0.004 * Math.max(1, V.s * 0.6); wxPoints.material.size = 0.004 * Math.max(1, V.s * 0.6);
-  bars.p.mesh.position.set(big ? X(62) + 0.07 : X(62), big ? 0.17 : 0.2, 0);
+  bars.p.mesh.position.set(big ? X(62) + 0.07 : X(62), big ? 0.17 : table ? 0.13 : 0.2, 0);
+  hisarModel.scale.setScalar(view === 'harp' ? 0.55 : 1);
+  env.userData.hills.visible = !V.ar || preview;
   const passthrough = mode === 'immersive-ar' && V.ar;
   env.visible = preview ? !(previewAr && V.ar) : !passthrough;
   if (renderer) renderer.setClearColor(0x000000, passthrough ? 0 : 1);
@@ -552,7 +567,7 @@ function applyView() {
 }
 function cycleView() {
   view = VIEW_ORDER[(VIEW_ORDER.indexOf(view) + 1) % VIEW_ORDER.length];
-  try { localStorage.setItem('hisar_vr_gorunum', view); } catch (e) {}
+  try { localStorage.setItem('hisar_vr_gorunum2', view); } catch (e) {}
   applyView();
 }
 function placeBoard(cam) {
@@ -560,10 +575,17 @@ function placeBoard(cam) {
   camDir.y = 0; if (camDir.lengthSq() < 1e-4) camDir.set(0, 0, -1); camDir.normalize();
   const yaw = Math.atan2(camDir.x, camDir.z);
   // paneller her görünümde elinin altında: önünde, bel hizasında
-  ui.position.set(camPos.x + camDir.x * 0.62, Math.max(0.45, camPos.y - 0.42), camPos.z + camDir.z * 0.62);
+  const V = VIEWS[view], ua = V.uiAhead || 0.62;
+  ui.position.set(camPos.x + camDir.x * ua, Math.max(0.45, camPos.y - (V.tilt ? 0.5 : 0.42)), camPos.z + camDir.z * ua);
   ui.rotation.set(0, yaw + Math.PI, 0);
-  const V = VIEWS[view];
-  if (V.s === 1) { board.scale.setScalar(1); board.position.copy(ui.position); board.rotation.copy(ui.rotation); }
+  if (V.tilt) {
+    // Harp Masası: masanın ortası önünde ve göz hizasının biraz altında; uzak kenar sana doğru kalkık
+    board.scale.setScalar(V.s);
+    board.quaternion.setFromAxisAngle(_up, Math.atan2(-camDir.z, camDir.x));
+    board.quaternion.multiply(_q.setFromAxisAngle(_zAx, V.tilt));
+    board.position.set(camPos.x + camDir.x * V.ahead, Math.max(0.55, camPos.y - V.below), camPos.z + camDir.z * V.ahead);
+    const fl = env.userData.floor; fl.position.set(0, 0, 0); fl.scale.setScalar(1);
+  }
   else {
     // alan bakış yönünde uzanır: Hisar ayağının altında (Sur Başı) ya da hemen arkanda (Oda), Kara Kule ufukta
     board.scale.setScalar(V.s);
@@ -576,7 +598,7 @@ function placeBoard(cam) {
     board.position.set(camPos.x - fx * (hx + ahead), groundY, camPos.z - fz * (hx + ahead));
     const fl = env.userData.floor; fl.position.set(camPos.x, groundY - 0.02, camPos.z); fl.scale.setScalar(view === 'sur' ? 5 : 1);
   }
-  if (V.s === 1) { const fl = env.userData.floor; fl.position.set(0, 0, 0); fl.scale.setScalar(1); }
+  if (false) { const fl = env.userData.floor; fl.position.set(0, 0, 0); fl.scale.setScalar(1); }
   placed = true;
 }
 
@@ -639,7 +661,7 @@ function sync(dt) {
   for (let k = 0; k < fg.count; k++) { const x0 = fb[k * 3]; fg.setZ(k, Math.sin(H.T * 5 + x0 * 160) * 0.003 * (x0 + 0.02) / 0.04); }
   fg.needsUpdate = true;
   kuleModel.userData.eye.material.color.setHSL(0.78, 1, 0.45 + Math.sin(H.T * 3) * 0.15);
-  hisarModel.scale.y = view === 'sur' ? 1 : 0.75 + 0.25 * Math.max(0, B.pBase.hp / B.pBase.max); // burçtayken zemin ayağının altından kaymasın
+  const hs = view === 'harp' ? 0.55 : 1; hisarModel.scale.set(hs, hs * (view === 'sur' ? 1 : 0.75 + 0.25 * Math.max(0, B.pBase.hp / B.pBase.max)), hs); // burçtayken zemin ayağının altından kaymasın
   kuleModel.scale.y = 0.6 + 0.4 * Math.max(0, B.eBase.hp / B.eBase.max);
   tickWeather(dt);
   drawHud(false);
@@ -700,7 +722,7 @@ function startPreview(i, opts) {
   renderer.domElement.style.display = 'block';
   previewAr = !!(opts && opts.ar); if (opts && opts.view && VIEWS[opts.view]) view = opts.view; applyView();
   if (previewAr && VIEWS[view].ar) renderer.setClearColor(0x8a8478, 1);
-  camera.position.set(0, 1.5, 0); camera.lookAt(0, VIEWS[view].s > 1 ? 0.4 : 0.78, VIEWS[view].s > 1 ? -4 : -0.62);
+  camera.position.set(0, 1.5, 0); camera.lookAt(0, VIEWS[view].tilt ? 1.0 : 0.4, VIEWS[view].tilt ? -0.9 : -4);
   placeBoard(camera);
   if (opts && opts.map) openMap(i); else startVrLevel(i);
   renderer.setAnimationLoop(frame);
