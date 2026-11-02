@@ -15,16 +15,17 @@ const US = 1.35;             // askerler oyuncak asker boyunda: biraz büyütül
 /* ---------------- yardımcılar ---------------- */
 const X = px => (px - 480) * PX;              // oyun x → maket x
 const Yh = py => (GY - py) * PX;              // oyun y (ekran) → yükseklik
-const Z = lane => lane * LANE;
+let laneMul = 1;
+const Z = lane => lane * LANE * laneMul;
 function canvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 function texOf(c) { const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; }
 function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
 const FONT = 'Tahoma,Verdana,"Segoe UI",sans-serif';
 
 /* ---------------- sahne ---------------- */
-let renderer, scene, camera, board, session = null, mode = 'vr', placed = false;
+let renderer, scene, camera, board, ui, session = null, mode = 'vr', placed = false;
 let env, hudPanel, resPanel, pausePanel, mapPanel, banner, bars = {}, decoGroup, unitLayer, projLayer;
-let preview = false; // masaüstü önizleme (ekran görüntüleri ve test için)
+let preview = false, previewAr = false; // masaüstü önizleme (ekran görüntüleri ve test için)
 let mapOpen = false, mapSel = 0, mapTab = 'map', mapDressT = -1; // VR içi sefer haritası ve ordugâh
 
 function initRenderer() {
@@ -42,14 +43,14 @@ function initRenderer() {
   camera.position.set(0, 1.2, 0);
   scene.add(new THREE.HemisphereLight(0xfff4e0, 0x2a3324, 1.6));
   const sun = new THREE.DirectionalLight(0xfff0d0, 1.6); sun.position.set(-1, 3, 2); scene.add(sun);
-  board = new THREE.Group(); scene.add(board);
+  board = new THREE.Group(); scene.add(board); ui = new THREE.Group(); scene.add(ui);
   buildEnv(); buildBoardBase(); buildPanels(); buildControllers();
   addEventListener('resize', () => { if (!session) { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); } });
 }
 
 /* Sanal oda (karma gerçeklikte gizlenir): gece göğü, zemin, ahşap masa */
 function buildEnv() {
-  env = new THREE.Group(); scene.add(env);
+  env = new THREE.Group(); scene.add(env); env.userData.poles = [];
   const sc = canvas(2048, 1024), c = sc.getContext('2d');
   const g = c.createLinearGradient(0, 0, 0, 1024); g.addColorStop(0, '#05080d'); g.addColorStop(0.55, '#16202a'); g.addColorStop(1, '#2a2418');
   c.fillStyle = g; c.fillRect(0, 0, 2048, 1024);
@@ -57,14 +58,14 @@ function buildEnv() {
   const sky = new THREE.Mesh(new THREE.SphereGeometry(20, 32, 16), new THREE.MeshBasicMaterial({ map: texOf(sc), side: THREE.BackSide, depthWrite: false }));
   env.add(sky);
   const fl = new THREE.Mesh(new THREE.CircleGeometry(6, 48), new THREE.MeshStandardMaterial({ color: 0x2a2a22, roughness: 1 }));
-  fl.rotation.x = -Math.PI / 2; env.add(fl);
+  fl.rotation.x = -Math.PI / 2; env.add(fl); env.userData.floor = fl;
   // çadır direkleri ve meşaleler: hareketsiz, uzakta
   for (const a of [-0.9, 0.9]) {
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.04, 2.2, 8), new THREE.MeshStandardMaterial({ color: 0x4a3420 }));
-    pole.position.set(a * 2.4, 1.1, -2.6); env.add(pole);
+    pole.position.set(a * 2.4, 1.1, -2.6); env.add(pole); env.userData.poles.push(pole);
     const fire = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffa040 }));
-    fire.position.set(a * 2.4, 2.25, -2.6); env.add(fire);
-    const pl = new THREE.PointLight(0xffa040, 1.2, 4); pl.position.copy(fire.position); env.add(pl);
+    fire.position.set(a * 2.4, 2.25, -2.6); env.add(fire); env.userData.poles.push(fire);
+    const pl = new THREE.PointLight(0xffa040, 1.2, 4); pl.position.copy(fire.position); env.add(pl); env.userData.poles.push(pl);
   }
 }
 
@@ -75,7 +76,7 @@ function buildBoardBase() {
   plinth = new THREE.Mesh(new THREE.BoxGeometry(1.04, 0.05, 0.38), wood);
   plinth.position.set(0, -0.026, -0.03); board.add(plinth);
   const trim = new THREE.Mesh(new THREE.BoxGeometry(1.06, 0.008, 0.40), new THREE.MeshStandardMaterial({ color: 0xa8822a, roughness: 0.5, metalness: 0.4 }));
-  trim.position.set(0, -0.0055, -0.03); board.add(trim);
+  trim.position.set(0, -0.0055, -0.03); board.add(trim); plinth.userData.trim = trim;
   baseTop = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.34), new THREE.MeshStandardMaterial({ roughness: 1 }));
   baseTop.rotation.x = -Math.PI / 2; baseTop.position.set(0, 0.001, -0.03); board.add(baseTop);
   backdrop = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.3), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }));
@@ -302,10 +303,10 @@ function makePanel(w, h, pw, ph) {
 }
 function buildPanels() {
   hudPanel = makePanel(1280, 236, 0.84, 0.155);
-  hudPanel.m.position.set(0, 0.012, 0.22); hudPanel.m.rotation.x = -0.95; board.add(hudPanel.m);
-  resPanel = makePanel(900, 520, 0.5, 0.289); resPanel.m.position.set(0, 0.22, 0.02); resPanel.m.visible = false; board.add(resPanel.m);
-  pausePanel = makePanel(900, 360, 0.44, 0.176); pausePanel.m.position.set(0, 0.2, 0.03); pausePanel.m.visible = false; board.add(pausePanel.m);
-  mapPanel = makePanel(900, 640, 0.5, 0.356); mapPanel.m.position.set(0, 0.215, 0.04); mapPanel.m.visible = false; board.add(mapPanel.m);
+  hudPanel.m.position.set(0, 0.012, 0.22); hudPanel.m.rotation.x = -0.95; ui.add(hudPanel.m);
+  resPanel = makePanel(900, 520, 0.5, 0.289); resPanel.m.position.set(0, 0.22, 0.02); resPanel.m.visible = false; ui.add(resPanel.m);
+  pausePanel = makePanel(900, 360, 0.44, 0.176); pausePanel.m.position.set(0, 0.2, 0.03); pausePanel.m.visible = false; ui.add(pausePanel.m);
+  mapPanel = makePanel(900, 640, 0.5, 0.356); mapPanel.m.position.set(0, 0.215, 0.04); mapPanel.m.visible = false; ui.add(mapPanel.m);
   banner = makeBanner(); buildParticles();
 }
 const ICONS = {};
@@ -388,9 +389,10 @@ function drawPause() {
   const P = pausePanel, c = P.c.getContext('2d'); c.clearRect(0, 0, P.w, P.h);
   rr(c, 4, 4, P.w - 8, P.h - 8, 18); c.fillStyle = '#f2ecd6'; c.fill(); c.strokeStyle = '#b9ad84'; c.lineWidth = 4; c.stroke();
   c.fillStyle = '#1d2a1f'; c.textAlign = 'center'; c.font = 'bold 44px ' + FONT; c.fillText('Mola', P.w / 2, 90);
-  c.font = '26px ' + FONT; c.fillText('Ordu bekliyor. Masayı yeniden konumlamak için ⌖ düğmesini kullan.', P.w / 2, 150);
+  c.font = '24px ' + FONT; c.fillText('Ordu bekliyor. Yerini değiştirdiysen ⌖ ile alanı önüne getir.', P.w / 2, 136);
   const btns = [];
   const B2 = (label, x, w, primary, fn) => { rr(c, x, 230, w, 80, 12); const gg = c.createLinearGradient(0, 230, 0, 310); gg.addColorStop(0, primary ? '#5f9152' : '#b84a3c'); gg.addColorStop(1, primary ? '#3a6232' : '#7c2a21'); c.fillStyle = gg; c.fill(); c.fillStyle = '#fff'; c.font = 'bold 32px ' + FONT; c.fillText(label, x + w / 2, 282); btns.push({ id: label, x, y: 230, w, h: 80, fn }); };
+  { rr(c, 250, 158, 400, 56, 12); c.fillStyle = '#c8a23a'; c.fill(); c.fillStyle = '#1d2a1f'; c.font = 'bold 26px ' + FONT; c.fillText('👁 Görünüm: ' + VIEWS[view].ad + ' ▸', 450, 196); btns.push({ id: 'view', x: 250, y: 158, w: 400, h: 56, fn: () => { cycleView(); drawPause(); } }); }
   B2('Haritaya Dön', 60, 360, false, () => openMap(H.B ? H.B.i : null));
   B2('Devam', 480, 360, true, () => setVrPause(false));
   panelButtons(P, btns); P.tex.needsUpdate = true;
@@ -415,6 +417,7 @@ function drawMap() {
   c.fillStyle = '#c8a23a'; c.fillRect(4, 72, P.w - 8, 4);
   const tab = (id, label, x, w) => { const on = mapTab === id; rr(c, x, 14, w, 48, 10); c.fillStyle = on ? '#f2ecd6' : 'rgba(242,236,214,.18)'; c.fill(); c.fillStyle = on ? '#2c3e2f' : '#f2ecd6'; c.font = 'bold 24px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + w / 2, 46); btns.push({ id: 'tab' + id, x, y: 14, w, h: 48, fn: () => { mapTab = id; } }); };
   tab('map', 'Sefer Haritası', 20, 230); tab('camp', 'Ordugâh', 262, 170);
+  { rr(c, 444, 14, 236, 48, 10); c.fillStyle = '#c8a23a'; c.fill(); c.fillStyle = '#1d2a1f'; c.font = 'bold 21px ' + FONT; c.textAlign = 'center'; c.fillText('👁 ' + VIEWS[view].ad + ' ▸', 562, 45); btns.push({ id: 'view', x: 444, y: 14, w: 236, h: 48, fn: () => { cycleView(); } }); }
   c.fillStyle = '#f5d36b'; c.font = 'bold 26px ' + FONT; c.textAlign = 'right'; c.fillText(S.gold + ' akçe', P.w - 26, 47);
   const B2 = (label, x, y, w, h, kind, fn, dis) => { rr(c, x, y, w, h, 12); const gg = c.createLinearGradient(0, y, 0, y + h); const col = dis ? ['#cfc6a6', '#b9ad84'] : kind === 1 ? ['#5f9152', '#3a6232'] : kind === 2 ? ['#b84a3c', '#7c2a21'] : ['#8a8570', '#5f5a48']; gg.addColorStop(0, col[0]); gg.addColorStop(1, col[1]); c.fillStyle = gg; c.fill(); c.fillStyle = dis ? '#8a8570' : '#fff'; c.font = 'bold ' + Math.round(h * 0.42) + 'px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + w / 2, y + h * 0.66); if (!dis) btns.push({ id: label, x, y, w, h, fn }); };
   if (mapTab === 'map') {
@@ -524,12 +527,56 @@ function updatePointers() {
 
 /* ---------------- maketi yerleştir ---------------- */
 const camPos = new THREE.Vector3(), camDir = new THREE.Vector3();
+/* Görünümler: Masa (maket masada), Oda (savaş odanın zemininde), Sur Başı (Hisar'ın burcunda durursun, ordular ayağının dibinden ufka uzanır).
+   Kamera hiçbir görünümde oyun tarafından hareket ettirilmez; sadece maketin ölçeği ve yeri değişir. */
+const VIEWS = {
+  sur: { ad: 'Sur Başı', s: 14, lane: 4, ar: false, turn: 0.3 },
+  oda: { ad: 'Oda', s: 5, lane: 2, ar: true, turn: 0.2 },
+  masa: { ad: 'Masa', s: 1, lane: 1, ar: true },
+};
+const VIEW_ORDER = ['sur', 'oda', 'masa'];
+let view = 'sur';
+try { const v = localStorage.getItem('hisar_vr_gorunum'); if (VIEWS[v]) view = v; } catch (e) {}
+function applyView() {
+  const V = VIEWS[view], big = V.s > 1;
+  laneMul = V.lane;
+  plinth.visible = plinth.userData.trim.visible = !big; backdrop.visible = !big;
+  for (const o of env.userData.poles) o.visible = !big;
+  partPts.material.size = 0.004 * Math.max(1, V.s * 0.6); wxPoints.material.size = 0.004 * Math.max(1, V.s * 0.6);
+  bars.p.mesh.position.set(big ? X(62) + 0.07 : X(62), big ? 0.17 : 0.2, 0);
+  const passthrough = mode === 'immersive-ar' && V.ar;
+  env.visible = preview ? !(previewAr && V.ar) : !passthrough;
+  if (renderer) renderer.setClearColor(0x000000, passthrough ? 0 : 1);
+  for (const [u, v] of unitViews) dropView(u, v);
+  placed = false;
+}
+function cycleView() {
+  view = VIEW_ORDER[(VIEW_ORDER.indexOf(view) + 1) % VIEW_ORDER.length];
+  try { localStorage.setItem('hisar_vr_gorunum', view); } catch (e) {}
+  applyView();
+}
 function placeBoard(cam) {
   cam.getWorldPosition(camPos); cam.getWorldDirection(camDir);
   camDir.y = 0; if (camDir.lengthSq() < 1e-4) camDir.set(0, 0, -1); camDir.normalize();
   const yaw = Math.atan2(camDir.x, camDir.z);
-  board.position.set(camPos.x + camDir.x * 0.62, Math.max(0.45, camPos.y - 0.42), camPos.z + camDir.z * 0.62);
-  board.rotation.set(0, yaw + Math.PI, 0);
+  // paneller her görünümde elinin altında: önünde, bel hizasında
+  ui.position.set(camPos.x + camDir.x * 0.62, Math.max(0.45, camPos.y - 0.42), camPos.z + camDir.z * 0.62);
+  ui.rotation.set(0, yaw + Math.PI, 0);
+  const V = VIEWS[view];
+  if (V.s === 1) { board.scale.setScalar(1); board.position.copy(ui.position); board.rotation.copy(ui.rotation); }
+  else {
+    // alan bakış yönünde uzanır: Hisar ayağının altında (Sur Başı) ya da hemen arkanda (Oda), Kara Kule ufukta
+    board.scale.setScalar(V.s);
+    // alan hafif çaprazdan uzanır: savaşı tam karşıdan değil, burcun köşesinden izler gibi (birlikler üst üste binmez)
+    const fx = camDir.x * Math.cos(V.turn) - camDir.z * Math.sin(V.turn), fz = camDir.x * Math.sin(V.turn) + camDir.z * Math.cos(V.turn);
+    board.rotation.set(0, Math.atan2(-fz, fx), 0);
+    const hx = X(62) * V.s;                       // Hisar'ın yerel x'i (ölçekli)
+    const ahead = view === 'sur' ? 0.3 : 0.9;     // oyuncu Hisar'ın merkezinden ne kadar önde
+    const groundY = view === 'sur' ? -0.15 * V.s : 0; // Sur Başı: Hisar'ın damında durursun
+    board.position.set(camPos.x - fx * (hx + ahead), groundY, camPos.z - fz * (hx + ahead));
+    const fl = env.userData.floor; fl.position.set(camPos.x, groundY - 0.02, camPos.z); fl.scale.setScalar(view === 'sur' ? 5 : 1);
+  }
+  if (V.s === 1) { const fl = env.userData.floor; fl.position.set(0, 0, 0); fl.scale.setScalar(1); }
   placed = true;
 }
 
@@ -592,7 +639,7 @@ function sync(dt) {
   for (let k = 0; k < fg.count; k++) { const x0 = fb[k * 3]; fg.setZ(k, Math.sin(H.T * 5 + x0 * 160) * 0.003 * (x0 + 0.02) / 0.04); }
   fg.needsUpdate = true;
   kuleModel.userData.eye.material.color.setHSL(0.78, 1, 0.45 + Math.sin(H.T * 3) * 0.15);
-  hisarModel.scale.y = 0.75 + 0.25 * Math.max(0, B.pBase.hp / B.pBase.max);
+  hisarModel.scale.y = view === 'sur' ? 1 : 0.75 + 0.25 * Math.max(0, B.pBase.hp / B.pBase.max); // burçtayken zemin ayağının altından kaymasın
   kuleModel.scale.y = 0.6 + 0.4 * Math.max(0, B.eBase.hp / B.eBase.max);
   tickWeather(dt);
   drawHud(false);
@@ -603,7 +650,7 @@ let lastT = 0;
 function frame() {
   const now = performance.now(); let dt = lastT ? (now - lastT) / 1000 : 0.016; lastT = now;
   if (!(dt > 0)) dt = 0.001; if (dt > 0.05) dt = 0.05;
-  if (renderer.xr.isPresenting && !placed) placeBoard(renderer.xr.getCamera());
+  if (!placed && (renderer.xr.isPresenting || preview)) placeBoard(renderer.xr.isPresenting ? renderer.xr.getCamera() : camera);
   const B = H.B;
   if (mapOpen) { H.tick(dt); if (mapDressT > 0 && (mapDressT -= dt) <= 0) dressBoard(mapSel); }
   else if (B) {
@@ -631,8 +678,7 @@ async function enterXR(i, opts) {
   try { session = await navigator.xr.requestSession(mode, opt); }
   catch (e) { if (mode === 'immersive-ar') { mode = 'immersive-vr'; session = await navigator.xr.requestSession(mode, opt); } else throw e; }
   window.__XR_ON = true; placed = false;
-  env.visible = mode !== 'immersive-ar';
-  scene.background = null; renderer.setClearColor(0x000000, mode === 'immersive-ar' ? 0 : 1);
+  scene.background = null; applyView();
   await renderer.xr.setSession(session);
   session.addEventListener('end', onEnd);
   if (opts && opts.map) openMap(i); else startVrLevel(i);
@@ -652,9 +698,9 @@ function endXR() { if (session) session.end(); else if (preview) onEnd(); }
 function startPreview(i, opts) {
   preview = true; initRenderer(); window.__XR_ON = true;
   renderer.domElement.style.display = 'block';
-  env.visible = !(opts && opts.ar);
-  renderer.setClearColor(opts && opts.ar ? 0x8a8478 : 0x000000, 1);
-  camera.position.set(0, 1.2, 0); camera.lookAt(0, 0.78, -0.62);
+  previewAr = !!(opts && opts.ar); if (opts && opts.view && VIEWS[opts.view]) view = opts.view; applyView();
+  if (previewAr && VIEWS[view].ar) renderer.setClearColor(0x8a8478, 1);
+  camera.position.set(0, 1.5, 0); camera.lookAt(0, VIEWS[view].s > 1 ? 0.4 : 0.78, VIEWS[view].s > 1 ? -4 : -0.62);
   placeBoard(camera);
   if (opts && opts.map) openMap(i); else startVrLevel(i);
   renderer.setAnimationLoop(frame);
@@ -683,5 +729,5 @@ if (/[?&]quest=1/.test(location.search) && H.xrModes) {
   enterXR(null, { map: true }).catch(gate);
   window.addEventListener('hisar-xr-end', gate);
 }
-window.HISAR_VR = { enterXR, startPreview, startVrLevel, placeBoard: () => placeBoard(renderer.xr.isPresenting ? renderer.xr.getCamera() : camera), get scene() { return scene; }, get renderer() { return renderer; }, get board() { return board; }, ctrls, drawHud, onSelect, castFrom, sync, setVrPause, openMap, get resPanel() { return resPanel; }, get mapPanel() { return mapPanel; }, get mapOpen() { return mapOpen; }, get mapSel() { return mapSel; } };
+window.HISAR_VR = { enterXR, startPreview, startVrLevel, placeBoard: () => placeBoard(renderer.xr.isPresenting ? renderer.xr.getCamera() : camera), get scene() { return scene; }, get renderer() { return renderer; }, get board() { return board; }, ctrls, drawHud, onSelect, cycleView, get view() { return view; }, castFrom, sync, setVrPause, openMap, get resPanel() { return resPanel; }, get mapPanel() { return mapPanel; }, get mapOpen() { return mapOpen; }, get mapSel() { return mapSel; } };
 H.onResult = r => { if (window.__XR_ON) { H.B.shown = true; drawResult(r); } };
