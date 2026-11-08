@@ -244,7 +244,7 @@ const barBg = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, 
 const barMats = { 0: new THREE.MeshBasicMaterial({ color: 0x6ac05a }), 1: new THREE.MeshBasicMaterial({ color: 0xd04a4a }), h: new THREE.MeshBasicMaterial({ color: 0xf5d36b }) };
 function viewFor(u) {
   let v = unitViews.get(u); if (v) return v;
-  const key = u.isHero ? 'alp' : u.id, A = atlasFor(key + (u.mounted ? '_m' : ''), u.look, u.mounted);
+  const key = u.isHero ? 'alp' + (u.tier || 0) : u.id, A = atlasFor(key + (u.mounted ? '_m' : ''), u.look, u.mounted);
   const g = new THREE.Group();
   const sh = new THREE.Mesh(shadowGeo, shadowMat); sh.rotation.x = -Math.PI / 2; sh.position.y = 0.0015;
   const r = (u.look.dragon ? 50 : 11 * (u.mounted ? 1.7 : 1)) * u.sc * PX * US; sh.scale.set(r, u.look.dragon ? 0.006 : 3 * u.sc * PX * 1.6, 1); g.add(sh);
@@ -275,6 +275,7 @@ const PROJ = {
   rain: [new THREE.SphereGeometry(0.005, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffcc55 })],
 };
 const projPool = { arrow: [], bomb: [], fire: [], orb: [], rain: [] };
+const coinPool = [], coinGeo = new THREE.CylinderGeometry(0.0045, 0.0045, 0.0012, 14), coinMat = new THREE.MeshBasicMaterial({ color: 0xf5d36b });
 function projMesh(kind, idx, col) {
   const pool = projPool[kind]; let m = pool[idx];
   if (!m) { const [geo, mat] = PROJ[kind]; m = new THREE.Mesh(geo, mat || new THREE.MeshBasicMaterial({ color: 0xb48aff })); pool.push(m); projLayer.add(m); }
@@ -330,7 +331,7 @@ function unitIcon(U) {
 let hudKey = '';
 function drawHud(force) {
   const B = H.B; if (!B) return;
-  const k = [Math.floor(B.food), Math.floor(B.mana), B.cds.map(v => Math.ceil(v * 4)).join(','), B.speed, B.paused, B.heroIn].join('|');
+  const k = [Math.floor(B.food), Math.floor(B.mana), B.cds.map(v => Math.ceil(v * 4)).join(','), B.speed, B.paused, B.heroIn, B.slots.join(','), B.pw.join(',')].join('|');
   if (k === hudKey && !force) return; hudKey = k;
   const P = hudPanel, c = P.c.getContext('2d'); P.btns = [];
   c.clearRect(0, 0, P.w, P.h);
@@ -350,24 +351,27 @@ function drawHud(force) {
   c.fillStyle = '#f5d36b'; c.font = 'bold 56px ' + FONT; c.fillText(Math.floor(B.food), 296, 132);
   c.fillStyle = '#f2ecd6'; c.font = '18px ' + FONT; c.fillText('+' + (B.foodRate * (B.moral || 1)).toFixed(1) + '/sn', 296, 166);
   // birlik kartları
-  H.UNITS.forEach((U, k) => {
-    const x = 366 + k * 128, un = H.unitUnlocked(U), ban = H.unitBanned(U), poor = B.food < U.cost;
+  B.slots.forEach((ui, k) => {
+    const U = H.UNITS[ui], x = 366 + k * 128, un = H.unitUnlocked(U), ban = H.unitBanned(U), poor = B.food < U.cost;
     card(x, 30, 118, 176, un && !ban);
     c.save(); if (!un || ban) c.globalAlpha = 0.4; c.drawImage(unitIcon(U), x - 1, 52); c.restore();
-    c.fillStyle = '#1d2a1f'; c.font = 'bold 18px ' + FONT; c.textAlign = 'left'; c.fillText(U.ad, x + 8, 52);
+    c.fillStyle = '#1d2a1f'; c.font = 'bold ' + (U.ad.length > 10 ? 15 : 18) + 'px ' + FONT; c.textAlign = 'left'; c.fillText(U.ad, x + 8, 52);
+    if (U.unique) { c.fillStyle = '#c8a23a'; c.font = 'bold 22px ' + FONT; c.textAlign = 'right'; c.fillText('★', x + 112, 78); }
     c.textAlign = 'center'; c.font = 'bold 20px ' + FONT; c.fillStyle = (un && !ban && poor) ? '#a8322a' : '#1d2a1f';
     c.fillText(ban ? 'Yok' : un ? U.cost + ' erzak' : 'Bölüm ' + U.unlock, x + 59, 196);
     if (B.cds[k] > 0) { c.fillStyle = 'rgba(20,30,20,.55)'; const hh = 176 * B.cds[k] / U.cd; c.fillRect(x, 30 + 176 - hh, 118, hh); }
     btn('unit' + k, x, 30, 118, 176, () => H.trySpawn(k));
   });
-  // ateş yağmuru
-  { const x = 1138, cost = H.fireCost(), rd = B.mana >= cost;
-    card(x, 30, 118, 120, true, rd);
-    c.save(); rr(c, x, 30, 118, 120, 12); c.clip(); const fh = 120 * B.mana / 100; const fg = c.createLinearGradient(0, 150 - fh, 0, 150); fg.addColorStop(0, '#ffb347'); fg.addColorStop(1, '#c8401f'); c.fillStyle = fg; c.globalAlpha = 0.85; c.fillRect(x, 150 - fh, 118, fh); c.restore();
-    c.fillStyle = '#1d2a1f'; c.font = 'bold 19px ' + FONT; c.textAlign = 'center'; c.fillText('Ateş', x + 59, 80); c.fillText('Yağmuru', x + 59, 104); c.font = '30px ' + FONT; c.fillText('🔥', x + 59, 140);
-    btn('fire', x, 30, 118, 120, () => H.fire()); }
+  // seçilen iki güç
+  const SH = { ates: 'Ateş', ok: 'Ok', mancinik: 'Mancınık', boru: 'Boru', gurz: 'Gürz', kurt: 'Kurtlar' };
+  B.pw.forEach((id, k) => { const x = 1138, y = 30 + k * 64, P = H.PW(id), cost = H.pwCost(id), rd = B.mana >= cost;
+    card(x, y, 118, 58, true, rd);
+    c.save(); rr(c, x, y, 118, 58, 12); c.clip(); const fw = 118 * Math.min(1, B.mana / cost); const fg = c.createLinearGradient(x, 0, x + 118, 0); fg.addColorStop(0, '#c8401f'); fg.addColorStop(1, '#ffb347'); c.fillStyle = fg; c.globalAlpha = 0.8; c.fillRect(x, y, fw, 58); c.restore();
+    c.fillStyle = '#1d2a1f'; c.textAlign = 'left'; c.font = '26px ' + FONT; c.fillText(P.ic, x + 6, y + 38); c.font = 'bold 18px ' + FONT; c.fillText(SH[id], x + 40, y + 26); c.font = '15px ' + FONT; c.fillText(cost + ' ocak', x + 40, y + 47);
+    btn('pw' + k, x, y, 118, 58, () => H.power(k)); });
   // hız, mola, konum
-  const sm = (id, x, label, fn) => { card(x, 160, 36, 46, true); c.fillStyle = '#1d2a1f'; c.font = 'bold 17px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + 18, 190); btn(id, x, 160, 36, 46, fn); };
+  const sm = (id, x, label, fn) => { card(x, 162, 36, 44, true); c.fillStyle = '#1d2a1f'; c.font = 'bold 17px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + 18, 191); btn(id, x, 162, 36, 44, fn); };
+  const smY = 160;
   sm('speed', 1138, '×' + B.speed, () => { B.speed = B.speed >= 3 ? 1 : B.speed + 1; });
   sm('pause', 1179, '❚❚', () => setVrPause(true));
   sm('place', 1220, '⌖', () => { placed = false; });
@@ -381,17 +385,19 @@ function drawResult(r) {
   c.fillStyle = '#c8a23a'; c.fillRect(4, 66, P.w - 8, 4);
   c.fillStyle = '#f2ecd6'; c.font = 'bold 26px ' + FONT; c.textAlign = 'left'; c.fillText('Gelen Kutusu · Hisar Divanı', 30, 46);
   c.fillStyle = '#1d2a1f'; c.font = 'bold 42px ' + FONT;
-  c.fillText(r.win ? (r.last ? 'Kara Kule yıkıldı!' : 'Zafer: ' + r.ad) : 'Hisar düştü', 30, 130);
+  c.fillText(r.endless ? 'Sonsuz Dalga: ' + r.wave + ' dalga' : r.win ? (r.last ? 'Kara Kule yıkıldı!' : 'Zafer: ' + r.ad) : 'Hisar düştü', 30, 130);
+  if (r.endless) { c.font = 'bold 26px ' + FONT; c.fillStyle = r.rec ? '#3f7a3a' : '#5a5444'; c.fillText((r.rec ? 'Yeni rekor! ' : '') + 'En iyi: ' + r.best + ' dalga', 30, 176); }
   if (r.win) { c.font = '52px ' + FONT; for (let k = 0; k < 3; k++) { c.fillStyle = k < r.stars ? '#c8a23a' : '#cfc6a6'; c.fillText('★', 30 + k * 58, 196); } }
   c.fillStyle = '#1d2a1f'; c.font = '26px ' + FONT;
-  const rows = [['Leş', r.kills], ['Ganimet', r.gold + ' akçe']]; if (r.win) rows.push(['Zafer ödülü', r.bonus + ' akçe']); rows.push(['Hazine', r.hazine + ' akçe']);
-  rows.forEach(([a, b], k) => { const y = (r.win ? 250 : 200) + k * 38; c.textAlign = 'left'; c.fillText(a, 30, y); c.textAlign = 'right'; c.font = 'bold 26px ' + FONT; c.fillText(b, P.w - 30, y); c.font = '26px ' + FONT; c.strokeStyle = '#d4c9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(30, y + 12); c.lineTo(P.w - 30, y + 12); c.stroke(); });
+  const rows = [['Leş', r.kills], ['Ganimet', r.gold + ' akçe']]; if (r.win || r.endless) rows.push([r.endless ? 'Dalga ödülü' : 'Zafer ödülü', r.bonus + ' akçe']); rows.push(['Hazine', r.hazine + ' akçe']);
+  rows.forEach(([a, b], k) => { const y = (r.win || r.endless ? 250 : 200) + k * 38; c.textAlign = 'left'; c.fillText(a, 30, y); c.textAlign = 'right'; c.font = 'bold 26px ' + FONT; c.fillText(b, P.w - 30, y); c.font = '26px ' + FONT; c.strokeStyle = '#d4c9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(30, y + 12); c.lineTo(P.w - 30, y + 12); c.stroke(); });
   if (r.rk) { c.fillStyle = '#3f7a3a'; c.font = 'bold 22px ' + FONT; c.textAlign = 'left'; c.fillText('Yeni rütbe: ' + r.rk.ad, 300, 186); }
   const btns = [];
   const B2 = (label, x, w, primary, fn) => { rr(c, x, 432, w, 64, 10); const gg = c.createLinearGradient(0, 432, 0, 496); gg.addColorStop(0, primary ? '#5f9152' : '#8a8570'); gg.addColorStop(1, primary ? '#3a6232' : '#5f5a48'); c.fillStyle = gg; c.fill(); c.fillStyle = '#fff'; c.font = 'bold 28px ' + FONT; c.textAlign = 'center'; c.fillText(label, x + w / 2, 474); btns.push({ id: label, x, y: 432, w, h: 64, fn }); };
   B2('Haritaya Dön', 30, 260, false, () => openMap(r.win ? r.i + 1 : r.i));
+  if (r.endless) { B2('Tekrar ▸', 550, 320, true, () => startVrEndless()); panelButtons(P, btns); P.tex.needsUpdate = true; P.m.visible = true; return; }
   B2('Tekrar', 310, 220, false, () => startVrLevel(r.i));
-  if (r.win && !r.last) B2('Devam ▸', 550, 320, true, () => { H.setCurReg(Math.floor((r.i + 1) / H.RSZ)); startVrLevel(r.i + 1); });
+  if (r.win && !r.last) B2('Devam ▸', 550, 320, true, () => { H.setCurReg(Math.floor((r.i + 1) / H.PG)); startVrLevel(r.i + 1); });
   else if (!r.win) B2('Tekrar ▸', 550, 320, true, () => startVrLevel(r.i));
   panelButtons(P, btns); P.tex.needsUpdate = true; P.m.visible = true;
 }
@@ -442,18 +448,19 @@ function drawMap() {
     c.fillStyle = '#3a3a2a'; c.font = '22px ' + FONT; wrap(c, L.brief, 30, y, P.w - 60, 28, Math.max(1, Math.floor((404 - y) / 28)));
     const nav = [['« 10', -10], ['‹', -1], ['›', 1], ['10 »', 10]];
     nav.forEach(([lb, d], k) => { const j = Math.max(0, Math.min(top, i + d)); B2(lb, 30 + k * 132, 440, 120, 66, 0, () => { mapSel = j; mapDressT = 0.35; }, j === i); });
-    B2('Son bölüm', 568, 440, 302, 66, 0, () => { mapSel = top; mapDressT = 0.35; }, i === top);
+    B2('Son bölüm', 568, 440, 140, 66, 0, () => { mapSel = top; mapDressT = 0.35; }, i === top);
+    if (S.unlocked >= H.ENDLESS_AT) B2('♾ Sonsuz', 718, 440, 152, 66, 2, () => startVrEndless());
     B2('Oyundan Çık', 30, 534, 300, 76, 2, () => endXR());
     B2('Sefere Çık ▸', 350, 534, 520, 76, 1, () => playFromMap());
   } else {
     H.UPS.forEach((u, k) => {
-      const y = 96 + k * 86, l = S.up[u.id], max = l >= H.UPMAX, cost = H.upCost(u, l);
-      c.textAlign = 'left'; c.fillStyle = '#1d2a1f'; c.font = 'bold 26px ' + FONT; c.fillText(u.ad, 30, y + 32);
-      c.fillStyle = '#5a5444'; c.font = '19px ' + FONT; wrap(c, u.desc, 30, y + 60, 420, 22, 1);
-      c.fillStyle = '#1d2a1f'; c.font = 'bold 24px ' + FONT; c.textAlign = 'center'; c.fillText(l + ' / ' + H.UPMAX, 530, y + 38);
-      c.fillStyle = '#d4c9a4'; c.fillRect(470, y + 50, 120, 10); c.fillStyle = '#c8a23a'; c.fillRect(470, y + 50, 120 * l / H.UPMAX, 10);
-      B2(max ? 'Tamam' : 'Geliştir · ' + cost, 620, y + 12, 250, 60, 1, () => { if (S.up[u.id] >= H.UPMAX || S.gold < cost) return; S.gold -= cost; S.up[u.id]++; H.save(); H.SFX.upgrade(); }, max || S.gold < cost);
-      c.strokeStyle = '#d4c9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(30, y + 82); c.lineTo(P.w - 30, y + 82); c.stroke();
+      const y = 84 + k * 48, l = S.up[u.id], mx = H.upMax(u), max = l >= mx, cost = H.upCost(u, l);
+      c.textAlign = 'left'; c.fillStyle = '#1d2a1f'; c.font = 'bold 21px ' + FONT; c.fillText(u.ad + (u.id === 'silah' ? ' · ' + H.SILAH[l].ad : ''), 30, y + 22);
+      c.fillStyle = '#5a5444'; c.font = '14px ' + FONT; wrap(c, u.desc, 30, y + 40, 420, 16, 1);
+      c.fillStyle = '#1d2a1f'; c.font = 'bold 20px ' + FONT; c.textAlign = 'center'; c.fillText(l + ' / ' + mx, 530, y + 24);
+      c.fillStyle = '#d4c9a4'; c.fillRect(470, y + 32, 120, 7); c.fillStyle = '#c8a23a'; c.fillRect(470, y + 32, 120 * l / mx, 7);
+      B2(max ? 'Tamam' : 'Geliştir · ' + cost, 620, y + 4, 250, 40, 1, () => { if (S.up[u.id] >= mx || S.gold < cost) return; S.gold -= cost; S.up[u.id]++; H.save(); H.SFX.upgrade(); }, max || S.gold < cost);
+      c.strokeStyle = '#d4c9a4'; c.lineWidth = 2; c.beginPath(); c.moveTo(30, y + 47); c.lineTo(P.w - 30, y + 47); c.stroke();
     });
     B2('Sefer Haritası ▸', 350, 534, 520, 76, 1, () => { mapTab = 'map'; });
   }
@@ -471,7 +478,7 @@ function openMap(i) {
 }
 function playFromMap() {
   mapOpen = false; mapPanel.m.visible = false; hudPanel.m.visible = true; banner.m.visible = true; unitLayer.visible = projLayer.visible = true;
-  H.setCurReg(Math.floor(mapSel / H.RSZ)); startVrLevel(mapSel);
+  H.setCurReg(Math.floor(mapSel / H.PG)); startVrLevel(mapSel);
 }
 
 /* ---------------- girdi: el / kumanda ışını ---------------- */
@@ -632,6 +639,7 @@ function sync(dt) {
   for (const k in projPool) for (const m of projPool[k]) m.visible = false;
   const cnt = { arrow: 0, bomb: 0, fire: 0, orb: 0, rain: 0 };
   for (const p of B.proj) {
+    if (p.e < 0) continue;
     const q = p.e / p.dur, x = p.sx + (p.tx - p.sx) * q, y = p.sy + (p.ty - p.sy) * q - p.arc * 4 * q * (1 - q);
     const m = projMesh(p.kind, cnt[p.kind]++, p.col);
     m.position.set(X(x), Yh(y), 0.004);
@@ -640,6 +648,11 @@ function sync(dt) {
   for (const f of B.fires) for (const b of f.balls) { if (b.hit) continue; const m = projMesh('rain', cnt.rain++); m.position.set(X(b.x), Math.max(0, Yh(b.y)) * 0.5 + (b.y < 0 ? 0.25 : 0), 0); }
   let fl = 0; for (const f of B.fires) if (f.t > 0.5 && f.t < 0.9) { fl = 0.35 * (1 - (f.t - 0.5) / 0.4); flashMesh.position.set(X(f.cx), 0.055, 0); }
   flashMesh.material.opacity = fl; flashMesh.visible = fl > 0;
+  // yerdeki ganimet
+  for (let k = 0; k < B.coins.length && k < 80; k++) { const cn = B.coins[k]; let m = coinPool[k];
+    if (!m) { m = new THREE.Mesh(coinGeo, coinMat); m.rotation.x = Math.PI / 2; coinPool[k] = m; projLayer.add(m); }
+    m.visible = true; m.scale.setScalar(cn.big ? 1.6 : 1); m.position.set(X(cn.x), 0.004 + Math.abs(Math.sin(cn.t * 3 + cn.x)) * 0.002, Z(cn.lane)); m.rotation.z = cn.t * 3; }
+  for (let k = Math.min(80, B.coins.length); k < coinPool.length; k++) coinPool[k].visible = false;
   // parçacıklar
   const pa = partPts.geometry.attributes.position, pc = partPts.geometry.attributes.color; let n = 0;
   for (const p of B.parts) { if (n >= 800) break; pa.setXYZ(n, X(p.x), Math.max(0.001, Yh(p.y)), ((n * 37) % 21 - 10) * LANE); tmpCol.set(p.col); const a = Math.min(1, p.life * 2); pc.setXYZ(n, tmpCol.r * a, tmpCol.g * a, tmpCol.b * a); n++; }
@@ -692,6 +705,12 @@ function startVrLevel(i) {
   H.B.shake = 0;
   dressBoard(i); hudKey = ''; drawHud(true);
 }
+function startVrEndless() {
+  mapOpen = false; mapPanel.m.visible = false; hudPanel.m.visible = true; banner.m.visible = true; unitLayer.visible = projLayer.visible = true;
+  resPanel.m.visible = false; pausePanel.m.visible = false; heroTarget = null; holdHero.clear();
+  for (const [u, v] of unitViews) dropView(u, v);
+  H.startEndless(); H.B.shake = 0; dressBoard(H.B.i); hudKey = ''; drawHud(true);
+}
 async function enterXR(i, opts) {
   initRenderer();
   const modes = H.xrModes || {};
@@ -703,7 +722,7 @@ async function enterXR(i, opts) {
   scene.background = null; applyView();
   await renderer.xr.setSession(session);
   session.addEventListener('end', onEnd);
-  if (opts && opts.map) openMap(i); else startVrLevel(i);
+  if (opts && opts.map) openMap(i); else if (opts && opts.endless) startVrEndless(); else startVrLevel(i);
   renderer.setAnimationLoop(frame);
 }
 function onEnd() {
@@ -724,7 +743,7 @@ function startPreview(i, opts) {
   if (previewAr && VIEWS[view].ar) renderer.setClearColor(0x8a8478, 1);
   camera.position.set(0, 1.5, 0); camera.lookAt(0, VIEWS[view].tilt ? 1.0 : 0.4, VIEWS[view].tilt ? -0.9 : -4);
   placeBoard(camera);
-  if (opts && opts.map) openMap(i); else startVrLevel(i);
+  if (opts && opts.map) openMap(i); else if (opts && opts.endless) startVrEndless(); else startVrLevel(i);
   renderer.setAnimationLoop(frame);
 }
 
@@ -733,6 +752,8 @@ function bindUi() {
   const go = i => enterXR(i).catch(e => { console.warn(e); alert('Masadaki Savaş başlatılamadı: ' + (e && e.message || e)); });
   const lv = document.getElementById('lvVR');
   if (lv) lv.addEventListener('click', () => { document.getElementById('ovLv').classList.remove('on'); const i = H.selLv; if (i != null) go(i); });
+  const pv = document.getElementById('prVR');
+  if (pv) pv.addEventListener('click', () => { if (!H.prepCommit()) return; const e = H.prEnd; enterXR(H.prI, e ? { endless: true } : null).catch(err => console.warn(err)); });
   const mb = document.getElementById('bVR');
   if (mb) mb.addEventListener('click', () => { H.show('levels'); document.getElementById('bCur').click(); });
 }
