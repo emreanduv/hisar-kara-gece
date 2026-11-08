@@ -143,6 +143,30 @@ canvas.full{position:absolute;left:0;top:0}
 .res td{padding:5px 4px;border-bottom:1px solid #d4c9a4}
 .res td:last-child{text-align:right;font-weight:bold}
 .res .acts{display:flex;gap:10px;justify-content:flex-end;padding:0 18px 16px}
+/* rehber, ayarlar, puan, paylaş (test ekibinin önerileri) */
+#rhKart{position:absolute;left:50%;top:54px;transform:translateX(-50%);width:560px;z-index:8;display:none}
+#rhKart.on{display:block}
+#rhKart .body{padding:10px 14px 4px;font-size:14px;line-height:1.5}
+#rhKart .acts{display:flex;gap:10px;justify-content:flex-end;padding:6px 14px 12px}
+#rhKart .acts .btn,.ayar .btn,.puanK .btn{padding:7px 14px;font-size:14px}
+#rhKart h3 small{float:right;font-weight:normal;opacity:.8}
+.rhListe{height:calc(100% - 35px);overflow:auto;padding:8px 10px;touch-action:pan-y}
+.rhSat{border:1px solid #d4c9a4;background:#fffbea;padding:6px 9px;margin-bottom:6px;font-size:12.5px;line-height:1.45}
+.rhSat b{display:block;font-size:13px;color:#2c3e2f}
+.rhSat.yeni{border:2px solid var(--accent);background:#fbf1cf}
+.rhSat.yeni b::after{content:" · yeni";color:#8a6a10;font-weight:normal;font-size:11px}
+.ayar{width:100%;border-collapse:collapse;font-size:13px}
+.ayar td{padding:6px 10px;border-bottom:1px solid #d4c9a4;vertical-align:middle}
+.ayar tr:nth-child(even){background:#ebe3c8}
+.ayar td:last-child{text-align:right;width:190px}
+.ayar .btn{min-width:150px}
+.ayar .unm{font-weight:bold;font-size:14px}
+.ayar .ud{color:var(--muted);font-size:12px}
+.puanK{margin-top:10px;border:2px solid var(--accent);background:#fbf1cf;padding:8px 10px;font-size:13px}
+.puanK .row{display:flex;gap:8px;margin-top:6px;justify-content:flex-end}
+#ovAsk{z-index:20}
+#tost{position:absolute;left:50%;bottom:76px;transform:translateX(-50%);background:rgba(30,46,33,.95);color:var(--cream);border:1px solid var(--accent);padding:8px 14px;font-size:13px;border-radius:3px;z-index:30;display:none;max-width:700px;text-align:center}
+#tost.on{display:block}
 #rotate{display:none;position:fixed;inset:0;background:#0d120e;color:var(--cream);align-items:center;justify-content:center;text-align:center;font-size:18px;z-index:99;padding:30px}
 @media (orientation:portrait) and (max-width:900px){#rotate{display:flex}}
 </style>
@@ -167,6 +191,8 @@ canvas.full{position:absolute;left:0;top:0}
         <div class="btn gray" id="bCamp">Ordugâh</div>
         <div class="btn gray" id="bHelp">Nasıl Oynanır</div>
         <div class="btn gray" id="bSound">Ses: Açık</div>
+        <div class="btn gray" id="bShare">Arkadaşına öner</div>
+        <div class="btn gray" id="bSettings">Ayarlar</div>
       </div>
     </div>
     <div class="footbar"><span class="hint">Kara Kule'yi yık, Hisar'ı ayakta tut. · <b>Bir Mr. Anduv! yapımıdır.</b></span><div class="btn" id="bPlay2">Devam</div></div>
@@ -202,7 +228,7 @@ canvas.full{position:absolute;left:0;top:0}
   <div id="scrHelp" class="screen">
     <canvas class="full bgc" width="960" height="540"></canvas>
     <div class="topbar"><span class="title">Nasıl Oynanır</span><span class="sp"></span><span class="badge">Komutan</span></div>
-    <div class="panel" style="position:absolute;left:24px;right:24px;top:62px"><h3>Divan'ın Talimatı</h3>
+    <div class="panel" style="position:absolute;left:24px;width:500px;top:62px;height:404px;overflow:auto"><h3>Divan'ın Talimatı</h3>
       <div class="help">
         <b>Amaç:</b> Sağdaki <b>Kara Kule</b>'yi yık, soldaki <b>Hisar</b>'ı ayakta tut.<br>
         <b>Sefer Hazırlığı:</b> Her savaştan önce gelecek düşmanları görür, ordundan <b>6 birlik</b> ve <b>2 güç</b> seçersin.<br>
@@ -216,7 +242,16 @@ canvas.full{position:absolute;left:0;top:0}
         <b>Klavye:</b> 1–6 birlik · ← → Alp · Boşluk 1. güç · Q 2. güç · P mola
       </div>
     </div>
-    <div class="footbar"><div class="btn gray" data-go="menu">Geri</div></div>
+    <div class="panel" style="position:absolute;left:540px;right:24px;top:62px;height:404px"><h3>Rehber · Bütün İpuçları</h3><div class="rhListe" id="rhListe"></div></div>
+    <div class="footbar"><span class="hint">Altın çerçeveliler henüz görmediğin ipuçları.</span><div class="btn gray" id="bRhBastan">Rehberi baştan göster</div><div class="btn" id="bHelpBack">Geri</div></div>
+  </div>
+
+  <!-- AYARLAR -->
+  <div id="scrSettings" class="screen">
+    <canvas class="full bgc" width="960" height="540"></canvas>
+    <div class="topbar"><span class="title">Ayarlar</span><span class="sp"></span><span class="badge">Komutan</span></div>
+    <div class="panel" style="position:absolute;left:24px;right:24px;top:58px"><h3>Komutanın Defteri</h3><table class="ayar" id="ayarT"></table></div>
+    <div class="footbar"><span class="hint" id="ayarSurum"></span><div class="btn" data-go="menu">Ana Menü</div></div>
   </div>
 
   <!-- SAVAŞ -->
@@ -239,11 +274,17 @@ canvas.full{position:absolute;left:0;top:0}
     </div>
     <div class="overlay" id="ovPause"><div class="panel res"><h3>Mola</h3>
       <div class="body"><div class="big">Ordu bekliyor</div>Savaş durduruldu.</div>
-      <div class="acts"><div class="btn red" id="bQuit">Bölümden Çık</div><div class="btn" id="bResume">Devam</div></div></div></div>
+      <div class="acts"><div class="btn red" id="bQuit">Bölümden Çık</div><div class="btn gray" id="bPauseHelp">Nasıl Oynanır</div><div class="btn" id="bResume">Devam</div></div></div></div>
     <div class="overlay" id="ovRes"><div class="panel res"><h3>Gelen Kutusu · Hisar Divanı</h3>
       <div class="body" id="resBody"></div>
       <div class="acts" id="resActs"></div></div></div>
   </div>
+
+  <!-- REHBER KARTI, SORU, BİLDİRİM -->
+  <div class="panel" id="rhKart"><h3><span id="rhB"></span><small>Rehber</small></h3><div class="body" id="rhM"></div>
+    <div class="acts"><div class="btn gray" id="bRhKapat">Rehberi kapat</div><div class="btn" id="bRhTamam">Anladım</div></div></div>
+  <div class="overlay" id="ovAsk"><div class="panel res"><h3 id="askB"></h3><div class="body" id="askM"></div><div class="acts" id="askActs"></div></div></div>
+  <div id="tost"></div>
 
 </div></div>
 
@@ -259,7 +300,7 @@ const SKEY='hisar_kara_gece_v1';
 const DEF_UP={erzak:0,sur:0,guc:0,alp:0,ates:0,surok:0,mancinik:0,hendek:0,silah:0};
 let S={gold:0,unlocked:1,stars:[],up:Object.assign({},DEF_UP),sound:true,read:[],loadout:['sekban','okcu','kalkan','akinci','humbara','deli'],powers:['ates','ok'],best:0};
 try{const r=localStorage.getItem(SKEY);if(r){const o=JSON.parse(r);S=Object.assign(S,o);S.up=Object.assign({},DEF_UP,o.up||{});}}catch(e){}
-function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}}
+function save(){if(S.__silindi)return;try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}}
 // 1.0 → 1.1 (40 → 999 bölüm): ilerleme korunur; 40'ı bitiren 41'den devam eder
 if(!S.v){if(S.finished&&S.unlocked<41)S.unlocked=41;S.finished=false;S.v=2;save();}
 // 1.1 → 1.2 (999 → 1923 bölüm): 999'u bitiren 1000'den devam eder
@@ -922,7 +963,7 @@ function startLevel(i,opt){
   buildUnitButtons();
   banner(endless?'Sonsuz Dalga: dayanabildiğin kadar dayan!':'Bölüm '+(i+1)+': '+L.ad,2.2);
   document.getElementById('ovRes').classList.remove('on');document.getElementById('ovPause').classList.remove('on');
-  show('battle');ambience(true);
+  show('battle');ambience(true);rhTemizle();rhSavasBasi();
 }
 function banner(txt,life,col){B.banner={txt,life:life||2,max:life||2,col:col||'#f2ecd6'};}
 function pick(pool){let tot=0;for(const k in pool)tot+=pool[k];let r=Math.random()*tot;for(const k in pool){r-=pool[k];if(r<=0)return k;}return Object.keys(pool)[0];}
@@ -1136,7 +1177,7 @@ function endGame(win){
     banner('HİSAR DÜŞTÜ · '+w+' dalga',3,'#ff6a5a');SFX.towerFall();setTimeout(()=>SFX.defeat(),500);B.bonus=bonus;S.gold+=B.goldEarned+bonus;save();ambience(false);return;}
   if(win){const lg=Math.round(B.left*0.5);B.goldEarned+=lg;B.leftGot=lg;}
   if(win){const pct=B.pBase.hp/B.pBase.max;B.stars=pct>0.7?3:pct>0.35?2:1;
-    const first=!(S.stars[B.i]>0);bonus=Math.round((80+DIFF.bonus*B.i)*(first?1:0.35)*(B.M.gold||1));
+    const first=!(S.stars[B.i]>0);B.ilk=first;bonus=Math.round((80+DIFF.bonus*B.i)*(first?1:0.35)*(B.M.gold||1));
     S.stars[B.i]=Math.max(S.stars[B.i]||0,B.stars);if(S.unlocked<B.i+2)S.unlocked=Math.min(NLV,B.i+2);
     if(B.i===NLV-1)S.finished=true;
     banner('ZAFER!',3,'#f5d36b');B.shake=12;
@@ -1248,6 +1289,7 @@ function showResult(){
       (B.leftGot?'<br><small>Yerde kalan ganimetin yarısını askerler topladı: +'+B.leftGot+' akçe.</small>':'')+
       '<table><tr><td>Leş</td><td>'+B.kills+'</td></tr><tr><td>Ganimet</td><td>'+B.goldEarned+' akçe</td></tr><tr><td>Zafer ödülü</td><td>'+B.bonus+' akçe</td></tr><tr><td>Hazine</td><td>'+S.gold+' akçe</td></tr></table>';
     ra.innerHTML='';
+    if(B.L.boss||last)addAct(ra,'Zaferi paylaş','gray',()=>paylas(last?'Hisar: Kara Gece\'de Kara Kule\'yi yıktım, Erlik Han devrildi! Sıra sende, Komutan.':'Hisar: Kara Gece\'de dev savaşını kazandım: '+FOES[B.L.boss].ad+' devrildi, '+B.L.ad+' alındı! '+B.stars+' yıldız. Sıra sende, Komutan.'));
     addAct(ra,'Ordugâh','gray',()=>show('camp'));addAct(ra,'Tekrar','gray',()=>openPrep(B.i));
     if(!last)addAct(ra,'Devam ▸','',()=>{curReg=Math.floor((B.i+1)/PG);openPrep(B.i+1);});else addAct(ra,'Ana Menü','',()=>show('menu'));
   }else{
@@ -1255,6 +1297,7 @@ function showResult(){
       '<table><tr><td>Leş</td><td>'+B.kills+'</td></tr><tr><td>Ganimet</td><td>'+B.goldEarned+' akçe</td></tr><tr><td>Hazine</td><td>'+S.gold+' akçe</td></tr></table>';
     ra.innerHTML='';addAct(ra,'Harita','gray',()=>show('levels'));addAct(ra,'Ordugâh','gray',()=>show('camp'));addAct(ra,'Tekrar ▸','',()=>openPrep(B.i));
   }
+  if(puanSorulsunMu(B.win,B.ilk,B.i,B.stars)){rb.appendChild(puanKutusu());puanSoruldu();}
   document.getElementById('ovRes').classList.add('on');
   if(window.HISAR&&window.HISAR.onResult)window.HISAR.onResult({win:B.win,stars:B.stars,last,rk,kills:B.kills,gold:B.goldEarned,bonus:B.bonus,hazine:S.gold,i:B.i,ad:B.L.ad,left:B.left,leftGot:B.leftGot});
   if(B.win){for(let k=0;k<B.stars;k++)setTimeout(()=>SFX.star(k),250+k*260);setTimeout(()=>SFX.coin(),300+B.stars*260);}
@@ -1264,11 +1307,12 @@ function addAct(p,txt,cls,fn){const b=document.createElement('div');b.className=
 /* ================= EKRANLAR ================= */
 let cur='menu';
 function show(n){
-  cur=n;const map={menu:'scrMenu',levels:'scrLevels',camp:'scrCamp',help:'scrHelp',battle:'scrBattle'};
+  cur=n;const map={menu:'scrMenu',levels:'scrLevels',camp:'scrCamp',help:'scrHelp',battle:'scrBattle',settings:'scrSettings'};
   for(const k in map)document.getElementById(map[k]).classList.toggle('on',k===n);
   document.querySelectorAll('.lvGold').forEach(e=>e.textContent=S.gold+' akçe');
   document.getElementById('ovLv').classList.remove('on');
-  if(n==='menu')renderMenu();if(n==='levels')renderLevels();if(n==='camp')renderCamp();
+  if(n==='menu')renderMenu();if(n==='levels')renderLevels();if(n==='camp')renderCamp();if(n==='settings')renderSettings();if(n==='help')rhListe();
+  if(n!=='battle')rhTemizle();if(n==='menu'||n==='levels'||n==='camp')rhGoster(n);if(n==='camp')rhGoster('sur');
   if(n!=='battle'){ambience(false);if(B)B.heroIn=0;}
 }
 function messages(){
@@ -1338,7 +1382,7 @@ function openPrep(i,endless){
   const bs=endless?L.bossPool:[L.boss,L.boss2].filter(Boolean);
   bs.forEach(id=>{const d=document.createElement('div');d.className='pfoe boss';d.title=FOES[id].ad;d.appendChild(foeIcon(id,48,52));d.onclick=()=>{document.getElementById('prInfo').textContent='☠ Dev: '+FOES[id].ad;};fr.appendChild(d);});
   const M=!endless&&MODS[L.mod];document.getElementById('prInfo').textContent=endless?'Kule yıkılmaz; dalgalar gittikçe güçlenir, her 5 dalgada bir dev gelir. Dayanabildiğin kadar dayan.':(M?M.ic+' '+M.ad+': '+M.d:'Bir birliğe ya da güce dokun, ne işe yaradığını gör.');
-  renderPrep();document.getElementById('ovLv').classList.remove('on');document.getElementById('ovPrep').classList.add('on');
+  renderPrep();document.getElementById('ovLv').classList.remove('on');document.getElementById('ovPrep').classList.add('on');rhGoster('prep');
 }
 function renderPrep(){
   const top=Math.max(S.unlocked,prI+1),L=prEnd?null:LEVELS[prI],ban=L&&MODS[L.mod]&&MODS[L.mod].noUnit,info=document.getElementById('prInfo');
@@ -1382,10 +1426,10 @@ on('bCur',()=>{curReg=null;renderLevels();openLv(Math.min(S.unlocked,NLV)-1);});
 on('lvGo',()=>{if(selLv!=null)openPrep(selLv);});
 on('prBack',()=>document.getElementById('ovPrep').classList.remove('on'));
 on('prGo',()=>{if(!prepCommit())return;if(prEnd)startEndless();else startLevel(prI);});
-on('bEndless',()=>{if(S.unlocked>=ENDLESS_AT)openPrep(Math.min(S.unlocked,NLV)-1,true);});on('bPlay2',()=>show('levels'));on('bCamp',()=>show('camp'));on('bCamp2',()=>show('camp'));on('bHelp',()=>show('help'));
+on('bEndless',()=>{if(S.unlocked>=ENDLESS_AT)openPrep(Math.min(S.unlocked,NLV)-1,true);});on('bPlay2',()=>show('levels'));on('bCamp',()=>show('camp'));on('bCamp2',()=>show('camp'));on('bHelp',()=>openHelp('menu'));
 on('bSound',()=>{S.sound=!S.sound;save();if(S.sound){unlockAudio();setTimeout(()=>SFX.click(),30);}else ambience(false);renderMenu();});
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
-function setPause(p){if(!B||B.over)return;B.paused=p;ambience(!p);B.heroIn=0;document.getElementById('ovPause').classList.toggle('on',p);}
+function setPause(p){if(!B||B.over||rhAcik)return;B.paused=p;ambience(!p);B.heroIn=0;document.getElementById('ovPause').classList.toggle('on',p);}
 on('bPause',()=>setPause(true));on('bResume',()=>setPause(false));
 on('bQuit',()=>{setPause(false);B=null;show('levels');});
 on('bSpeed',()=>{if(!B)return;B.speed=B.speed>=3?1:B.speed+1;document.getElementById('bSpeed').textContent='×'+B.speed;});
@@ -1396,6 +1440,7 @@ function holdBtn(id,dir){const el=document.getElementById(id);
   el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);el.addEventListener('pointerleave',up);el.addEventListener('pointercancel',up);}
 holdBtn('hL',-1);holdBtn('hR',1);
 addEventListener('keydown',e=>{if(cur!=='battle'||!B)return;
+  if(rhAcik){if(e.key==='Enter'||e.key===' '){e.preventDefault();rhTamam();}return;}
   if(e.key>='1'&&e.key<='6')trySpawn(+e.key-1);
   else if(e.key==='ArrowLeft'){if(!B.paused)B.heroIn=-1;}else if(e.key==='ArrowRight'){if(!B.paused)B.heroIn=1;}
   else if(e.key===' '){e.preventDefault();power(0);}else if(e.key==='q'||e.key==='Q'||e.key==='Enter'){e.preventDefault();power(1);}else if(e.key==='p'||e.key==='P'||e.key==='Escape')setPause(!B.paused);});
@@ -1404,16 +1449,169 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&B&&cur==='
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('click',e=>{const el=e.target.closest('.btn,.rtab,.lv,.iitem,.sbtn,#bSound');if(el&&!el.closest('#resActs')&&el.id!=='bSound'&&!el.classList.contains('dis')&&!el.classList.contains('lock'))SFX.click();},true);
 
+/* ================= REHBER · AYARLAR · PUAN · PAYLAŞ =================
+   Test ekibinin önerileri (Malazgirt Akıncıları 1.6 / Champion Battle Manager 4.4 ile aynı paket):
+   ilk karşılaşmada kısa ipucu kartı, Nasıl Oynanır'da bütün ipuçları, uygulama içinden puan (mobil),
+   arkadaşına öner, "Bize yaz" hazır e-postası, Verilerimi sil. Hiçbir veri toplanmaz. */
+const SURUM='1.2.0';
+const RKEY='hisar_rehber_v1',PKEY='hisar_puan_v1';
+const IOS_ID='';// App Store kimliği belli olunca yaz (ör. '6750000000'); boşken iOS'ta mağaza bağlantısı yerine site kullanılır
+const jOku=(k,v)=>{try{const r=localStorage.getItem(k);return r?JSON.parse(r):v;}catch(e){return v;}};
+const jYaz=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
+function platform(){try{const p=window.Capacitor&&window.Capacitor.getPlatform&&window.Capacitor.getPlatform();if(p&&p!=='web')return p;}catch(e){}return 'web';}
+const mobil=()=>platform()==='ios'||platform()==='android';
+const PLAY_URL='https://play.google.com/store/apps/details?id=com.anduv.hisar';
+function magazaUrl(){if(platform()==='ios')return IOS_ID?'https://apps.apple.com/app/id'+IOS_ID:'https://emreanduv.github.io/';return PLAY_URL;}
+/* ipuçları: [anahtar, başlık, metin] — Nasıl Oynanır'da bu sırayla görünür */
+const IPUCU=[
+ ['menu','Komuta Masası','Gelen Kutusu\'nda Divan\'ın ve Keşif Kolu\'nun mektupları var; her yeni bölümün ipucu oradadır. Devam ▸ ile Sefer Haritası\'na geç.'],
+ ['levels','Sefer Haritası','20 bölge, 1923 bölüm. Kazandıkça sıradaki bölüm açılır. Yıldızlar Hisar\'ın kalan canına göre verilir: canın %70\'ten fazlası kalırsa 3 yıldız.'],
+ ['prep','Sefer Hazırlığı','Savaştan önce gelecek düşmanları ve devleri gör. Ordundan 6 birlik, cephanelikten 2 güç seç; seçimin bir sonraki sefere de kalır.'],
+ ['ganimet','Ganimet yerde','Devrilen yaratık yere akçe bırakır. Alp Er\'i üstünden yürüt, toplasın. Zaferde yerde kalanın yarısını askerler toplar, yenilgide kaybolur.'],
+ ['sonsuz','Sonsuz Dalga','Kule yıkılmaz; dalgalar gittikçe güçlenir, her 5 dalgada bir dev gelir. Dayanabildiğin kadar dayan, her dalga hazineye akçe getirir.'],
+ ['sur','Sur savunması','Ordugâh\'tan Sur Okçuları, Sur Mancınığı ve Hendek kurabilirsin: Hisar kendini de savunur. Silahhane Alp Er\'in silahını güçlendirir.'],
+ ['battle','Erzak ve birlikler','Erzak zamanla dolar. Alttaki kartlara dokunarak birlik çıkar; her kartın bedeli ve bekleme süresi vardır. Önce ucuz Sekban ile safı tut, arkasına Okçu diz.'],
+ ['alp','Alp Er','◀ ▶ düğmelerini basılı tut, Alp Er yürür ve yanındaki düşmana kendiliğinden kılıç sallar. Sağ üstte ×2 savaşı hızlandırır, ❚❚ mola verir.'],
+ ['ates','Güç hazır','Ocak doldu. Sağ alttaki güç düğmelerinden birine dokun: Ateş Yağmuru kalabalığa ateş yağdırır, Ok Yağmuru öndekileri oklar. Devlere ve kalabalığa sakla.'],
+ ['alpDustu','Alp Er yaralandı','Alp Er düşünce 10 saniye sonra Hisar\'dan yeniden çıkar. O sırada birliklerinle cepheyi tut; Ordugâh\'taki Alp Er\'in Kılıcı onu güçlendirir.'],
+ ['camp','Ordugâh','Leşlerden ve zaferlerden gelen akçeyi burada harca. Geliştirmeler kalıcıdır; takıldığın bölümde önce Surlar ve Erzak Ambarı işe yarar.'],
+ ['u_kalkan','Yeni birlik: Kalkancı','Canı çok yüksek, yavaş ilerler. Öne kalkancı, arkaya okçu diz; okçular onun arkasından güvenle vurur.'],
+ ['dev','Dev geliyor','Bu bölümde bir dev çıkar. Vuruşu yanındaki herkese değer: safları sıklaştır, Alp Er\'i geri çek, Ateş Yağmuru\'nu ona sakla.'],
+ ['u_akinci','Yeni birlik: Akıncı','Atlı ve çok hızlı. Uzaktan vuran Hortlak ve Cadılara çabucak ulaşır.'],
+ ['u_humbara','Yeni birlik: Humbaracı','Uzaktan gülle atar, kalabalığa toplu hasar verir ve zırhı deler. Pahalıdır; önünü kalkancıyla koru.'],
+ ['u_deli','Yeni birlik: Deli','Zırhsız ama çok sert vurur ve hızlıdır. Kalkancıların arkasından saldırıya sür.'],
+ ['u_mizrak','Yeni birlik: Mızrakçı','Uzun mızrağıyla ön safın arkasından vurur. Kalkancının hemen arkasına koy.'],
+ ['u_mesaleci','Yeni birlik: Meşaleci','Savaşmaz. Sahadayken bütün okçular ateşli ok atar ve çok daha sert vurur. Çabuk düşer, önünü koru.'],
+ ['u_silahtar','Yeni birlik: Silahtar','Savaşmaz. Sahadayken bütün sekbanlar keskin kılıç kuşanır.'],
+ ['u_ozan','Tekil kahraman: Ozan','Sahada bir tane olur. Savaşmaz; kopuzuyla yakınındaki askerleri iyileştirir.'],
+ ['u_bey','Tekil kahraman: Hisar Beyi','Sahada bir tane olur. Çok güçlüdür ve yanında iki okçuyla gelir.'],
+ ['u_bahadir','Tekil kahraman: Kızıl Bahadır','Sahada bir tane olur. Atlıdır, gürzüyle düşman saflarına dalar.'],
+ ['zirh','Zırhlı düşman','Demir Cin ve Erlik Muhafızı zırhlıdır: kılıç ve okun bir kısmını yutar. Humbaracı güllesi ve Ateş Yağmuru zırhı tam deler.'],
+];
+const IPM={};IPUCU.forEach(x=>IPM[x[0]]=x);
+function rhDurum(){const d=jOku(RKEY,null);return d&&d.gor?d:{gor:{},kapali:false};}
+function rhKaydet(d){jYaz(RKEY,d);}
+/* eski oyuncu: rehber kaydı yok ama ilerlemesi var → zaten karşılaştığı ipuçlarını görülmüş say */
+(function(){try{if(localStorage.getItem(RKEY))return;}catch(e){return;}
+  if(!(S.unlocked>1||S.gold>0||(S.stars&&S.stars.length)))return;
+  const g={};['menu','levels','battle','alp','ates','alpDustu','camp'].forEach(k=>g[k]=1);
+  UNITS.forEach(U=>{if(U.unlock>1&&S.unlocked>U.unlock)g['u_'+U.id]=1;});
+  if(S.unlocked>5)g.dev=1;if(S.unlocked>21)g.zirh=1;
+  rhKaydet({gor:g,kapali:false});})();
+let rhSira=[],rhAcik=null;
+function rhGoster(k){if(window.__XR_ON)return;const d=rhDurum();if(d.kapali||d.gor[k]||!IPM[k])return;if(rhAcik===k||rhSira.indexOf(k)>=0)return;rhSira.push(k);if(!rhAcik)rhSonraki();}
+function rhSonraki(){
+  const el=document.getElementById('rhKart');
+  rhAcik=rhSira.shift()||null;
+  if(!rhAcik){el.classList.remove('on');if(B&&B.rhDur){B.rhDur=false;if(!document.getElementById('ovPause').classList.contains('on'))B.paused=false;}return;}
+  const x=IPM[rhAcik];document.getElementById('rhB').textContent=x[1];document.getElementById('rhM').textContent=x[2];
+  el.style.top=cur==='battle'?'52px':'54px';el.classList.add('on');
+  if(cur==='battle'&&B&&!B.over&&!B.paused){B.paused=true;B.rhDur=true;B.heroIn=0;}
+}
+function rhTamam(){if(rhAcik){const d=rhDurum();d.gor[rhAcik]=1;rhKaydet(d);}rhSonraki();}
+function rhKapat(){const d=rhDurum();d.kapali=true;if(rhAcik)d.gor[rhAcik]=1;rhKaydet(d);rhSira=[];rhSonraki();}
+function rhTemizle(){rhSira=[];rhSonraki();}
+function rhListe(){const d=rhDurum();const el=document.getElementById('rhListe');el.innerHTML='';
+  IPUCU.forEach(x=>{const r=document.createElement('div');r.className='rhSat'+(d.gor[x[0]]?'':' yeni');const b=document.createElement('b');b.textContent=x[1];r.appendChild(b);r.appendChild(document.createTextNode(x[2]));el.appendChild(r);});}
+/* savaş sırasında ilk karşılaşmalar (her karede ucuz kontrol) */
+function rhSavas(){
+  if(!B||B.over||rhAcik)return;
+  if(B.mana>=Math.min(...B.pw.map(pwCost)))rhGoster('ates');if(B.coins.length)rhGoster('ganimet');
+  if(B.hero&&B.hero.hp<=0)rhGoster('alpDustu');
+  for(const u of B.units)if(u.side===1&&u.hp>0){if(u.armor)rhGoster('zirh');if(u.boss)rhGoster('dev');}
+}
+function rhSavasBasi(){
+  rhGoster('battle');rhGoster('alp');
+  UNITS.forEach(U=>{if(U.unlock>1&&unitUnlocked(U))rhGoster('u_'+U.id);});
+  if(B&&B.L.boss)rhGoster('dev');if(B&&B.endless)rhGoster('sonsuz');
+}
+let helpFrom='menu';
+function openHelp(from){helpFrom=from;rhTemizle();show('help');}
+/* bildirim ve soru pencereleri */
+let tostT=0;
+function tost(m){const t=document.getElementById('tost');t.textContent=m;t.classList.add('on');clearTimeout(tostT);tostT=setTimeout(()=>t.classList.remove('on'),2600);}
+function sor(baslik,metin,dugmeler){
+  document.getElementById('askB').textContent=baslik;document.getElementById('askM').innerHTML=metin;
+  const a=document.getElementById('askActs');a.innerHTML='';
+  dugmeler.forEach(([t,c,f])=>addAct(a,t,c,()=>{document.getElementById('ovAsk').classList.remove('on');if(f)f();}));
+  document.getElementById('ovAsk').classList.add('on');
+}
+/* ilerleme özeti (e-posta gövdesi için; yalnız kullanıcı kendisi gönderirse gider) */
+function ilerleme(){let st=0;(S.stars||[]).forEach(x=>st+=x||0);return 'Bölüm '+Math.min(S.unlocked,LEVELS.length)+'/'+LEVELS.length+' · ★ '+st+'/'+(LEVELS.length*3)+' · '+S.gold+' akçe';}
+/* paylaş: telefonun paylaşım menüsü, yoksa tarayıcınınki, yoksa panoya kopyala */
+async function paylas(metin){
+  metin=metin||'Hisar: Kara Gece — Hisar\'ı savun, Kara Kule\'yi yık! Anadolu efsanelerinden yaratıklara karşı 1923 bölümlük kale savunması. Reklamsız, internetsiz.';
+  const url=magazaUrl(),P=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Share;
+  try{
+    if(P&&P.share){await P.share({title:'Hisar: Kara Gece',text:metin,url,dialogTitle:'Arkadaşına öner'});return;}
+    if(navigator.share){await navigator.share({title:'Hisar: Kara Gece',text:metin,url});return;}
+  }catch(e){if(/cancel|abort/i.test((e&&(e.message||e.name))||''))return;}
+  try{await navigator.clipboard.writeText(metin+' '+url);tost('Bağlantı kopyalandı, istediğin yere yapıştır.');}catch(e){tost(url);}
+}
+function bizeYaz(){
+  const konu='Hisar: Kara Gece – Görüş ve öneri ('+SURUM+', '+platform()+')';
+  const govde='Merhaba, oyunla ilgili görüşüm ve önerim:\n\n\n— Sürüm '+SURUM+' · '+platform()+' · '+ilerleme();
+  location.href='mailto:emreanduvart@gmail.com?subject='+encodeURIComponent(konu)+'&body='+encodeURIComponent(govde);
+}
+/* puan: yalnız iOS/Android; ilk kez kazanılan 5., 10. ve 20. bölümde (2+ yıldız) ya da sefer sonunda; en çok 2 kez, yenilgide asla */
+function puanSorulsunMu(win,ilk,i,yildiz){
+  if(!mobil()||!win||!ilk)return false;
+  const p=jOku(PKEY,{n:0,tamam:false});if(p.tamam||p.n>=2)return false;
+  return i===LEVELS.length-1||([4,9,19].indexOf(i)>=0&&yildiz>=2);
+}
+function puanSoruldu(){const p=jOku(PKEY,{n:0,tamam:false});p.n++;jYaz(PKEY,p);}
+async function puanVer(){
+  const p=jOku(PKEY,{n:0,tamam:false});p.tamam=true;jYaz(PKEY,p);
+  const R=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.InAppReview;
+  try{if(R&&R.requestReview){await R.requestReview();return;}}catch(e){}
+  try{window.open(magazaUrl(),'_blank');}catch(e){location.href=magazaUrl();}
+}
+function puanKutusu(){
+  const k=document.createElement('div');k.className='puanK';
+  k.innerHTML='<b>Hisar hoşuna gitti mi, Komutan?</b><br>Birkaç saniyeni ayırıp puan verirsen oyun daha çok kişiye ulaşır.';
+  const r=document.createElement('div');r.className='row';k.appendChild(r);
+  const kapat=()=>k.remove();
+  addAct(r,'Sonra','gray',kapat);addAct(r,'Önerim var','gray',()=>{kapat();bizeYaz();});addAct(r,'★ Puan ver','',()=>{kapat();puanVer();});
+  return k;
+}
+/* verilerimi sil: ilerleme, akçe, geliştirmeler, ayarlar, rehber ve puan kaydı. Oyunda satın alma yoktur. */
+function verileriSil(){
+  sor('Verilerimi sil','Bu cihazdaki bütün oyun verilerin silinecek: açılan bölümler, yıldızlar, akçe, Ordugâh geliştirmeleri, ses ayarı ve rehber. <b>Geri alınamaz.</b><br><br>Oyun hiçbir veriyi bize göndermez; silinecek veriler yalnız bu cihazdadır.',[
+    ['Vazgeç','gray',null],
+    ['Evet, sil','red',()=>{try{Object.keys(localStorage).forEach(k=>{if(/^hisar/i.test(k))localStorage.removeItem(k);});}catch(e){}
+      try{sessionStorage.clear();}catch(e){}
+      S.__silindi=true;tost('Verilerin silindi. Oyun baştan açılıyor…');setTimeout(()=>location.reload(),900);}]]);
+}
+function renderSettings(){
+  const d=rhDurum(),t=document.getElementById('ayarT');t.innerHTML='';
+  const satir=(ad,acik,dug,cls,fn)=>{const tr=document.createElement('tr');tr.innerHTML='<td><div class="unm"></div><div class="ud"></div></td><td></td>';
+    tr.querySelector('.unm').textContent=ad;tr.querySelector('.ud').textContent=acik;const b=document.createElement('div');b.className='btn '+(cls||'');b.textContent=dug;b.onclick=fn;tr.lastChild.appendChild(b);t.appendChild(tr);};
+  satir('Ses','Savaş sesleri ve gece ambiyansı',S.sound?'Açık':'Kapalı',S.sound?'':'gray',()=>{S.sound=!S.sound;save();if(S.sound){unlockAudio();setTimeout(()=>SFX.click(),30);}else ambience(false);renderSettings();});
+  satir('Rehber ipuçları','Yeni bir şeyle ilk karşılaştığında kısa ipucu',d.kapali?'Kapalı':'Açık',d.kapali?'gray':'',()=>{const x=rhDurum();x.kapali=!x.kapali;rhKaydet(x);renderSettings();});
+  satir('Nasıl Oynanır','Bütün ipuçları ve Divan\'ın talimatı','Aç','gray',()=>openHelp('settings'));
+  if(mobil())satir('Oyunu puanla','Mağazanın kendi puan ekranı açılır','★ Puan ver','',puanVer);
+  satir('Arkadaşına öner','Oyunu paylaş','Paylaş','gray',()=>paylas());
+  satir('Görüş ve öneri','Hazır bir e-posta açılır; sürüm ve ilerlemen eklenir','Bize yaz','gray',bizeYaz);
+  satir('Gizlilik politikası','Oyun hiçbir kişisel veri toplamaz','Oku','gray',()=>{try{window.open('https://emreanduv.github.io/hisar/','_blank');}catch(e){}});
+  satir('Verilerimi sil','Bu cihazdaki ilerleme, akçe, geliştirmeler ve ayarlar','Verilerimi sil','red',verileriSil);
+  document.getElementById('ayarSurum').innerHTML='Hisar: Kara Gece '+SURUM+' · <b>Bir Mr. Anduv! yapımıdır.</b>';
+}
+on('bRhTamam',rhTamam);on('bRhKapat',rhKapat);
+on('bRhBastan',()=>{rhKaydet({gor:{},kapali:false});rhListe();tost('Rehber baştan gösterilecek.');});
+on('bHelpBack',()=>show(helpFrom==='battle'&&!B?'levels':helpFrom));
+on('bShare',()=>paylas());on('bSettings',()=>show('settings'));
+on('bPauseHelp',()=>openHelp('battle'));
+
 /* ================= DÖNGÜ ================= */
 let last=performance.now();
 function loop(now){
   requestAnimationFrame(loop);
   const dt=Math.min(0.05,(now-last)/1000);last=now;T+=dt;
   if(window.__XR_ON)return; // VR (Masadaki Savaş) kendi döngüsünü çalıştırır
-  if(cur==='battle'&&B){if(!B.paused){for(let k=0;k<B.speed;k++)step(dt);ambienceTick(dt);}draw();hud();}
+  if(cur==='battle'&&B){if(!B.paused){for(let k=0;k<B.speed;k++)step(dt);ambienceTick(dt);rhSavas();}draw();hud();}
 }
 paintBgs();show('menu');requestAnimationFrame(loop);
-window.HISAR={startLevel,step,trySpawn,fire,power,POWERS,PW,pwCost,UNIT_D,PG,ENDLESS_AT,upMax,SILAH,loadoutFor,powersFor,unitById,startEndless,openPrep,prepCommit,get prI(){return prI;},get prEnd(){return prEnd;},get B(){return B;},S,show,UNITS,LEVELS,REGIONS,MODS,UPS,upCost,UPMAX,NLV,RSZ,DIFF,buildLevels,fireCost,openLv,save,
+window.HISAR={startLevel,step,trySpawn,fire,endGame,power,POWERS,PW,pwCost,UNIT_D,PG,ENDLESS_AT,upMax,SILAH,loadoutFor,powersFor,unitById,startEndless,openPrep,prepCommit,get prI(){return prI;},get prEnd(){return prEnd;},get B(){return B;},S,show,UNITS,LEVELS,REGIONS,MODS,UPS,upCost,UPMAX,NLV,RSZ,DIFF,buildLevels,fireCost,openLv,save,
   LOOK,FOES,RANKS,RPAL,GY,drawFig,drawHorse,makeBg,shade,srand,SFX,ambience,ambienceTick,setPause,unitUnlocked,unitBanned,hasRank,
   tick(dt){T+=dt;},get T(){return T;},onResult:null,get selLv(){return selLv;},setCurReg(r){curReg=r;}};
 // Masadaki Savaş (VR/MR): yalnızca WebXR destekleyen cihazlarda yüklenir

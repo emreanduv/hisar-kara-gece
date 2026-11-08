@@ -1,6 +1,6 @@
 {
   "name": "hisar-kara-gece",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Hisar: Kara Gece - yandan görünümlü kale savunma oyunu",
   "scripts": {
@@ -10,10 +10,12 @@
     "ios": "npx cap open ios"
   },
   "dependencies": {
+    "@capacitor-community/in-app-review": "8.0.0",
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3",
-    "@capacitor/ios": "^8.5.3"
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/share": "8.0.3"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5"

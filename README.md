@@ -44,3 +44,8 @@ npx cap sync
 - `FOES` → düşman değerleri
 - `LEVELS` → bölüm adı, Kule canı, düşman sıklığı, düşman karışımı, dev (boss)
 - `UPS` → Ordugâh geliştirmeleri ve fiyatları
+
+## Rehber, puan, paylaş (1.1.0)
+- `www/index.html` içinde `IPUCU` → rehber ipuçları (ilk karşılaşmada kart, Nasıl Oynanır'da liste). İlerleme `hisar_rehber_v1` anahtarında, cihazda.
+- Puan: `@capacitor-community/in-app-review`, paylaş: `@capacitor/share`. App Store kimliği belli olunca `IOS_ID` sabitine yaz (boşken iOS paylaşımında site bağlantısı kullanılır).
+- Ayarlar → Verilerimi sil: `hisar` ile başlayan bütün localStorage anahtarlarını siler (oyunda satın alma yok).
