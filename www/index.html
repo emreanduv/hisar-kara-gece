@@ -332,6 +332,7 @@ const LOOK={
  demircin:{skin:'#5a6a7a',cloth:'#5a5e66',cloth2:'#2a2e36',leg:'#2a2e36',head:'demir',wpn:'cekic',eye:'#ff7a2a',plate:true},
  atescini:{skin:'#e07a3a',cloth:'#a8321a',cloth2:'#ffb347',head:'alev',wpn:'yok',eye:'#fff2a0',float:true,glow:'#ff7a1f'},
  muhafiz:{skin:'#4a3a4a',cloth:'#2a1a2a',cloth2:'#8a2a2a',leg:'#1a101a',head:'muhafiz',wpn:'mizrak',eye:'#ff3a3a',plate:true},
+ karabasan:{skin:'#2a2236',cloth:'#1e1828',cloth2:'#3a2e4e',leg:'#1e1828',head:'kukuleta',wpn:'pence',eye:'#e8e0ff',float:true,hunch:0.3,glow:'#5a4a8a'},
  golge:{skin:'#0e0c12',cloth:'#141018',cloth2:'#241c2c',leg:'#0e0c12',head:'kel',wpn:'pence',eye:'#d06aff',hunch:0.2,glow:'#8a3aff'},
  tepegoz:{skin:'#9a8a6a',cloth:'#5a3a2a',cloth2:'#3a2418',leg:'#4a3a2a',head:'tek',wpn:'sopa',eye:'#ff2a2a',hunch:0.1},
  yelbegen:{skin:'#7a8a6a',cloth:'#4a5a3a',cloth2:'#2a3420',leg:'#3a4a2a',head:'iki',wpn:'sopa',eye:'#ff4a2a',hunch:0.12},
@@ -375,6 +376,7 @@ const FOES={
  atescini:{id:'atescini',ad:'Ateş Cini',hp:70,atk:13,rate:2.2,range:180,spd:30,gold:12,ranged:true,splash:40},
  muhafiz:{id:'muhafiz',ad:'Erlik Muhafızı',hp:200,atk:22,rate:1.1,range:34,spd:32,gold:16,sc:1.15,r:3,armor:0.25},
  golge:{id:'golge',ad:'Gölge',hp:90,atk:20,rate:0.6,range:22,spd:85,gold:10},
+ karabasan:{id:'karabasan',ad:'Karabasan',hp:170,atk:15,rate:1.3,range:28,spd:22,gold:13,sc:1.25,r:4},   // halk inancı: uykuda göğse çöken ağır gölge (evren kitabı, 11 Kas 2026)
  tepegoz:{id:'tepegoz',ad:'Tepegöz',hp:600,atk:32,rate:2.0,range:42,spd:18,gold:80,sc:2.4,boss:true,r:18},
  yelbegen:{id:'yelbegen',ad:'Yelbegen',hp:750,atk:36,rate:2.2,range:44,spd:17,gold:120,sc:2.6,boss:true,r:20},
  evren:{id:'evren',ad:'Evren',hp:800,atk:26,rate:2.6,range:210,spd:16,gold:160,sc:1.6,boss:true,r:30,ranged:true,splash:80},
@@ -426,7 +428,7 @@ const REGIONS=[
  {ad:'Ejder Sırtı',st:2,tint:'#b4462e',wx:'ember',fav:['atescini','muhafiz'],bosses:['evren','yelbegen'],
   nouns:['Sırt','Yuva','Kaya','Zirve','Kül Tepesi','Uçurum','Pul Vadisi','Kanat Taşı','Ejder Yolu','Ocak'],
   lines:['Ejderlerin yurdu. Evren\'in soyu burada kanat açıyor.','Gökten alev yağıyor; birliklerini yığma.','Sırtın tepesinde kızıl bir ışık.']},
- {ad:'Ay Ormanı',st:1,tint:'#4a5ab4',fav:['hortlak','golge'],bosses:['yelbegen','evren'],
+ {ad:'Ay Ormanı',st:1,tint:'#4a5ab4',fav:['hortlak','golge','karabasan'],bosses:['yelbegen','evren'],
   nouns:['Koru','Ay Gölü','Açıklık','Kovuk','Patika','Sırt','Pınar','Çember Taşı','Gümüş Dere','Meşe'],
   lines:['Ay ışığında ağaçlar fısıldıyor. Hortlaklar uyanık.','Gümüş derenin ötesinde gölgeler toplanıyor.','Orman büyülü; Ateş Yağmuru\'nu doğru ana sakla.']},
  {ad:'Kanlı Irmak',st:0,tint:'#a01e1e',wx:'rain',fav:['kurtbasi','muhafiz'],bosses:['evren','tepegoz'],
@@ -450,9 +452,9 @@ const REGIONS=[
   lines:['Kule\'nin gölgesindeyiz. Her adım kanla ödenir.','Erlik\'in muhafızları zırhlı ve sabırlı. Humbaracılarını hazır tut.','Son surlar. Bu gece burada biter.']},
 ];
 const ADJ=['Eski','Kara','Yanık','Sessiz','Kanlı','Kuzey','Güney','Derin','Yüksek','Issız','Taşlı','Dar','Gizli','Yıkık','Soğuk','Uzak','Dumanlı','Kayıp','Lanetli','Çorak'];
-const INTRO={gulyabani:0,albasti:1,hortlak:2,karakoncolos:6,cadi:12,kurtbasi:18,demircin:28,atescini:36,muhafiz:48,golge:60};
+const INTRO={gulyabani:0,albasti:1,hortlak:2,karakoncolos:6,cadi:12,kurtbasi:18,demircin:28,atescini:36,muhafiz:48,golge:60,karabasan:1300};
 const BOSS_FROM={tepegoz:0,yelbegen:59,evren:119,erlik:299};
-const WGT={gulyabani:3,albasti:2,hortlak:2,karakoncolos:1.5,cadi:2,kurtbasi:2,demircin:1.5,atescini:1.5,muhafiz:1.5,golge:2};
+const WGT={gulyabani:3,albasti:2,hortlak:2,karakoncolos:1.5,cadi:2,kurtbasi:2,demircin:1.5,atescini:1.5,muhafiz:1.5,golge:2,karabasan:1.5};
 const INTRO_TXT={
  albasti:'Albastılar görüldü. Çok hızlıdırlar ama çabuk düşerler; okçuların arkasını boş bırakma.',
  hortlak:'Hortlaklar uzaktan büyü atar. Okçuların menzili onlara yeter.',
@@ -462,6 +464,7 @@ const INTRO_TXT={
  demircin:'Demir Cinler geldi. Zırhları kılıç ve okun yarısını yutar; gülle ve Ateş Yağmuru tam işler.',
  atescini:'Ateş Cinleri uzaktan alev topu atar ve topluca yakar. Birliklerini aralıklı sür.',
  muhafiz:'Erlik Muhafızları göründü: zırhlı ve uzun mızraklı.',
+ karabasan:'Karabasan geldi: gece uykuda insanın göğsüne çöken ağır gölge. Yavaştır ama çok dayanıklıdır; ateşle karşıla, Alp Er\'i önüne yalnız sürme.',
  golge:'Gölgeler sessiz ve ölümcül. Çok hızlı vurur; Alp Er\'i yalnız bırakma.',
 };
 const BOSS_TXT={tepegoz:'Tepegöz geliyor. Dev çıktığında safları sıklaştır, Alp Er\'i geri çek, ateşle karşıla.',
@@ -1453,7 +1456,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('.btn,.rtab,.lv,
    Test ekibinin önerileri (Malazgirt Akıncıları 1.6 / Champion Battle Manager 4.4 ile aynı paket):
    ilk karşılaşmada kısa ipucu kartı, Nasıl Oynanır'da bütün ipuçları, uygulama içinden puan (mobil),
    arkadaşına öner, "Bize yaz" hazır e-postası, Verilerimi sil. Hiçbir veri toplanmaz. */
-const SURUM='1.3.0';
+const SURUM='1.3.1';
 const RKEY='hisar_rehber_v1',PKEY='hisar_puan_v1';
 const IOS_ID='';// App Store kimliği belli olunca yaz (ör. '6750000000'); boşken iOS'ta mağaza bağlantısı yerine site kullanılır
 const jOku=(k,v)=>{try{const r=localStorage.getItem(k);return r?JSON.parse(r):v;}catch(e){return v;}};

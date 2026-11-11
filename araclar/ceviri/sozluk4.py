@@ -10,3 +10,4 @@ D4.update({
 D4.update({"Kimden: {0}":"From: {0}","Kimden:":"From:"})
 D4.update({"Dil · Language":"Language · Dil","Değiştir":"Change","Oku":"Read","{0} · Türkçe / English":"{0} · Türkçe / English","Türkçe":"Türkçe","English":"English"})
 D4.update({"Kalkancı":"Shieldman"})
+D4.update({"Karabasan":"Karabasan","Karabasan geldi: gece uykuda insanın göğsüne çöken ağır gölge. Yavaştır ama çok dayanıklıdır; ateşle karşıla, Alp Er'i önüne yalnız sürme.":"The Karabasan has come: the heavy shadow that sits on a sleeper's chest in the night. It is slow but very tough; meet it with fire, and don't send Alp Er against it alone."})

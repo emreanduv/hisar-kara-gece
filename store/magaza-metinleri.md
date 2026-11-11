@@ -80,6 +80,16 @@ Gulyabani, witches, wolf-heads, iron djinn, the one-eyed Tepegöz, the dragon Ev
 
 ---
 
+## Sürüm 1.3.1 notları (Yenilikler / What's New)
+
+**Türkçe (emojisiz)**
+• Yeni yaratık: Karabasan. Ay Ormanı'nda gece uykuda göğse çöken ağır gölge çıkıyor; yavaş ama çok dayanıklı
+• İngilizce metinlerde küçük düzeltmeler
+
+**English (no emoji)**
+• New creature: the Karabasan. In the Moon Forest, the heavy shadow from Anatolian folklore that sits on a sleeper's chest appears; slow but very tough
+• Small fixes to the English text
+
 ## Sürüm 1.3.0 notları (Yenilikler / What's New)
 
 **Türkçe (emojisiz)**
