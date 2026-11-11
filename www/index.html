@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="tr">
-<head><script src="ses-kurtarici.js"></script>
+<head><script src="ses-kurtarici.js"></script><script src="dil-en.js"></script><script src="dil.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#1e2e21"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="ikon-192.png">
@@ -1453,7 +1453,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('.btn,.rtab,.lv,
    Test ekibinin önerileri (Malazgirt Akıncıları 1.6 / Champion Battle Manager 4.4 ile aynı paket):
    ilk karşılaşmada kısa ipucu kartı, Nasıl Oynanır'da bütün ipuçları, uygulama içinden puan (mobil),
    arkadaşına öner, "Bize yaz" hazır e-postası, Verilerimi sil. Hiçbir veri toplanmaz. */
-const SURUM='1.2.0';
+const SURUM='1.3.0';
 const RKEY='hisar_rehber_v1',PKEY='hisar_puan_v1';
 const IOS_ID='';// App Store kimliği belli olunca yaz (ör. '6750000000'); boşken iOS'ta mağaza bağlantısı yerine site kullanılır
 const jOku=(k,v)=>{try{const r=localStorage.getItem(k);return r?JSON.parse(r):v;}catch(e){return v;}};
@@ -1587,6 +1587,7 @@ function renderSettings(){
   const satir=(ad,acik,dug,cls,fn)=>{const tr=document.createElement('tr');tr.innerHTML='<td><div class="unm"></div><div class="ud"></div></td><td></td>';
     tr.querySelector('.unm').textContent=ad;tr.querySelector('.ud').textContent=acik;const b=document.createElement('div');b.className='btn '+(cls||'');b.textContent=dug;b.onclick=fn;tr.lastChild.appendChild(b);t.appendChild(tr);};
   satir('Ses','Savaş sesleri ve gece ambiyansı',S.sound?'Açık':'Kapalı',S.sound?'':'gray',()=>{S.sound=!S.sound;save();if(S.sound){unlockAudio();setTimeout(()=>SFX.click(),30);}else ambience(false);renderSettings();});
+  satir('Dil · Language','Şu an: '+(window.DIL?DIL.ad():'Türkçe'),'Değiştir','gray',()=>{if(window.DIL)DIL.degistir();});
   satir('Rehber ipuçları','Yeni bir şeyle ilk karşılaştığında kısa ipucu',d.kapali?'Kapalı':'Açık',d.kapali?'gray':'',()=>{const x=rhDurum();x.kapali=!x.kapali;rhKaydet(x);renderSettings();});
   satir('Nasıl Oynanır','Bütün ipuçları ve Divan\'ın talimatı','Aç','gray',()=>openHelp('settings'));
   if(mobil())satir('Oyunu puanla','Mağazanın kendi puan ekranı açılır','★ Puan ver','',puanVer);

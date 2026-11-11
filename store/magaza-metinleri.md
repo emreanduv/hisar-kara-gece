@@ -80,6 +80,20 @@ Gulyabani, witches, wolf-heads, iron djinn, the one-eyed Tepegöz, the dragon Ev
 
 ---
 
+## Sürüm 1.3.0 notları (Yenilikler / What's New)
+
+**Türkçe (emojisiz)**
+Yeni: İngilizce!
+• Oyun ilk açılışta dilini soruyor: Türkçe ya da English
+• Bütün menüler, mektuplar, ipuçları ve 1923 bölümün adları İngilizce de oynanabiliyor
+• Dil, Ayarlar > Dil · Language satırından her zaman değiştirilebilir
+
+**English (no emoji)**
+New: English language!
+• The game asks for your language on first launch: Turkish or English
+• All menus, letters, tips and the names of all 1923 levels are now available in English
+• Switch language any time from Settings > Language
+
 ## Sürüm 1.2.0 notları (Yenilikler / What's New)
 App Store notlarında emoji kullanma.
 
