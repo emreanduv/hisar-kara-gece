@@ -1,7 +1,8 @@
 REG = {
-"Köyler":"The Villages","Kara Orman":"Black Forest","Dağ Geçitleri":"Mountain Passes","Kızıl Bozkır":"Red Steppe","Sisli Bataklık":"Misty Marsh","Tuz Gölü":"Salt Lake","Kül Ovası":"Ash Plain","Buzul Yaylası":"Glacier Highlands","Kurt Vadisi":"Wolf Valley","Yıkık Şehir":"Ruined City","Kervan Yolu":"Caravan Road","Yeraltı Mağaraları":"Underground Caves","Ejder Sırtı":"Dragon Ridge","Ay Ormanı":"Moon Forest","Kanlı Irmak":"Blood River","Gölge Diyarı":"Land of Shades","Demir Dağlar":"Iron Mountains","Ateş Çölü":"Fire Desert","Erlik'in Eşiği":"Erlik's Threshold",
+"Köyler":"The Villages","Kara Orman":"Black Forest","Dağ Geçitleri":"Mountain Passes","Kızıl Bozkır":"Red Steppe","Sisli Bataklık":"Misty Marsh","Tuz Gölü":"Salt Lake","Van Gölü":"Lake Van","Kül Ovası":"Ash Plain","Buzul Yaylası":"Glacier Highlands","Kurt Vadisi":"Wolf Valley","Yıkık Şehir":"Ruined City","Kervan Yolu":"Caravan Road","Yeraltı Mağaraları":"Underground Caves","Ejder Sırtı":"Dragon Ridge","Ay Ormanı":"Moon Forest","Kanlı Irmak":"Blood River","Gölge Diyarı":"Land of Shades","Demir Dağlar":"Iron Mountains","Ateş Çölü":"Fire Desert","Erlik'in Eşiği":"Erlik's Threshold",
 }
 FIRST = {
+"Göl Kıyısı":"Lakeshore","Balıkçı Köyü":"Fishing Village","Süphan Eteği":"Foot of Süphan","Kıyı Yolu":"Shore Road","Taş Rıhtım":"Stone Quay","Kuşluk":"Bird Marsh","İnci Kefali Göçü":"Pearl Mullet Run","Fırtına Burnu":"Storm Cape","Canavarın Koyu":"The Monster's Cove",
 "Köy Yolu":"Village Road","Değirmen":"The Mill","Kervansaray":"Caravanserai","Pınar Başı":"Spring Head","Tepegöz İni":"Tepegöz's Den","Sisli Geçit":"Misty Pass","Eski Mezarlık":"Old Graveyard","Kuzgun Tepesi":"Raven Hill","Kanlı Dere":"Bloody Creek","Kara Karakol":"Black Outpost",
 "Orman Kapısı":"Forest Gate","Cadı Kulübesi":"Witch's Hut","Yosunlu Taşlar":"Mossy Stones","Kurt Sırtı":"Wolf Ridge","Dev Koruluğu":"Giant's Grove","Çürük Köprü":"Rotten Bridge","Baykuş Yuvası":"Owl's Nest","Kuru Göl":"Dry Lake","Kökler Arası":"Among the Roots","Yelbegen Yatağı":"Yelbegen's Lair",
 "Taş Merdiven":"Stone Stairs","Demirci Ocağı":"Blacksmith's Forge","Kartal Kayası":"Eagle Rock","Kızıl Yamaç":"Red Slope","Yelbegen Mağarası":"Yelbegen's Cave","Karlı Geçit":"Snowy Pass","Kükürt Vadisi":"Sulfur Valley","Buzul Köprü":"Glacier Bridge","Kül Tepesi":"Ash Hill","Evren'in Yuvası":"Evren's Nest",
@@ -22,13 +23,16 @@ NOUN = {"Ambar":"Barn","Harman":"Threshing Floor","Çeşme":"Fountain","Ağıl":
 "Dehliz":"Corridor","Tünel":"Tunnel","Yeraltı Gölü":"Underground Lake","Maden":"Mine","Oyuk":"Hollow","Sarnıç":"Cistern","Galeri":"Gallery","Derinlik":"Depths",
 "Kül Tepesi":"Ash Hill","Pul Vadisi":"Scale Valley","Kanat Taşı":"Wing Stone","Ejder Yolu":"Dragon Road",
 "Ay Gölü":"Moon Lake","Çember Taşı":"Stone Circle","Gümüş Dere":"Silver Creek",
-"Irmak":"River","Değirmen":"Mill","Delta":"Delta","Sal Yolu":"Raft Way","İskele":"Pier",
+"Irmak":"River","Koy":"Cove","Rıhtım":"Quay","Dere Ağzı":"Creek Mouth","Göl Yolu":"Lake Road","Değirmen":"Mill","Delta":"Delta","Sal Yolu":"Raft Way","İskele":"Pier",
 "Diyar":"Realm","Sis Yolu":"Fog Road","Mezarlık":"Graveyard","Avlu":"Courtyard","Tapınak":"Temple","Bahçe":"Garden","Taht":"Throne",
 "Örs":"Anvil","Dağ":"Mountain","Döküm":"Foundry","Kale":"Fortress",
 "Çöl":"Desert","Serap":"Mirage","Harabe":"Ruins","Kızgın Taş":"Scorching Stone","Ufuk":"Horizon",
 "Eşik":"Threshold","Kemik Yolu":"Bone Road","Ateş Hendeği":"Fire Moat","Nöbet Yeri":"Guard Post",
 "Merdiven":"Stairs","Mahzen":"Cellar","Burç":"Bastion","Salon":"Hall"}
 LINES = {
+"Göl turkuaz ama derin; balıkçılar suda büyük bir gölge gördüklerini söylüyor.":"The lake is turquoise but deep; fishermen say they have seen a great shadow in the water.",
+"Kıyı dar ve kaygan, birliklerini aralıklı sür.":"The shore is narrow and slippery; send your units with gaps between them.",
+"Su köpürürse geri çekil: Van Gölü Canavarı kıyıya çıkıyor.":"If the water foams, fall back: the Lake Van Monster is coming ashore.",
 "Köylüler Hisar'a sığındı. Yolu temizle, karakollara ilerle.":"The villagers have taken shelter in Hisar. Clear the road and advance on the outposts.",
 "Gece uzun, erzağı boşa harcama. Öne kalkancı, arkaya okçu.":"The night is long; don't waste supplies. Shieldmen in front, archers behind.",
 "Düşman sürü halinde geliyor. Ateş Yağmuru'nu kalabalığa sakla.":"The enemy comes in swarms. Save Fire Rain for the crowd.",

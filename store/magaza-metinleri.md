@@ -36,7 +36,7 @@ Gulyabaniler, cadılar, kurtbaşılar, demir cinler, Tepegöz, ejder Evren ve en
 • Sur okçuları, mancınık ve hendekle Hisar kendini de savunur
 • 20 bölge, 1923 bölüm: kolaydan zora adım adım
 • Sonsuz Dalga: dayanabildiğin kadar dayan, rekorunu kır
-• Her 10 bölümde bir dev savaşı (Tepegöz, Yelbegen, Evren, Erlik Han); bölge sonlarında iki dev birden
+• Her 10 bölümde bir dev savaşı (Tepegöz, Yelbegen, Evren, Van Gölü Canavarı, Erlik Han); bölge sonlarında iki dev birden
 • Bölüm kuralları: Sisli Gece, Kıtlık, Kara Rüzgâr, Demir Gece, Sürü, Kızıl Ay...
 • Rütbeler: ilerledikçe Alp Er ve ordun kalıcı güçler kazanır
 • Ordugâh'ta kalıcı geliştirmeler: erzak, sur, talim, Alp Er, güç ocağı, sur savunması ve silahhane
@@ -79,6 +79,18 @@ Gulyabani, witches, wolf-heads, iron djinn, the one-eyed Tepegöz, the dragon Ev
 • No ads, works offline, no data collected
 
 ---
+
+## Sürüm 1.3.2 notları (Yenilikler / What's New)
+
+**Türkçe (emojisiz)**
+• Yeni bölge: Van Gölü. Turkuaz göl kıyısında balıkçı köyü, Süphan eteği ve İnci Kefali göçü
+• Yeni dev: Van Gölü Canavarı. Gölde gördüğünü söyleyenlerin anlattığı dev gölge kıyıya çıkıyor
+• iPhone'da ok işaretleri artık her yerde düz çiziliyor
+
+**English (no emoji)**
+• New region: Lake Van, with a fishing village, the foot of Mount Süphan and the pearl mullet run
+• New giant: the Lake Van Monster, the great shadow people say they have seen in the lake, comes ashore
+• Arrow symbols now always draw as plain text on iPhone
 
 ## Sürüm 1.3.1 notları (Yenilikler / What's New)
 

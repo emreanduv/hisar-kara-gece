@@ -339,10 +339,10 @@ function drawHud(force) {
   c.strokeStyle = '#c8a23a'; c.lineWidth = 5; c.stroke();
   const btn = (id, x, y, w, h, fn) => { P.btns.push({ id, x, y, w, h, fn }); };
   const card = (x, y, w, h, on, glow) => { rr(c, x, y, w, h, 12); c.fillStyle = on ? '#f2ecd6' : '#8a8570'; c.fill(); c.strokeStyle = glow ? '#ffb347' : '#8a7f5c'; c.lineWidth = glow ? 6 : 3; c.stroke(); };
-  // Alp Er ◀ ▶
+  // Alp Er ◀︎ ▶︎
   for (const [d, x] of [[-1, 22], [1, 132]]) {
     card(x, 30, 98, 176, true, B.heroIn === d);
-    c.fillStyle = '#2c3e2f'; c.font = 'bold 54px ' + FONT; c.textAlign = 'center'; c.fillText(d < 0 ? '◀' : '▶', x + 49, 132);
+    c.fillStyle = '#2c3e2f'; c.font = 'bold 54px ' + FONT; c.textAlign = 'center'; c.fillText(d < 0 ? '◀︎' : '▶︎', x + 49, 132);
     c.font = 'bold 18px ' + FONT; c.fillText('Alp Er', x + 49, 190);
     btn('hero' + d, x, 30, 98, 176, null);
   }

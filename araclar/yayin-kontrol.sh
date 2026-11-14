@@ -38,4 +38,6 @@ else
   hata "Sürüm verilmedi ya da store/SON-SURUM yok"
 fi
 
+python3 araclar/turkce-yazi-kontrol.py www && tamam "Türkçe yazı ve iOS işaretleri" || hata "Türkçe yazı / iOS işaret denetimi tutmadı (araclar/turkce-yazi-kontrol.py)"
+
 [ $HATA = 0 ] && echo "Yayın öncesi kontrol geçti." || { echo "Yayın öncesi kontrol TUTMADI, derleme durdu."; exit 1; }
