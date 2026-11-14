@@ -85,11 +85,13 @@ Gulyabani, witches, wolf-heads, iron djinn, the one-eyed Tepegöz, the dragon Ev
 **Türkçe (emojisiz)**
 • Yeni bölge: Van Gölü. Turkuaz göl kıyısında balıkçı köyü, Süphan eteği ve İnci Kefali göçü
 • Yeni dev: Van Gölü Canavarı. Gölde gördüğünü söyleyenlerin anlattığı dev gölge kıyıya çıkıyor
+• Yelbegen artık yedi başlı: bütün Mr. Anduv! oyunlarındaki gibi
 • iPhone'da ok işaretleri artık her yerde düz çiziliyor
 
 **English (no emoji)**
 • New region: Lake Van, with a fishing village, the foot of Mount Süphan and the pearl mullet run
 • New giant: the Lake Van Monster, the great shadow people say they have seen in the lake, comes ashore
+• Yelbegen now has seven heads, as in every Mr. Anduv! game
 • Arrow symbols now always draw as plain text on iPhone
 
 ## Sürüm 1.3.1 notları (Yenilikler / What's New)

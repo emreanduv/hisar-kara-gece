@@ -335,7 +335,7 @@ const LOOK={
  karabasan:{skin:'#2a2236',cloth:'#1e1828',cloth2:'#3a2e4e',leg:'#1e1828',head:'kukuleta',wpn:'pence',eye:'#e8e0ff',float:true,hunch:0.3,glow:'#5a4a8a'},
  golge:{skin:'#0e0c12',cloth:'#141018',cloth2:'#241c2c',leg:'#0e0c12',head:'kel',wpn:'pence',eye:'#d06aff',hunch:0.2,glow:'#8a3aff'},
  tepegoz:{skin:'#9a8a6a',cloth:'#5a3a2a',cloth2:'#3a2418',leg:'#4a3a2a',head:'tek',wpn:'sopa',eye:'#ff2a2a',hunch:0.1},
- yelbegen:{skin:'#7a8a6a',cloth:'#4a5a3a',cloth2:'#2a3420',leg:'#3a4a2a',head:'iki',wpn:'sopa',eye:'#ff4a2a',hunch:0.12},
+ yelbegen:{skin:'#7a8a6a',cloth:'#4a5a3a',cloth2:'#2a3420',leg:'#3a4a2a',head:'yedi',wpn:'sopa',eye:'#ff4a2a',hunch:0.12},   // evren kitabı: yedi başlı, boynuzlu, kızıl gözlü
  evren:{skin:'#3a6a4a',cloth:'#2a4a34',eye:'#ffcc33',dragon:true},
  vangolu:{skin:'#2a6a7a',cloth:'#1a4654',eye:'#e8f6ff',dragon:true},   // yaşayan efsane: Van Gölü Canavarı (evren kitabı)
  erlik:{skin:'#3a2030',cloth:'#1a0a14',cloth2:'#a8221a',leg:'#120810',head:'erlik',wpn:'kizil',eye:'#ff2a2a',cape:'#4a0a1a',glow:'#ff2a2a'},
@@ -471,7 +471,7 @@ const INTRO_TXT={
  golge:'Gölgeler sessiz ve ölümcül. Çok hızlı vurur; Alp Er\'i yalnız bırakma.',
 };
 const BOSS_TXT={tepegoz:'Tepegöz geliyor. Dev çıktığında safları sıklaştır, Alp Er\'i geri çek, ateşle karşıla.',
- yelbegen:'Yelbegen, iki başlı dev! Vuruşu bütün safı biçer; birliklerini dalga dalga gönder.',
+ yelbegen:'Yelbegen, yedi başlı dev! Vuruşu bütün safı biçer; birliklerini dalga dalga gönder.',
  evren:'Evren, dağların ejderi! Uzaktan alev püskürtür; humbaracıların onu yere indirmeli.',
  vangolu:'Van Gölü Canavarı! Gölde gördüğünü söyleyenlerin anlattığı dev gölge bu gece kıyıya çıktı. Pullu ve ağırdır; okçular uzaktan, kalkancılar önden.',
  erlik:'Erlik Han\'ın kendisi! Yanına sürekli Gölge çağırır. Bütün gücünle saldır, Komutan.'};
@@ -695,6 +695,13 @@ function drawHead(c,L){
     const f=Math.sin(T*14)*2;c.fillStyle='#ff7a1f';c.shadowColor='#ff7a1f';c.shadowBlur=14;
     c.beginPath();c.moveTo(hx-8,hy+4);c.quadraticCurveTo(hx-10,hy-10,hx-3,hy-20+f);c.quadraticCurveTo(hx,hy-10,hx+3,hy-24-f);c.quadraticCurveTo(hx+10,hy-8,hx+8,hy+4);c.closePath();c.fill();
     c.fillStyle='#ffd27a';circ(c,hx,hy-2,5.5);c.shadowBlur=0;c.fillStyle='#5a1a0a';circ(c,hx+3,hy-3,1.5);circ(c,hx-1,hy-3,1.5);return;
+  }
+  if(L.head==='yedi'){   // Yelbegen: yedi baş, yay biçiminde dizili; küçük boynuzlar
+    const P7=[[-12,4],[-9,-3],[-4,-8],[2,-10],[8,-8],[12,-2],[14,5]];
+    for(const [dx,dy] of P7){const x=hx+dx,y=hy+dy;c.fillStyle='#d8ccb0';c.beginPath();c.moveTo(x-2.5,y-2.5);c.lineTo(x-3.5,y-6.5);c.lineTo(x-0.8,y-3.2);c.closePath();c.fill();
+      c.beginPath();c.moveTo(x+2.5,y-2.5);c.lineTo(x+3.5,y-6.5);c.lineTo(x+0.8,y-3.2);c.closePath();c.fill();
+      c.fillStyle=L.skin;circ(c,x,y,3.9);eyeDot(c,L,x+1.4,y-0.3,1.1);}
+    return;
   }
   if(L.head==='iki'){
     c.fillStyle=L.skin;circ(c,hx-5,hy-1,6);circ(c,hx+6,hy+1,6.5);
