@@ -378,7 +378,7 @@ window.DIL_EN = {
 "Ocak dolunca seçtiğin iki gücü kullanırsın: Ateş Yağmuru, Ok Yağmuru, Mancınık Atışı, Sur Borusu, Alp'in Gürzü, Kurt Akını.": "When the hearth is full you can use the two powers you chose: Fire Rain, Arrow Rain, Catapult Volley, War Horn, Alp's Mace, Wolf Charge.",
 "Ordugâh'tan sur okçuları, mancınık ve hendek kurarsın; Hisar kendini de savunur.": "At the Camp you build wall archers, a catapult and a moat; Hisar defends itself too.",
 "Akçeyle erzak, sur, birlik, Alp Er, güç ocağı, sur savunması ve Alp Er'in silahını kalıcı olarak geliştir.": "Spend akçe to permanently upgrade supplies, walls, units, Alp Er, the power hearth, wall defenses and Alp Er's weapon.",
-"{0}–{1} birlik · ← → Alp · Boşluk {2}. güç · Q {3}. güç · P mola": "{0}–{1} units · ← → Alp · Space power {2} · Q power {3} · P pause",
+"{0}–{1} birlik · A D / ← → Alp · Boşluk {2}. güç · Q/E {3}. güç · P mola": "{0}–{1} units · A D / ← → Alp · Space power {2} · Q/E power {3} · P pause",
 "Akçe: yaratıkların düşürdüğü ganimetten ve zaferlerden gelir.": "Akçe (silver coins) comes from loot dropped by creatures and from victories.",
 "Bir birliğe ya da güce dokun, ne işe yaradığını gör.": "Tap a unit or a power to see what it does.",
 "Bir bölüm seç. Yıldızlar Hisar'ın ne kadar sağlam kaldığına göre verilir.": "Pick a level. Stars depend on how intact Hisar remains.",

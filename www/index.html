@@ -239,7 +239,7 @@ canvas.full{position:absolute;left:0;top:0}
         <b>Sur:</b> Ordugâh'tan sur okçuları, mancınık ve hendek kurarsın; Hisar kendini de savunur.<br>
         <b>Sefer:</b> 20 bölge, 1923 bölüm. Her 10 bölümde bir dev; bölge sonunda iki dev. 50. bölümden sonra <b>Sonsuz Dalga</b> açılır.<br>
         <b>Ordugâh:</b> Akçeyle erzak, sur, birlik, Alp Er, güç ocağı, sur savunması ve Alp Er'in silahını kalıcı olarak geliştir.<br>
-        <b>Klavye:</b> 1–6 birlik · ← → Alp · Boşluk 1. güç · Q 2. güç · P mola
+        <b>Klavye:</b> 1–6 birlik · A D / ← → Alp · Boşluk 1. güç · Q/E 2. güç · P mola
       </div>
     </div>
     <div class="panel" style="position:absolute;left:540px;right:24px;top:62px;height:404px"><h3>Rehber · Bütün İpuçları</h3><div class="rhListe" id="rhListe"></div></div>
@@ -1456,9 +1456,9 @@ holdBtn('hL',-1);holdBtn('hR',1);
 addEventListener('keydown',e=>{if(cur!=='battle'||!B)return;
   if(rhAcik){if(e.key==='Enter'||e.key===' '){e.preventDefault();rhTamam();}return;}
   if(e.key>='1'&&e.key<='6')trySpawn(+e.key-1);
-  else if(e.key==='ArrowLeft'){if(!B.paused)B.heroIn=-1;}else if(e.key==='ArrowRight'){if(!B.paused)B.heroIn=1;}
-  else if(e.key===' '){e.preventDefault();power(0);}else if(e.key==='q'||e.key==='Q'||e.key==='Enter'){e.preventDefault();power(1);}else if(e.key==='p'||e.key==='P'||e.key==='Escape')setPause(!B.paused);});
-addEventListener('keyup',e=>{if(!B)return;if((e.key==='ArrowLeft'&&B.heroIn===-1)||(e.key==='ArrowRight'&&B.heroIn===1))B.heroIn=0;});
+  else if(e.key==='ArrowLeft'||e.code==='KeyA'){if(!B.paused)B.heroIn=-1;}else if(e.key==='ArrowRight'||e.code==='KeyD'){if(!B.paused)B.heroIn=1;}
+  else if(e.key===' '){e.preventDefault();power(0);}else if(e.code==='KeyQ'||e.code==='KeyE'||e.key==='Enter'){e.preventDefault();power(1);}else if(e.code==='KeyP'||e.key==='Escape')setPause(!B.paused);});
+addEventListener('keyup',e=>{if(!B)return;if(((e.key==='ArrowLeft'||e.code==='KeyA')&&B.heroIn===-1)||((e.key==='ArrowRight'||e.code==='KeyD')&&B.heroIn===1))B.heroIn=0;});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&B&&cur==='battle'&&!B.over)setPause(true);});
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('click',e=>{const el=e.target.closest('.btn,.rtab,.lv,.iitem,.sbtn,#bSound');if(el&&!el.closest('#resActs')&&el.id!=='bSound'&&!el.classList.contains('dis')&&!el.classList.contains('lock'))SFX.click();},true);
@@ -1467,7 +1467,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('.btn,.rtab,.lv,
    Test ekibinin önerileri (Malazgirt Akıncıları 1.6 / Champion Battle Manager 4.4 ile aynı paket):
    ilk karşılaşmada kısa ipucu kartı, Nasıl Oynanır'da bütün ipuçları, uygulama içinden puan (mobil),
    arkadaşına öner, "Bize yaz" hazır e-postası, Verilerimi sil. Hiçbir veri toplanmaz. */
-const SURUM='1.3.2';
+const SURUM='1.3.3';
 const RKEY='hisar_rehber_v1',PKEY='hisar_puan_v1';
 const IOS_ID='';// App Store kimliği belli olunca yaz (ör. '6750000000'); boşken iOS'ta mağaza bağlantısı yerine site kullanılır
 const jOku=(k,v)=>{try{const r=localStorage.getItem(k);return r?JSON.parse(r):v;}catch(e){return v;}};
