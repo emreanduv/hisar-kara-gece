@@ -169,6 +169,71 @@ canvas.full{position:absolute;left:0;top:0}
 #tost.on{display:block}
 #rotate{display:none;position:fixed;inset:0;background:#0d120e;color:var(--cream);align-items:center;justify-content:center;text-align:center;font-size:18px;z-index:99;padding:30px}
 @media (orientation:portrait) and (max-width:900px){#rotate{display:flex}}
+
+/* ===== D3 cila (Çizim Planı): panel derinliği, parşömen, altın çerçeve, kabartma düğmeler. Ölçüler ve yerleşim aynı. ===== */
+:root{--ink2:#1e130b;--gold2:#e8c25a;--parch1:#fbf5df;--parch2:#efe5c6;--parch3:#e0d2a6}
+.panel{border:1px solid #5d4a22;border-radius:6px;background:radial-gradient(ellipse 120% 90% at 30% 0%,var(--parch1) 0%,var(--parch2) 58%,var(--parch3) 100%);
+  box-shadow:inset 0 0 0 3px rgba(255,250,232,.7),inset 0 0 0 4px rgba(200,162,58,.55),inset 0 0 26px rgba(120,90,30,.2),0 3px 0 #4a3a18,0 10px 26px rgba(0,0,0,.55)}
+.panel>h3{position:relative;font-family:Georgia,"Times New Roman",serif;font-size:14.5px;letter-spacing:.4px;color:#f6e7b8;text-shadow:0 1px 0 #0c140e;
+  background:linear-gradient(#486a52,#2a3f2f 60%,#1f3024);border-bottom:2px solid var(--accent);border-radius:5px 5px 0 0;padding:8px 10px 8px 24px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 1px 0 #6e5a2c,0 2px 0 rgba(232,194,90,.35)}
+.panel>h3::before{content:"";position:absolute;left:9px;top:50%;width:7px;height:7px;margin-top:-4px;transform:rotate(45deg);background:linear-gradient(135deg,#fbe39a,#b8892a);box-shadow:0 0 0 1px #3a2a10,0 0 6px rgba(245,211,107,.6)}
+.btn{border-radius:5px;background:linear-gradient(#73a862,#447337 52%,#335a2b);border:1px solid #1b3517;text-shadow:0 1px 0 rgba(0,0,0,.5);letter-spacing:.2px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.38),inset 0 0 0 1px rgba(245,211,107,.28),inset 0 -3px 6px rgba(0,0,0,.18),0 2px 0 #18291a,0 4px 9px rgba(0,0,0,.35)}
+.btn:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(245,211,107,.25),0 0 0 #18291a,0 2px 4px rgba(0,0,0,.3)}
+.btn.gray{background:linear-gradient(#8f7d58,#66563a 52%,#4e4129);border-color:#2e2516}
+.btn.red{background:linear-gradient(#c45444,#8a2f24 52%,#6a2119);border-color:#3e130e}
+.topbar,.footbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(0,0,0,.3)}
+.topbar{background:linear-gradient(#36513e,#1c2c21 70%,#152119);border-bottom:2px solid var(--accent);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 0 #4a3a18,0 6px 14px rgba(0,0,0,.5)}
+.topbar .title{font-family:Georgia,"Times New Roman",serif;color:#f5d36b;font-size:20px;letter-spacing:1px;text-shadow:0 1px 0 #0c140e,0 0 10px rgba(245,211,107,.25)}
+.footbar{background:linear-gradient(#22352a,#121c15);border-top:2px solid var(--accent);box-shadow:inset 0 2px 0 rgba(232,194,90,.18),0 -2px 0 #4a3a18,0 -6px 14px rgba(0,0,0,.45)}
+.badge{background:linear-gradient(#f3d77a,#c8a23a 60%,#a7832a);border:1px solid #5d4a22;border-radius:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 1px 0 #2a1e0a;text-shadow:0 1px 0 rgba(255,240,190,.5)}
+.gold{text-shadow:0 1px 0 #0c140e,0 0 8px rgba(245,211,107,.35)}
+.ilist{background:rgba(222,208,166,.45);border-right:1px solid rgba(110,90,44,.45)}
+.iitem{border-bottom:1px solid rgba(110,90,44,.25)}
+.iitem.sel{background:linear-gradient(90deg,rgba(200,162,58,.38),rgba(200,162,58,.08));box-shadow:inset 3px 0 0 var(--accent)}
+.ibody .subj{font-family:Georgia,"Times New Roman",serif;font-size:16px;border-bottom:1px solid rgba(110,90,44,.45)}
+/* sefer haritası */
+.lv{border-radius:5px}
+.lv .n{font-family:Georgia,"Times New Roman",serif}
+.lv.boss{background:radial-gradient(ellipse at 50% 0%,#f6e3d0,#e3c7ad 70%,#d4b293);border-color:#6e2a20}
+.lv.cur{outline:none;box-shadow:inset 0 0 0 3px var(--accent),0 0 0 2px #5d4a22,0 0 16px rgba(245,211,107,.75),0 6px 16px rgba(0,0,0,.5)}
+.lv.lock{opacity:1;background:linear-gradient(#6a6150,#4e4738);border-color:#2c271d;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 3px rgba(0,0,0,.12),0 2px 0 #1e1a12,0 5px 12px rgba(0,0,0,.45)}
+.lv.lock .n{color:#cfc4a2;text-shadow:0 1px 0 #1e1a12}
+.lv.lock .tg{color:#e08070}
+.rbar,.ubar{border-radius:5px;overflow:hidden;background:linear-gradient(#cbbd92,#e8dcb6);border:1px solid #8a7a4c;box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+.rbar i,.ubar i{background:linear-gradient(#f3d77a,#c8a23a 55%,#9c7a24)}
+.modl,.pinfo{background:rgba(222,208,166,.5);border-color:rgba(110,90,44,.35);border-radius:4px}
+.ut tr:nth-child(even),.ayar tr:nth-child(even){background:rgba(200,180,120,.18)}
+.ut td,.ayar td{border-bottom:1px solid rgba(110,90,44,.25)}
+.ut .unm,.ayar .unm{font-family:Georgia,"Times New Roman",serif}
+.rki{border-bottom:1px solid rgba(110,90,44,.25)}
+.rhSat{background:rgba(255,251,234,.6);border-color:rgba(110,90,44,.3);border-radius:4px}
+.rhSat.yeni{background:linear-gradient(#fdf3d2,#f5e3a8);box-shadow:0 0 8px rgba(200,162,58,.45)}
+.overlay{background:radial-gradient(ellipse at 50% 50%,rgba(5,10,6,.42),rgba(5,10,6,.82))}
+.res .big{font-family:Georgia,"Times New Roman",serif;color:#2a3f2f}
+.res .stars,.lvst{text-shadow:0 1px 0 #7a6420,0 0 10px rgba(245,211,107,.6)}
+/* savaş alt paneli: koyu ağaç ve altın, kartlar parşömen */
+#hud{background:linear-gradient(#2f4535,#17241b 60%,#101911);box-shadow:inset 0 2px 0 rgba(232,194,90,.2),0 -2px 0 #4a3a18,0 -8px 18px rgba(0,0,0,.5)}
+.hbtn,.ubtn,#fireBtn,.pwBtn{border-radius:6px;border:1px solid #4a3a18;background:linear-gradient(#fbf4dc,#ece0bb 60%,#dccb98);
+  box-shadow:inset 0 1px 0 #fff,inset 0 0 0 2px rgba(200,162,58,.4),0 2px 0 #2a2010,0 4px 8px rgba(0,0,0,.45)}
+.hbtn{color:#2a3f2f;text-shadow:0 1px 0 #fff}
+.hbtn:active,.hbtn.down,.ubtn:active{background:linear-gradient(#e2edcf,#c3d6ab);transform:translateY(2px);box-shadow:inset 0 0 0 2px rgba(63,122,58,.6),0 0 0 #2a2010,0 2px 4px rgba(0,0,0,.4)}
+.ubtn .cost{text-shadow:0 1px 0 #fff}
+.ubtn.locked{filter:grayscale(.9) brightness(.8)}
+#foodBox .v{font-family:Georgia,"Times New Roman",serif;text-shadow:0 1px 0 #0c140e,0 0 10px rgba(245,211,107,.45)}
+#fireBtn.ready,.pwBtn.ready{box-shadow:inset 0 0 0 2px #f5d36b,0 0 0 1px #8a2a10,0 0 16px rgba(255,170,60,.85),0 4px 8px rgba(0,0,0,.45)}
+.pcard,.pchip{border-radius:5px}
+.pcard{background:linear-gradient(#fffaf0,#f0e6c8)}
+.pcard.on{background:linear-gradient(#eef7e2,#d4e8bf)}
+.chip{border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.chip.dark{background:linear-gradient(rgba(54,81,62,.95),rgba(28,44,33,.95));color:#f6e7b8}
+.sbtn{border-radius:5px;background:linear-gradient(#fbf4dc,#e6d9b0);border-color:#5d4a22;box-shadow:inset 0 1px 0 #fff,0 2px 0 #2a2010,0 3px 8px rgba(0,0,0,.4)}
+#tost{border-radius:5px;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.pcard .nm{white-space:nowrap;overflow:hidden;text-overflow:clip;letter-spacing:-.2px;padding:0 2px}
+.pcard .cs,.ubtn .cost{background:linear-gradient(rgba(251,244,220,0),rgba(251,244,220,.92) 35%);padding-top:4px}
+.ubtn .nm{text-shadow:0 1px 0 #fff}
+#prPows{flex-wrap:wrap;row-gap:5px}
 </style>
 </head>
 <body>
@@ -1285,11 +1350,11 @@ function drawUnit(c,u){
   drawFig(c,u.look,u.walk,u.atkA,u.state==='walk'&&!u.mounted);
   c.restore();
   if(!u.ghost&&(u.hp<u.max||u.isHero)){
-    const w=(u.isHero?34:22)*Math.min(u.sc,1.6),top=u.look.dragon?y-104*u.sc:y-46*u.sc-(u.mounted?23:0)-(u.look.float?8:0),p=Math.max(0,u.hp/u.max);
+    const w=(u.isHero?34:22)*Math.min(u.sc,1.6),top=u.look.dragon?y-104*u.sc:y-(u.isHero?63:46)*u.sc-(u.mounted?23:0)-(u.look.float?8:0),p=Math.max(0,u.hp/u.max);
     c.fillStyle='rgba(0,0,0,.65)';c.fillRect(u.x-w/2-1,top-1,w+2,5);
     c.fillStyle=u.isHero?'#f5d36b':u.side?'#d04a4a':'#6ac05a';c.fillRect(u.x-w/2,top,w*p,3);
   }
-  if(u.isHero){c.fillStyle='#f5d36b';c.font='bold 10px Tahoma,Verdana,sans-serif';c.textAlign='center';c.fillText('ALP ER',u.x,y-46*u.sc-8);}
+  if(u.isHero){c.font='bold 10px Tahoma,Verdana,sans-serif';c.textAlign='center';c.lineWidth=3;c.lineJoin='round';c.strokeStyle='rgba(12,20,14,.85)';c.strokeText('ALP ER',u.x,y-63*u.sc-5);c.fillStyle='#f5d36b';c.fillText('ALP ER',u.x,y-63*u.sc-5);}
   else if(u.unique&&u.side===0){c.fillStyle='#ffd27a';c.font='bold 9px Tahoma,Verdana,sans-serif';c.textAlign='center';c.fillText(UNITS.find(U=>U.id===u.id).ad.toLocaleUpperCase('tr'),u.x,y-46*u.sc-(u.mounted?31:8));}
 }
 function draw(){const t0=performance.now();ciz();netDenetle(performance.now()-t0);}
@@ -1548,7 +1613,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('.btn,.rtab,.lv,
    Test ekibinin önerileri (Malazgirt Akıncıları 1.6 / Champion Battle Manager 4.4 ile aynı paket):
    ilk karşılaşmada kısa ipucu kartı, Nasıl Oynanır'da bütün ipuçları, uygulama içinden puan (mobil),
    arkadaşına öner, "Bize yaz" hazır e-postası, Verilerimi sil. Hiçbir veri toplanmaz. */
-const SURUM='1.3.3';
+const SURUM='1.4.0';
 const RKEY='hisar_rehber_v1',PKEY='hisar_puan_v1';
 const IOS_ID='';// App Store kimliği belli olunca yaz (ör. '6750000000'); boşken iOS'ta mağaza bağlantısı yerine site kullanılır
 const jOku=(k,v)=>{try{const r=localStorage.getItem(k);return r?JSON.parse(r):v;}catch(e){return v;}};

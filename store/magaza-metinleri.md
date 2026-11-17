@@ -80,6 +80,22 @@ Gulyabani, witches, wolf-heads, iron djinn, the one-eyed Tepegöz, the dragon Ev
 
 ---
 
+## Sürüm 1.4.0 notları (Yenilikler / What's New)
+
+**Türkçe (emojisiz)**
+• Bütün birlikler, yaratıklar ve devler baştan, ayrıntılı çizgi film çizimiyle: yüzler, serpuşlar, Türk yayı ve kalkanı, ışık ve gölge
+• Gece savaş alanı yenilendi: haleli ay, Kuş Yolu, karlı dağlar, sis, ışıklı köy evleri
+• Hisar taş taş, meşaleli ve sancaklı; Kara Kule kara taşı ve mor ışığıyla
+• Menüler parşömen ve altın çerçeveyle; telefon ekranında daha keskin görüntü
+
+**English (no emoji)**
+• Every unit, creature and giant redrawn in detailed cartoon style: faces, headgear, Turkish bows and shields, light and shadow
+• A new night battlefield: haloed moon, Milky Way, snowy mountains, mist and lit village houses
+• The fortress is built stone by stone with torches and banner; the Dark Tower glows with violet light
+• Menus in parchment and gold; sharper image on phone screens
+
+---
+
 ## Sürüm 1.3.2 notları (Yenilikler / What's New)
 
 **Türkçe (emojisiz)**
